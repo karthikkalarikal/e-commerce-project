@@ -12,10 +12,13 @@ type Config struct {
 	DBPort      string `mapstructure:"DB_PORT"`
 	DBPassword  string `mapstructure:"DB_PASSWORD"`
 	DB_SSL_MODE string `mapstructure:"DB_SSL_MODE" default:"disable"`
+	ACCOUNTSID  string `mapstructure:"DB_ACCOUNTSID"`
+	SERVICESID  string `mapstructure:"DB_SERVICESID"`
+	AUTHTOKEN   string `mapstructure:"DB_AUTHTOKEN"`
 }
 
 var envs = []string{
-	"DB_HOST", "DB_HOST", "DB_NAME", "DB_USER", "DB_PORT", "DB_PASSWORD", "DB_SSL_MODE",
+	"DB_HOST", "DB_HOST", "DB_NAME", "DB_USER", "DB_PORT", "DB_PASSWORD", "DB_SSL_MODE", "DB_AUTHTOKEN", "DB_ACCOUNTSID", "DB_SERVICESID",
 }
 
 func LoadConfig() (Config, error) {
