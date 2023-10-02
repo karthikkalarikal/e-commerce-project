@@ -7,4 +7,5 @@ type UserRepository interface {
 	CheckUserAvailability(email string) bool
 	UserBlockedStatus(email string) (bool, error)
 	FindUserByEmail(email string) (models.UserSignInResponse, error)
+	CheckRole(email string) (bool, error)
 }

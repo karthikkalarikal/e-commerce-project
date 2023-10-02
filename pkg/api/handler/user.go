@@ -79,13 +79,18 @@ func (u *UserHandler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	user_details, err := u.userUseCase.LoginHandler(user)
+	user_details, err, role := u.userUseCase.LoginHandler(user)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "User could not be logged in", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-
-	successRes := response.ClientResponse(http.StatusOK, "User succesfully logged in", user_details, nil)
+	var message string
+	if role {
+		message = "admin succesfully logged in"
+	} else {
+		message = "User succesfully logged in"
+	}
+	successRes := response.ClientResponse(http.StatusOK, message, user_details, nil)
 	c.JSON(http.StatusOK, successRes)
 }

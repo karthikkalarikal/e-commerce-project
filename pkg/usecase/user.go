@@ -77,29 +77,49 @@ func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers
 }
 
 // log in
-func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (models.TokenUsers, error) {
+func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, error, bool) {
 
 	ok := u.userRepo.CheckUserAvailability(user.Email)
 
 	if !ok {
-		return models.TokenUsers{}, errors.New("the user does not exist")
+		return models.TokenUsers{}, errors.New("the user does not exist"), false
 	}
 	isBlocked, err := u.userRepo.UserBlockedStatus(user.Email)
 	if err != nil {
-		return models.TokenUsers{}, errors.New("internal error")
+		return models.TokenUsers{}, errors.New("internal error"), false
 	}
 	if isBlocked {
-		return models.TokenUsers{}, errors.New("user is blocked by admin")
+		return models.TokenUsers{}, errors.New("user is blocked by admin"), false
 	}
 
 	user_details, err := u.userRepo.FindUserByEmail(user.Email)
 	if err != nil {
-		return models.TokenUsers{}, errors.New("internal error")
+		return models.TokenUsers{}, errors.New("internal error"), false
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user_details.Password), []byte(user.Password))
 	if err != nil {
-		return models.TokenUsers{}, errors.New("password incorrect")
+		return models.TokenUsers{}, errors.New("password incorrect"), false
+	}
+
+	if user_details.Role {
+		var adminDetails models.AdminDetailsResponse
+
+		adminDetails.Id = int(user_details.Id)
+		adminDetails.Name = user_details.Name
+		adminDetails.Email = user_details.Email
+		adminDetails.Phone = user_details.Phone
+		adminDetails.Role = user_details.Role
+
+		tokenString, err := helper.GenerateTokenAdmin(adminDetails)
+		if err != nil {
+			return models.TokenUsers{}, errors.New("could not create token due to some internal error"), false
+		}
+
+		return models.TokenAdmin{
+			Users: adminDetails,
+			Token: tokenString,
+		}, nil, true
 	}
 
 	var userDetails models.UserDetailsResponse
@@ -111,12 +131,12 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (models.TokenUsers
 
 	tokenString, err := helper.GenerateTokenClients(userDetails)
 	if err != nil {
-		return models.TokenUsers{}, errors.New("could not create token due to some internal error")
+		return models.TokenUsers{}, errors.New("could not create token due to some internal error"), false
 	}
 
 	return models.TokenUsers{
 		Users: userDetails,
 		Token: tokenString,
-	}, nil
+	}, nil, false
 
 }

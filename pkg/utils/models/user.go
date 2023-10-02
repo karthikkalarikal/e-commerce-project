@@ -6,6 +6,7 @@ type UserDetails struct {
 	Phone           string `json:"phone"`
 	Password        string `json:"password"`
 	ConfirmPassword string `json:"confirmpassword"`
+	Role            bool   `json:"role" default:"false`
 }
 
 type Address struct {
@@ -25,6 +26,7 @@ type UserDetailsResponse struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 	Phone string `json:"phone"`
+	Role  bool   `json:"role" default:"false`
 }
 
 // token and details , token to access protected routes
@@ -45,4 +47,5 @@ type UserSignInResponse struct {
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
+	Role     bool   `json:"role" default:"false`
 }

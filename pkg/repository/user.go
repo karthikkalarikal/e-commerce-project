@@ -66,3 +66,16 @@ func (c *userDatabase) FindUserByEmail(email string) (models.UserSignInResponse,
 	}
 	return user_details, nil
 }
+
+//find the role
+
+func (c *userDatabase) CheckRole(email string) (bool, error) {
+	var isBlocked bool
+
+	query := "SELECT role from users where email = ?"
+
+	if err := c.DB.Raw(query, email).Scan(&isBlocked).Error; err != nil {
+		return false, err
+	}
+	return isBlocked, nil
+}
