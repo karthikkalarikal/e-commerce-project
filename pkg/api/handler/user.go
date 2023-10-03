@@ -20,11 +20,11 @@ func NewUserHandler(usecase interfaces.UserUseCase) *UserHandler {
 	}
 }
 
-type Response struct {
-	ID      uint   `copier:"must"`
-	Name    string `copier:"must"`
-	Surname string `copier:"must"`
-}
+// type Response struct {
+// 	ID      uint   `copier:"must"`
+// 	Name    string `copier:"must"`
+// 	Surname string `copier:"must"`
+// }
 
 func (u *UserHandler) UserSignUp(c *gin.Context) {
 	var user models.UserDetails
