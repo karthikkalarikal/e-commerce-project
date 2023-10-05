@@ -18,6 +18,15 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 	}
 }
 
+// @Summary ListProducts
+// @Description Retrive and display user list
+// @Tags User Management
+// @Accept json
+// @Produce json
+// @Security ApiKeyHeaderAuth
+// @Success 200 {array} models.UserDetails "Array of user details "
+// @Failure 400 {array} models.UserDetails "Bad request"
+// @Router /admin/userlist [post]
 func (u *AdminHandler) UserList(c *gin.Context) {
 	product_list, err := u.adminUseCase.UserList()
 	if err != nil {

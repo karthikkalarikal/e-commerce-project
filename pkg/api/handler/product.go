@@ -19,6 +19,13 @@ func NewProductHandler(usecase interfaces.ProductUseCase) *ProductHandler {
 	}
 }
 
+// @Summary ViewProducts
+// @Description view products by a user
+// @Accept json
+// @Produce json
+// @Success 200 {object} models.Product "List of products"
+// @Failure 400 {array} models.Product "Bad request"
+// @Router /user/viewproducts [post]
 func (u *ProductHandler) ListProducts(c *gin.Context) {
 	fmt.Println("list product handler")
 

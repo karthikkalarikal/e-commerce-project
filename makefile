@@ -42,3 +42,9 @@ swag: ## Generate swagger docs
 
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+Install-swagger:
+	which swagger || GO111MODULE=off go get -u github.com/go-swagger/go-swagger/cmd/swagger
+
+swagger:
+	GO111MODULE=off swagger generate spec -o ./swagger.yaml --scan-models	

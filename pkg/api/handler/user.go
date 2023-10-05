@@ -20,17 +20,19 @@ func NewUserHandler(usecase interfaces.UserUseCase) *UserHandler {
 	}
 }
 
-// type Response struct {
-// 	ID      uint   `copier:"must"`
-// 	Name    string `copier:"must"`
-// 	Surname string `copier:"must"`
-// }
-
+// @Summary UserSignUP
+// @Description Retrive UserDetails stored in DB and a auth token with success message
+// @Tags User Auth
+// @Accept json
+// @Produce json
+// @Param user body models.UserDetails true "User details"
+// @Success 200 {array} models.UserDetails "User details and token"
+// @Failure 400 {array} models.UserSignInResponse "Bad request"
+// @Router /users/signup [get]
 func (u *UserHandler) UserSignUp(c *gin.Context) {
 	var user models.UserDetails
 
 	//bind user details to struct
-
 	if err := c.BindJSON(&user); err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
@@ -63,6 +65,15 @@ func (u *UserHandler) UserSignUp(c *gin.Context) {
 
 //signin handler
 
+// @Summary UserSignIN
+// @Description Sign in a user and return user details and a token
+// @Tags User Auth
+// @Accept json
+// @Produce json
+// @Param user body models.UserLogin true "User login details"
+// @Success 200 {object} models.UserSignInResponse "User details and role"
+// @Failure 400 {array} models.UserSignInResponse "Bad request"
+// @Router /user/signin [post]
 func (u *UserHandler) LoginHandler(c *gin.Context) {
 	var user models.UserLogin
 
