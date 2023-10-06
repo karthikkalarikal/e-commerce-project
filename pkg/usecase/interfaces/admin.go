@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 )
@@ -8,4 +9,5 @@ import (
 type AdminUseCase interface {
 	UserList() ([]models.UserDetails, error)
 	BlockUser(id int, block bool) (domain.Users, error)
+	FindUserByEmail(ctx *gin.Context) ([]domain.Users, error)
 }

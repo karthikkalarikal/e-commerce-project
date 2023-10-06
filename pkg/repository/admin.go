@@ -44,3 +44,16 @@ func (db *adminRepositoryImpl) BlockUser(id int, block bool) (domain.Users, erro
 	}
 	return user, nil
 }
+
+// search user by email
+func (db *adminRepositoryImpl) FindUserByEmail(email string) ([]domain.Users, error) {
+	var user []domain.Users
+
+	query := "select * from users where email like ?"
+
+	err := db.db.Raw(query, "%"+email+"%").Scan(&user).Error
+	if err != nil {
+		return []domain.Users{}, err
+	}
+	return user, nil
+}

@@ -3,6 +3,7 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	repo "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
@@ -10,18 +11,18 @@ import (
 )
 
 type adminUseCaseImpl struct {
-	repo repo.AdminRepository
+	adminrepo repo.AdminRepository
 }
 
 func NewAdminUseCase(repo repo.AdminRepository) interfaces.AdminUseCase {
 	return &adminUseCaseImpl{
-		repo: repo,
+		adminrepo: repo,
 	}
 }
 
 // user list for admin
 func (usecase *adminUseCaseImpl) UserList() ([]models.UserDetails, error) {
-	userList, err := usecase.repo.UserList()
+	userList, err := usecase.adminrepo.UserList()
 	if err != nil {
 		return []models.UserDetails{}, err
 	}
@@ -35,10 +36,22 @@ func (usecase *adminUseCaseImpl) BlockUser(id int, block bool) (domain.Users, er
 	fmt.Println("here")
 	var user domain.Users
 
-	user, err := usecase.repo.BlockUser(id, block)
+	user, err := usecase.adminrepo.BlockUser(id, block)
 	if err != nil {
 		return domain.Users{}, err
 	}
 	fmt.Println("user", user)
 	return user, err
+}
+
+// search user by email
+func (usecase *adminUseCaseImpl) FindUserByEmail(ctx *gin.Context) ([]domain.Users, error) {
+	var user []domain.Users
+
+	email := ctx.GetString("email")
+	user, err := usecase.adminrepo.FindUserByEmail(email)
+	if err != nil {
+		return []domain.Users{}, err
+	}
+	return user, nil
 }

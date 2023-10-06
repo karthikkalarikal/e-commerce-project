@@ -54,8 +54,8 @@ type userBlock struct {
 // @Produce json
 // @Param user body userBlock true "blocked user id"
 // @Security ApiKeyHeaderAuth
-// @Success 200 {array} models.UserDetails "Array of user details "
-// @Failure 400 {array} models.UserDetails "Bad request"
+// @Success 200 {array} domain.Users "Array of user details "
+// @Failure 400 {array} domain.Users "Bad request"
 // @Router /admin/users/block [post]
 func (u *AdminHandler) BlockUser(c *gin.Context) {
 	// fmt.Println("here")
@@ -76,5 +76,31 @@ func (u *AdminHandler) BlockUser(c *gin.Context) {
 	}
 
 	successRes := response.ClientResponse(http.StatusOK, "succesfully blocked", user_details, nil)
+	c.JSON(http.StatusOK, successRes)
+}
+
+// @Summary Search user by email
+// @Description find user by email
+// @Tags User Management
+// @Accept json
+// @Produce json
+//
+//	@Param email query string true "User's email address"
+//
+// @Security ApiKeyHeaderAuth
+// @Success 200 {array} domain.Users "Array of user details "
+// @Failure 400 {array} domain.Users "Bad request"
+// @Router /admin/users/searchbyemail [post]
+func (u *AdminHandler) FindUserByEmail(c *gin.Context) {
+	// fmt.Println("here")
+
+	user, err := u.adminUseCase.FindUserByEmail(c)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in values", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "The users", user, nil)
 	c.JSON(http.StatusOK, successRes)
 }

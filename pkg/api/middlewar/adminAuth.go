@@ -1,6 +1,7 @@
 package middlewar
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 )
 
 func AdminMiddleware(c *gin.Context) {
+	fmt.Println("*****Middle ware Auth******8")
 	tokenString := c.GetHeader("Authorization")
 	// fmt.Println("here")
 	if tokenString == "" {
