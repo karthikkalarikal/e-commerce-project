@@ -98,3 +98,33 @@ func (db *adminRepositoryImpl) EditProduct(product domain.Product) (domain.Produ
 
 	return modProduct, nil
 }
+
+// delete product
+func (db *adminRepositoryImpl) DeleteProduct(id int) (domain.Product, error) {
+	var delProduct domain.Product
+
+	delProduct, err := db.FindProductById(id)
+	if err != nil {
+		return domain.Product{}, err
+
+	}
+
+	query := "DELETE FROM products WHERE id = ?"
+
+	if err = db.db.Exec(query, id).Error; err != nil {
+		return domain.Product{}, err
+	}
+	return delProduct, nil
+}
+
+// find product by id
+func (db *adminRepositoryImpl) FindProductById(id int) (domain.Product, error) {
+	var product domain.Product
+
+	query := "select * from products where id = ?"
+	if err := db.db.Raw(query, id).Scan(&product).Error; err != nil {
+		return domain.Product{}, err
+	}
+
+	return product, nil
+}

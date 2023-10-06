@@ -12,4 +12,6 @@ type AdminRepository interface {
 	DeleteUser(id int) (bool, error)
 	AddProduct(domain.Product) (domain.Product, error)
 	EditProduct(domain.Product) (domain.Product, error)
+	DeleteProduct(id int) (domain.Product, error)
+	FindProductById(id int) (domain.Product, error)
 }

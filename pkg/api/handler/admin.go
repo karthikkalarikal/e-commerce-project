@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -194,5 +195,38 @@ func (u *AdminHandler) EditProduct(c *gin.Context) {
 	}
 
 	succesRes := response.ClientResponse(http.StatusOK, "sucessfully edited product", modProduct, nil)
+	c.JSON(http.StatusOK, succesRes)
+}
+
+// @Summary Delete product
+// @Description Delete product by id
+// @Tags Product Management
+// @Accept json
+// @Produce json
+//
+//	@Param id query int true "product id"
+//
+// @Security ApiKeyHeaderAuth
+// @Success 200 {array} domain.Product "Array of deleted product details "
+// @Failure 400 {array} domain.Product  "Bad request"
+// @Router /admin/product/deleteproduct [post]
+func (u *AdminHandler) DeleteProduct(c *gin.Context) {
+
+	id_str := c.Param("id")
+	id, err := strconv.Atoi(id_str)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "id is in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	product, err := u.adminUseCase.DeleteProduct(id)
+
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in deleting the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, "sucessfully deleted the product", product, nil)
 	c.JSON(http.StatusOK, succesRes)
 }

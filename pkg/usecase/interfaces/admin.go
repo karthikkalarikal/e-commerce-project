@@ -13,4 +13,5 @@ type AdminUseCase interface {
 	DeleteUser(ctx *gin.Context) (string, error)
 	AddProduct(domain.Product) (domain.Product, error)
 	EditProduct(domain.Product) (domain.Product, error)
+	DeleteProduct(id int) (domain.Product, error)
 }

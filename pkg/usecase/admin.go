@@ -92,3 +92,14 @@ func (usecase *adminUseCaseImpl) EditProduct(product domain.Product) (domain.Pro
 	}
 	return modProduct, nil
 }
+
+// delete products
+func (usecase *adminUseCaseImpl) DeleteProduct(id int) (domain.Product, error) {
+
+	delProduct, err := usecase.adminrepo.DeleteProduct(id)
+	if err != nil {
+		return domain.Product{}, nil
+	}
+
+	return delProduct, nil
+}
