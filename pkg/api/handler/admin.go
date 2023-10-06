@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/response"
 )
@@ -132,4 +133,35 @@ func (u *AdminHandler) DeleteUser(c *gin.Context) {
 
 	succesRes := response.ClientResponse(http.StatusOK, message, nil, nil)
 	c.JSON(http.StatusOK, succesRes)
+}
+
+// AddProduct is a function to add a new product by admin.
+// @Summary Add product
+// @Description Add product by admin
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product body domain.Product true "Product object"
+// @Security ApiKeyHeaderAuth
+// @Success 200 {string}  domain.Product "Added product details"
+// @Failure 400 {string}  response.ClientErrorResponse "Bad request"
+// @Router /admin/product/addproduct [post]
+func (u *AdminHandler) AddProduct(c *gin.Context) {
+	var product domain.Product
+
+	if err := c.BindJSON(&product); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	returnProduct, err := u.adminUseCase.AddProduct(product)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Could not add the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "successfully added the product", returnProduct, nil)
+	c.JSON(http.StatusOK, successRes)
 }

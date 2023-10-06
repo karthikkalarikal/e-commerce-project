@@ -35,7 +35,7 @@ func (usecase *adminUseCaseImpl) UserList() ([]models.UserDetails, error) {
 // user block value logic
 func (usecase *adminUseCaseImpl) BlockUser(id int, block bool) (domain.Users, error) {
 	fmt.Println("here")
-	var user domain.Users
+	// var user domain.Users
 
 	user, err := usecase.adminrepo.BlockUser(id, block)
 	if err != nil {
@@ -59,7 +59,7 @@ func (usecase *adminUseCaseImpl) FindUserByEmail(ctx *gin.Context) ([]domain.Use
 
 // delete user
 func (usecase *adminUseCaseImpl) DeleteUser(ctx *gin.Context) (string, error) {
-	fmt.Println("****delete usecase ******")
+	// fmt.Println("****delete usecase ******")
 	id_str := ctx.Query("id")
 	id, err := strconv.Atoi(id_str)
 	if err != nil {
@@ -71,5 +71,15 @@ func (usecase *adminUseCaseImpl) DeleteUser(ctx *gin.Context) (string, error) {
 	}
 
 	return "succesfuly deleted", nil
+
+}
+
+// add products
+func (usecase *adminUseCaseImpl) AddProduct(products domain.Product) (domain.Product, error) {
+	product, err := usecase.adminrepo.AddProduct(products)
+	if err != nil {
+		return domain.Product{}, err
+	}
+	return product, nil
 
 }

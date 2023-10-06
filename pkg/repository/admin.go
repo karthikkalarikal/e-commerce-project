@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -62,12 +60,24 @@ func (db *adminRepositoryImpl) FindUserByEmail(email string) ([]domain.Users, er
 
 // delete user
 func (db *adminRepositoryImpl) DeleteUser(id int) (bool, error) {
-	fmt.Println("**delete repo")
+	// fmt.Println("**delete repo")
 	query := "delete from users where id = ?"
-	fmt.Println("id:", id)
+	// fmt.Println("id:", id)
 	err := db.db.Exec(query, id).Error
 	if err != nil {
 		return false, err
 	}
 	return true, nil
+}
+
+// add product
+func (db *adminRepositoryImpl) AddProduct(product domain.Product) (domain.Product, error) {
+	var products domain.Product
+
+	query := "insert into products (category_id,product_name, product_image,colour,stock,price) values(?,?,?,?,?,?) returning *"
+
+	if err := db.db.Raw(query, product.Category_id, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price).Scan(&products).Error; err != nil {
+		return domain.Product{}, err
+	}
+	return products, nil
 }

@@ -1,4 +1,23 @@
 definitions:
+  domain.Product:
+    properties:
+      category_id:
+        type: integer
+      colour:
+        type: string
+      id:
+        type: integer
+      price:
+        type: string
+      product_image:
+        items:
+          type: integer
+        type: array
+      product_name:
+        type: string
+      stock:
+        type: string
+    type: object
   domain.Users:
     properties:
       blocked:
@@ -105,6 +124,34 @@ definitions:
 info:
   contact: {}
 paths:
+  /admin/product/addproduct:
+    post:
+      consumes:
+      - application/json
+      description: Add product by admin
+      parameters:
+      - description: Product object
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Added product details
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      security:
+      - ApiKeyHeaderAuth: []
+      summary: Add product
+      tags:
+      - Product Management
   /admin/users/block:
     post:
       consumes:

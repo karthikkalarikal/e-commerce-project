@@ -17,6 +17,10 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler) {
 			usermanagement.POST("/searchbyemail/:email", adminHandler.FindUserByEmail)
 			usermanagement.POST("/deleteuser", adminHandler.DeleteUser)
 		}
+		productmanagement := engine.Group("/product")
+		{
+			productmanagement.POST("/addproduct", adminHandler.AddProduct)
+		}
 	}
 
 }
