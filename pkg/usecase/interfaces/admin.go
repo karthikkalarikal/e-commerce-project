@@ -10,4 +10,5 @@ type AdminUseCase interface {
 	UserList() ([]models.UserDetails, error)
 	BlockUser(id int, block bool) (domain.Users, error)
 	FindUserByEmail(ctx *gin.Context) ([]domain.Users, error)
+	DeleteUser(ctx *gin.Context) (string, error)
 }

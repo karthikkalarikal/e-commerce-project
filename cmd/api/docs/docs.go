@@ -73,7 +73,7 @@ const docTemplate = `{
                         "ApiKeyHeaderAuth": []
                     }
                 ],
-                "description": "find user by email",
+                "description": "Delete user by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -83,12 +83,12 @@ const docTemplate = `{
                 "tags": [
                     "User Management"
                 ],
-                "summary": "Search user by email",
+                "summary": "Delete user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "User's email address",
-                        "name": "email",
+                        "type": "integer",
+                        "description": "User's id",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -97,19 +97,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Array of user details ",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Users"
-                            }
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Users"
-                            }
+                            "type": "string"
                         }
                     }
                 }

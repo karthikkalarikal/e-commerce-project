@@ -9,4 +9,5 @@ type AdminRepository interface {
 	UserList() ([]models.UserDetails, error)
 	BlockUser(id int, block bool) (domain.Users, error)
 	FindUserByEmail(email string) ([]domain.Users, error)
+	DeleteUser(id int) (bool, error)
 }

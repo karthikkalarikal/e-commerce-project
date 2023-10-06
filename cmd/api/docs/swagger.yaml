@@ -141,31 +141,27 @@ paths:
     post:
       consumes:
       - application/json
-      description: find user by email
+      description: Delete user by id
       parameters:
-      - description: User's email address
+      - description: User's id
         in: query
-        name: email
+        name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: 'Array of user details '
           schema:
-            items:
-              $ref: '#/definitions/domain.Users'
-            type: array
+            type: string
         "400":
           description: Bad request
           schema:
-            items:
-              $ref: '#/definitions/domain.Users'
-            type: array
+            type: string
       security:
       - ApiKeyHeaderAuth: []
-      summary: Search user by email
+      summary: Delete user
       tags:
       - User Management
   /admin/users/userlist:

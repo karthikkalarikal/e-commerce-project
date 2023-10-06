@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -56,4 +58,16 @@ func (db *adminRepositoryImpl) FindUserByEmail(email string) ([]domain.Users, er
 		return []domain.Users{}, err
 	}
 	return user, nil
+}
+
+// delete user
+func (db *adminRepositoryImpl) DeleteUser(id int) (bool, error) {
+	fmt.Println("**delete repo")
+	query := "delete from users where id = ?"
+	fmt.Println("id:", id)
+	err := db.db.Exec(query, id).Error
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

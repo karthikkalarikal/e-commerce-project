@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -103,4 +104,32 @@ func (u *AdminHandler) FindUserByEmail(c *gin.Context) {
 
 	successRes := response.ClientResponse(http.StatusOK, "The users", user, nil)
 	c.JSON(http.StatusOK, successRes)
+}
+
+// Delete user
+
+// @Summary Delete user
+// @Description Delete user by id
+// @Tags User Management
+// @Accept json
+// @Produce json
+//
+//	@Param id query int true "User's id"
+//
+// @Security ApiKeyHeaderAuth
+// @Success 200 {string}  "Array of user details "
+// @Failure 400 {string}  "Bad request"
+// @Router /admin/users/searchbyemail [post]
+func (u *AdminHandler) DeleteUser(c *gin.Context) {
+	fmt.Println("*****Delete Handler*****")
+
+	message, err := u.adminUseCase.DeleteUser(c)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, message, nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, message, nil, nil)
+	c.JSON(http.StatusOK, succesRes)
 }

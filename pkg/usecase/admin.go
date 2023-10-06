@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -48,10 +49,27 @@ func (usecase *adminUseCaseImpl) BlockUser(id int, block bool) (domain.Users, er
 func (usecase *adminUseCaseImpl) FindUserByEmail(ctx *gin.Context) ([]domain.Users, error) {
 	var user []domain.Users
 
-	email := ctx.GetString("email")
+	email := ctx.Param("email")
 	user, err := usecase.adminrepo.FindUserByEmail(email)
 	if err != nil {
 		return []domain.Users{}, err
 	}
 	return user, nil
+}
+
+// delete user
+func (usecase *adminUseCaseImpl) DeleteUser(ctx *gin.Context) (string, error) {
+	fmt.Println("****delete usecase ******")
+	id_str := ctx.Query("id")
+	id, err := strconv.Atoi(id_str)
+	if err != nil {
+		return "error in atoi", err
+	}
+	_, err = usecase.adminrepo.DeleteUser(id)
+	if err != nil {
+		return "could not delete", err
+	}
+
+	return "succesfuly deleted", nil
+
 }

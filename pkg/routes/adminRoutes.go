@@ -14,7 +14,8 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler) {
 		{
 			usermanagement.POST("/userlist", adminHandler.UserList)
 			usermanagement.POST("/block", adminHandler.BlockUser)
-			usermanagement.POST("/searchbyemail", adminHandler.FindUserByEmail)
+			usermanagement.POST("/searchbyemail/:email", adminHandler.FindUserByEmail)
+			usermanagement.POST("/deleteuser", adminHandler.DeleteUser)
 		}
 	}
 
