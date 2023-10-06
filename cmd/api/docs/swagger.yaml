@@ -152,6 +152,34 @@ paths:
       summary: Add product
       tags:
       - Product Management
+  /admin/product/editproduct:
+    post:
+      consumes:
+      - application/json
+      description: Edit product by admin
+      parameters:
+      - description: Product object
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Edit product details
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      security:
+      - ApiKeyHeaderAuth: []
+      summary: Edit product
+      tags:
+      - Product Management
   /admin/users/block:
     post:
       consumes:

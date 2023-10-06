@@ -12,4 +12,5 @@ type AdminUseCase interface {
 	FindUserByEmail(ctx *gin.Context) ([]domain.Users, error)
 	DeleteUser(ctx *gin.Context) (string, error)
 	AddProduct(domain.Product) (domain.Product, error)
+	EditProduct(domain.Product) (domain.Product, error)
 }

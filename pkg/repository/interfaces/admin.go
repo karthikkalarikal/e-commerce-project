@@ -11,4 +11,5 @@ type AdminRepository interface {
 	FindUserByEmail(email string) ([]domain.Users, error)
 	DeleteUser(id int) (bool, error)
 	AddProduct(domain.Product) (domain.Product, error)
+	EditProduct(domain.Product) (domain.Product, error)
 }

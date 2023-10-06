@@ -81,3 +81,20 @@ func (db *adminRepositoryImpl) AddProduct(product domain.Product) (domain.Produc
 	}
 	return products, nil
 }
+
+// edit product
+func (db *adminRepositoryImpl) EditProduct(product domain.Product) (domain.Product, error) {
+	var modProduct domain.Product
+
+	query := "UPDATE products SET category_id = ? , product_name = ?, product_image = ?, colour = ?, stock = ?, price = ? WHERE id = ?"
+
+	if err := db.db.Exec(query, product.Category_id, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, product.Id).Error; err != nil {
+		return domain.Product{}, err
+	}
+
+	if err := db.db.First(&modProduct, product.Id).Error; err != nil {
+		return domain.Product{}, err
+	}
+
+	return modProduct, nil
+}

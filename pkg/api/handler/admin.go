@@ -165,3 +165,34 @@ func (u *AdminHandler) AddProduct(c *gin.Context) {
 	successRes := response.ClientResponse(http.StatusOK, "successfully added the product", returnProduct, nil)
 	c.JSON(http.StatusOK, successRes)
 }
+
+// EditProduct is a function to edit product by admin.
+// @Summary Edit product
+// @Description Edit product by admin
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product body domain.Product true "Product object"
+// @Security ApiKeyHeaderAuth
+// @Success 200 {string}  domain.Product "Edit product details"
+// @Failure 400 {string}  response.ClientErrorResponse "Bad request"
+// @Router /admin/product/editproduct [post]
+func (u *AdminHandler) EditProduct(c *gin.Context) {
+	var product domain.Product
+
+	if err := c.BindJSON(&product); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in the wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	modProduct, err := u.adminUseCase.EditProduct(product)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not edit the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, "sucessfully edited product", modProduct, nil)
+	c.JSON(http.StatusOK, succesRes)
+}

@@ -83,3 +83,12 @@ func (usecase *adminUseCaseImpl) AddProduct(products domain.Product) (domain.Pro
 	return product, nil
 
 }
+
+// edit products
+func (usecase *adminUseCaseImpl) EditProduct(product domain.Product) (domain.Product, error) {
+	modProduct, err := usecase.adminrepo.EditProduct(product)
+	if err != nil {
+		return domain.Product{}, err
+	}
+	return modProduct, nil
+}
