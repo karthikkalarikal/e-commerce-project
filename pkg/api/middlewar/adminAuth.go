@@ -10,6 +10,7 @@ import (
 
 func AdminMiddleware(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
+	// fmt.Println("here")
 	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing authorization token"})
 		c.Abort()

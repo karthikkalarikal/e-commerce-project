@@ -15,7 +15,58 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/userlist": {
+        "/admin/users/block": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyHeaderAuth": []
+                    }
+                ],
+                "description": "Edit block collumn of user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Block/Unblock-User",
+                "parameters": [
+                    {
+                        "description": "blocked user id",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.userBlock"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of user details ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.UserDetails"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.UserDetails"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/userlist": {
             "post": {
                 "security": [
                     {
@@ -267,6 +318,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handler.userBlock": {
+            "type": "object",
+            "properties": {
+                "blocked": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.OTPData": {
             "type": "object",
             "required": [

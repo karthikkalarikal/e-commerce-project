@@ -13,6 +13,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler) {
 		usermanagement := engine.Group("/users")
 		{
 			usermanagement.POST("/userlist", adminHandler.UserList)
+			usermanagement.POST("/block", adminHandler.BlockUser)
 		}
 	}
 
