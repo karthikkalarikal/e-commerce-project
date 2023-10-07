@@ -5,7 +5,7 @@ import (
 	"github.com/karthikkalarikal/ecommerce-project/pkg/api/handler"
 )
 
-func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHandler *handler.OtpHandler, productHandler *handler.ProductHandler) {
+func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHandler *handler.OtpHandler, productHandler *handler.ProductHandler, cartHandler *handler.CartHandler) {
 	engine.POST("/signup", userHandler.UserSignUp)
 	engine.POST("/login", userHandler.LoginHandler)
 
@@ -13,5 +13,5 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 	engine.POST("/verifyotp", otpHandler.VerifyOTP)
 
 	engine.GET("/viewproducts", productHandler.ListProducts)
-
+	engine.PUT("/addtocart/:id", cartHandler.AddToCart)
 }
