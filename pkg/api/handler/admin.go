@@ -253,11 +253,11 @@ func (u *AdminHandler) AddCategory(c *gin.Context) {
 
 	returnCategory, err := u.adminUseCase.AddCategory(adCat)
 	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "Could not add the product", nil, err.Error())
+		errRes := response.ClientResponse(http.StatusBadRequest, "Could not add the category", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 
-	successRes := response.ClientResponse(http.StatusOK, "successfully added the product", returnCategory, nil)
+	successRes := response.ClientResponse(http.StatusOK, "successfully added the category", returnCategory, nil)
 	c.JSON(http.StatusOK, successRes)
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 	"gorm.io/gorm"
@@ -19,6 +20,7 @@ func NewProductRepository(repo *gorm.DB) interfaces.ProductRepository {
 	}
 }
 
+// list products
 func (prod *productRepositoryImpl) ListProducts() ([]models.Product, error) {
 
 	var product_list []models.Product
@@ -31,4 +33,24 @@ func (prod *productRepositoryImpl) ListProducts() ([]models.Product, error) {
 	}
 	fmt.Println(product_list)
 	return product_list, nil
+}
+
+// update categories
+
+func (prod *productRepositoryImpl) UpdateCategory(category domain.Category) (domain.Category, error) {
+
+	var body domain.Category
+
+	query := "UPDATE categories SET category_name = $1 WHERE category_id = $2"
+	fmt.Println(category.CategoryID, category.CategoryName)
+
+	if err := prod.repo.Exec(query, category.CategoryName, category.CategoryID).Error; err != nil {
+		return domain.Category{}, err
+	}
+
+	if err := prod.repo.First(&body, category.CategoryID).Error; err != nil {
+		return domain.Category{}, err
+	}
+
+	return body, nil
 }

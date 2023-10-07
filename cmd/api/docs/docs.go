@@ -199,6 +199,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/product/updatecategory": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyHeaderAuth": []
+                    }
+                ],
+                "description": "Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Management"
+                ],
+                "summary": "update category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "category_id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update Category  ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admin/users/block": {
             "post": {
                 "security": [
@@ -548,13 +597,10 @@ const docTemplate = `{
         "domain.Category": {
             "type": "object",
             "properties": {
-                "category": {
+                "category_name": {
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
-                },
-                "subcategory_id": {
                     "type": "integer"
                 }
             }

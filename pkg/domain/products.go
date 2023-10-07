@@ -12,7 +12,7 @@ type Product struct {
 }
 
 type Category struct {
-	CategoryID   uint   `json:"id" gorm:"primaryKey;not null"`
+	CategoryID   int    `json:"id" gorm:"primaryKey;not null"`
 	CategoryName string `json:"category_name"`
 	// SubCategory_id int    `json:"subcategory_id"`
 }

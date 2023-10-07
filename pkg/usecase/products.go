@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	usecase "github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -23,4 +24,13 @@ func (u *productUseCaseImpl) ListProducts() ([]models.Product, error) {
 	}
 	// fmt.Println(productList)
 	return productList, nil
+}
+
+// update category usecase
+func (u *productUseCaseImpl) UpdateCategory(category domain.Category) (domain.Category, error) {
+	body, err := u.usecase.UpdateCategory(category)
+	if err != nil {
+		return domain.Category{}, err
+	}
+	return body, nil
 }
