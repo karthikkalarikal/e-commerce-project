@@ -61,9 +61,10 @@ func (prod *productRepositoryImpl) DeleteCategory(id int) (domain.Category, erro
 	var body domain.Category
 
 	query := "select * from categories where category_id = ?"
-	query2 := "delete from categories where id = ?"
+	query2 := "delete from categories where category_id = ?"
+	fmt.Println(id)
 
-	if err := prod.repo.Raw(query2).Scan(&body).Error; err != nil {
+	if err := prod.repo.Raw(query2, id).Scan(&body).Error; err != nil {
 		return domain.Category{}, err
 	}
 

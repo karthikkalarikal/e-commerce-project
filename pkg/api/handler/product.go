@@ -91,7 +91,7 @@ func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 // @Router /admin/product/updatecategory [patch]
 func (u *ProductHandler) DeleteCategory(c *gin.Context) {
 
-	id_str := c.Query("id")
+	id_str := c.Param("id")
 	id, err := strconv.Atoi(id_str)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in converting the id", nil, err.Error())
@@ -106,7 +106,7 @@ func (u *ProductHandler) DeleteCategory(c *gin.Context) {
 		return
 	}
 
-	succesRes := response.ClientResponse(http.StatusOK, "added category successfully", category, nil)
+	succesRes := response.ClientResponse(http.StatusOK, "deleted a category successfully", category, nil)
 	c.JSON(http.StatusOK, succesRes)
 
 }
