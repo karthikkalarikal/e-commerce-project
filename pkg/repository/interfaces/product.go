@@ -8,4 +8,5 @@ import (
 type ProductRepository interface {
 	ListProducts() ([]models.Product, error)
 	UpdateCategory(category domain.Category) (domain.Category, error)
+	DeleteCategory(id int) (domain.Category, error)
 }

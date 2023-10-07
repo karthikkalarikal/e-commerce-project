@@ -34,3 +34,12 @@ func (u *productUseCaseImpl) UpdateCategory(category domain.Category) (domain.Ca
 	}
 	return body, nil
 }
+
+// delete categories usecase
+func (u *productUseCaseImpl) DeleteCategory(id int) (domain.Category, error) {
+	body, err := u.usecase.DeleteCategory(id)
+	if err != nil {
+		return domain.Category{}, err
+	}
+	return body, nil
+}

@@ -24,6 +24,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 			productmanagement.POST("/deleteproduct/:id", adminHandler.DeleteProduct)
 			productmanagement.POST("/addcategory", adminHandler.AddCategory)
 			productmanagement.PUT("/updatecategory", productHandler.UpdateCategory)
+			productmanagement.DELETE("/deletecategory/:id", productHandler.DeleteCategory)
 		}
 	}
 

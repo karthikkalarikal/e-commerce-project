@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -64,17 +65,6 @@ func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	
-	// str_id, err := strconv.Atoi(category.CategoryID)
-	// fmt.Println()
-	// id_str := c.Query("id")
-	// fmt.Println(id_str)
-	// id, err := strconv.Atoi(id_str)
-	// if err != nil {
-	// 	errRes := response.ClientResponse(http.StatusBadRequest, "error in id ", nil, err.Error())
-	// 	c.JSON(http.StatusBadRequest, errRes)
-	// 	return
-	// }
 
 	body, err := u.productUsecase.UpdateCategory(category)
 	if err != nil {
@@ -85,4 +75,38 @@ func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 
 	successRes := response.ClientResponse(http.StatusOK, "successfully updated the category", body, nil)
 	c.JSON(http.StatusOK, successRes)
+}
+
+// @Summary delete category
+// @Description delete Category by id
+// @Tags Product Management
+// @Accept json
+// @Produce json
+//
+//	@Param id query int true "category_id"
+//
+// @Security ApiKeyHeaderAuth
+// @Success 200 {array} domain.Category "delete Category  "
+// @Failure 400 {array} domain.Category  "Bad request"
+// @Router /admin/product/updatecategory [patch]
+func (u *ProductHandler) DeleteCategory(c *gin.Context) {
+
+	id_str := c.Query("id")
+	id, err := strconv.Atoi(id_str)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in converting the id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	category, err := u.productUsecase.DeleteCategory(id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could delete category", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, "added category successfully", category, nil)
+	c.JSON(http.StatusOK, succesRes)
+
 }

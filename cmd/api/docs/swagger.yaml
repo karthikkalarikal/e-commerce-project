@@ -250,7 +250,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: Category by id
+      description: delete Category by id
       parameters:
       - description: category_id
         in: query
@@ -261,7 +261,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'Update Category  '
+          description: 'delete Category  '
           schema:
             items:
               $ref: '#/definitions/domain.Category'
@@ -274,7 +274,7 @@ paths:
             type: array
       security:
       - ApiKeyHeaderAuth: []
-      summary: update category
+      summary: delete category
       tags:
       - Product Management
   /admin/users/block:

@@ -206,7 +206,7 @@ const docTemplate = `{
                         "ApiKeyHeaderAuth": []
                     }
                 ],
-                "description": "Category by id",
+                "description": "delete Category by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -216,7 +216,7 @@ const docTemplate = `{
                 "tags": [
                     "Product Management"
                 ],
-                "summary": "update category",
+                "summary": "delete category",
                 "parameters": [
                     {
                         "type": "integer",
@@ -228,7 +228,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Update Category  ",
+                        "description": "delete Category  ",
                         "schema": {
                             "type": "array",
                             "items": {

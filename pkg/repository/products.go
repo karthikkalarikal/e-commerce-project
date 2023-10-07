@@ -54,3 +54,21 @@ func (prod *productRepositoryImpl) UpdateCategory(category domain.Category) (dom
 
 	return body, nil
 }
+
+// delete categories
+
+func (prod *productRepositoryImpl) DeleteCategory(id int) (domain.Category, error) {
+	var body domain.Category
+
+	query := "select * from categories where category_id = ?"
+	query2 := "delete from categories where id = ?"
+
+	if err := prod.repo.Raw(query2).Scan(&body).Error; err != nil {
+		return domain.Category{}, err
+	}
+
+	if err := prod.repo.Exec(query, id).Error; err != nil {
+		return domain.Category{}, err
+	}
+	return body, nil
+}
