@@ -14,4 +14,5 @@ type AdminUseCase interface {
 	AddProduct(domain.Product) (domain.Product, error)
 	EditProduct(domain.Product) (domain.Product, error)
 	DeleteProduct(id int) (domain.Product, error)
+	AddCategory(domain.Category) (domain.Category, error)
 }

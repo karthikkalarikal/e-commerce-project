@@ -1,7 +1,7 @@
 package domain
 
 type Users struct {
-	ID       uint   `json:"id" gorm:"unique;not null"`
+	UserID   uint   `json:"id" gorm:"primaryKey;autoIncrement"`
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password" validate:"min=8,max=20"`
@@ -11,7 +11,7 @@ type Users struct {
 }
 
 type Address struct {
-	Id        uint   `json:"id" gorm:"unique;not null"`
+	AddressId uint   `json:"id" gorm:";primaryKey;autoIncrement"`
 	UserID    uint   `json:"user_id"`
 	Users     Users  `json:"-" gorm:"foreignkey:UserID"`
 	Name      string `json:"name" validate:"required"`

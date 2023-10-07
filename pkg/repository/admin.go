@@ -76,7 +76,7 @@ func (db *adminRepositoryImpl) AddProduct(product domain.Product) (domain.Produc
 
 	query := "insert into products (category_id,product_name, product_image,colour,stock,price) values(?,?,?,?,?,?) returning *"
 
-	if err := db.db.Raw(query, product.Category_id, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price).Scan(&products).Error; err != nil {
+	if err := db.db.Raw(query, product.CategoryID, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price).Scan(&products).Error; err != nil {
 		return domain.Product{}, err
 	}
 	return products, nil
@@ -88,11 +88,11 @@ func (db *adminRepositoryImpl) EditProduct(product domain.Product) (domain.Produ
 
 	query := "UPDATE products SET category_id = ? , product_name = ?, product_image = ?, colour = ?, stock = ?, price = ? WHERE id = ?"
 
-	if err := db.db.Exec(query, product.Category_id, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, product.Id).Error; err != nil {
+	if err := db.db.Exec(query, product.CategoryID, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, product.ProductID).Error; err != nil {
 		return domain.Product{}, err
 	}
 
-	if err := db.db.First(&modProduct, product.Id).Error; err != nil {
+	if err := db.db.First(&modProduct, product.ProductID).Error; err != nil {
 		return domain.Product{}, err
 	}
 
@@ -127,4 +127,18 @@ func (db *adminRepositoryImpl) FindProductById(id int) (domain.Product, error) {
 	}
 
 	return product, nil
+}
+
+// add category
+func (db *adminRepositoryImpl) AddCategory(category domain.Category) (domain.Category, error) {
+
+	var adCat domain.Category
+
+	query := "INSERT INTO categories(category_name) VALUES($1) RETURNING * ;"
+
+	if err := db.db.Raw(query, category.CategoryName).Scan(&adCat).Error; err != nil {
+		return domain.Category{}, err
+	}
+
+	return adCat, nil
 }

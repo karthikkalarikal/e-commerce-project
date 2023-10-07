@@ -103,3 +103,13 @@ func (usecase *adminUseCaseImpl) DeleteProduct(id int) (domain.Product, error) {
 
 	return delProduct, nil
 }
+
+// add category
+func (usecase *adminUseCaseImpl) AddCategory(category domain.Category) (domain.Category, error) {
+	adCat, err := usecase.adminrepo.AddCategory(category)
+	if err != nil {
+		return adCat, err
+	}
+	return adCat, nil
+
+}

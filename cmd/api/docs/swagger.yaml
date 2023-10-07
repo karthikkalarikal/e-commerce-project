@@ -1,4 +1,13 @@
 definitions:
+  domain.Category:
+    properties:
+      category:
+        type: string
+      id:
+        type: integer
+      subcategory_id:
+        type: integer
+    type: object
   domain.Product:
     properties:
       category_id:
@@ -124,6 +133,34 @@ definitions:
 info:
   contact: {}
 paths:
+  /admin/product/addcategory:
+    post:
+      consumes:
+      - application/json
+      description: Add category by admin
+      parameters:
+      - description: Category object
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Added Category details
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      security:
+      - ApiKeyHeaderAuth: []
+      summary: Add category
+      tags:
+      - Product Management
   /admin/product/addproduct:
     post:
       consumes:
@@ -383,25 +420,6 @@ paths:
       summary: VerifyOTP
       tags:
       - User Auth
-  /user/viewproducts:
-    post:
-      consumes:
-      - application/json
-      description: view products by a user
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of products
-          schema:
-            $ref: '#/definitions/models.Product'
-        "400":
-          description: Bad request
-          schema:
-            items:
-              $ref: '#/definitions/models.Product'
-            type: array
-      summary: ViewProducts
   /users/signup:
     get:
       consumes:
@@ -433,4 +451,23 @@ paths:
       summary: UserSignUP
       tags:
       - User Auth
+  /users/viewproducts:
+    get:
+      consumes:
+      - application/json
+      description: view products by a user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of products
+          schema:
+            $ref: '#/definitions/models.Product'
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+      summary: ViewProducts
 swagger: "2.0"

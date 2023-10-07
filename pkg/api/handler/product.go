@@ -25,7 +25,7 @@ func NewProductHandler(usecase interfaces.ProductUseCase) *ProductHandler {
 // @Produce json
 // @Success 200 {object} models.Product "List of products"
 // @Failure 400 {array} models.Product "Bad request"
-// @Router /user/viewproducts [post]
+// @Router /users/viewproducts [get]
 func (u *ProductHandler) ListProducts(c *gin.Context) {
 	fmt.Println("list product handler")
 

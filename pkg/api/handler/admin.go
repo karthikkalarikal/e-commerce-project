@@ -230,3 +230,34 @@ func (u *AdminHandler) DeleteProduct(c *gin.Context) {
 	succesRes := response.ClientResponse(http.StatusOK, "sucessfully deleted the product", product, nil)
 	c.JSON(http.StatusOK, succesRes)
 }
+
+// AddCategory is a function to add a new category by admin.
+// @Summary Add category
+// @Description Add category by admin
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product body domain.Category true "Category object"
+// @Security ApiKeyHeaderAuth
+// @Success 200 {string}  domain.Category "Added Category details"
+// @Failure 400 {string}  response.ClientErrorResponse "Bad request"
+// @Router /admin/product/addcategory [post]
+func (u *AdminHandler) AddCategory(c *gin.Context) {
+	var adCat domain.Category
+
+	if err := c.BindJSON(&adCat); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	returnCategory, err := u.adminUseCase.AddCategory(adCat)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Could not add the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "successfully added the product", returnCategory, nil)
+	c.JSON(http.StatusOK, successRes)
+}

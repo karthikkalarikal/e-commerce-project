@@ -4,6 +4,51 @@
         "contact": {}
     },
     "paths": {
+        "/admin/product/addcategory": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyHeaderAuth": []
+                    }
+                ],
+                "description": "Add category by admin",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Management"
+                ],
+                "summary": "Add category",
+                "parameters": [
+                    {
+                        "description": "Category object",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Category"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Added Category details",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/product/addproduct": {
             "post": {
                 "security": [
@@ -412,35 +457,6 @@
                 }
             }
         },
-        "/user/viewproducts": {
-            "post": {
-                "description": "view products by a user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "ViewProducts",
-                "responses": {
-                    "200": {
-                        "description": "List of products",
-                        "schema": {
-                            "$ref": "#/definitions/models.Product"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Product"
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/users/signup": {
             "get": {
                 "description": "Retrive UserDetails stored in DB and a auth token with success message",
@@ -486,9 +502,52 @@
                     }
                 }
             }
+        },
+        "/users/viewproducts": {
+            "get": {
+                "description": "view products by a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "ViewProducts",
+                "responses": {
+                    "200": {
+                        "description": "List of products",
+                        "schema": {
+                            "$ref": "#/definitions/models.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "domain.Category": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "subcategory_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "domain.Product": {
             "type": "object",
             "properties": {
