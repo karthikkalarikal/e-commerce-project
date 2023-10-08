@@ -60,13 +60,22 @@ func (u *ProductHandler) ListProducts(c *gin.Context) {
 func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 	var category domain.Category
 
+	id_str := c.Param("id")
+	id, err := strconv.Atoi(id_str)
+
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
 	if err := c.BindJSON(&category); err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 
-	body, err := u.productUsecase.UpdateCategory(category)
+	body, err := u.productUsecase.UpdateCategory(category, id)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "Could not update the category", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)

@@ -27,8 +27,8 @@ func (u *productUseCaseImpl) ListProducts() ([]models.Product, error) {
 }
 
 // update category usecase
-func (u *productUseCaseImpl) UpdateCategory(category domain.Category) (domain.Category, error) {
-	body, err := u.usecase.UpdateCategory(category)
+func (u *productUseCaseImpl) UpdateCategory(category domain.Category, id int) (domain.Category, error) {
+	body, err := u.usecase.UpdateCategory(category, id)
 	if err != nil {
 		return domain.Category{}, err
 	}

@@ -37,18 +37,18 @@ func (prod *productRepositoryImpl) ListProducts() ([]models.Product, error) {
 
 // update categories
 
-func (prod *productRepositoryImpl) UpdateCategory(category domain.Category) (domain.Category, error) {
+func (prod *productRepositoryImpl) UpdateCategory(category domain.Category, id int) (domain.Category, error) {
 
 	var body domain.Category
 
 	query := "UPDATE categories SET category_name = $1 WHERE category_id = $2"
-	fmt.Println(category.CategoryID, category.CategoryName)
+	// fmt.Println(category.CategoryID, category.CategoryName)
 
-	if err := prod.repo.Exec(query, category.CategoryName, category.CategoryID).Error; err != nil {
+	if err := prod.repo.Exec(query, category.CategoryName, id).Error; err != nil {
 		return domain.Category{}, err
 	}
 
-	if err := prod.repo.First(&body, category.CategoryID).Error; err != nil {
+	if err := prod.repo.First(&body, id).Error; err != nil {
 		return domain.Category{}, err
 	}
 
