@@ -13,5 +13,6 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 	engine.POST("/verifyotp", otpHandler.VerifyOTP)
 
 	engine.GET("/viewproducts", productHandler.ListProducts)
+	
 	engine.PUT("/addtocart/:id", cartHandler.AddToCart)
 }

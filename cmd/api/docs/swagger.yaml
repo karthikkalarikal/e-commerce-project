@@ -314,11 +314,11 @@ paths:
               $ref: '#/definitions/domain.Users'
             type: array
       security:
-      - ApiKeyHeaderAuth: []
+      - Bearer: []
       summary: Block/Unblock-User
       tags:
       - User Management
-  /admin/users/searchbyemail:
+  /admin/users/deleteuser:
     post:
       consumes:
       - application/json
@@ -343,6 +343,39 @@ paths:
       security:
       - ApiKeyHeaderAuth: []
       summary: Delete user
+      tags:
+      - User Management
+  /admin/users/searchbyemail:
+    post:
+      consumes:
+      - application/json
+      description: find user by email
+      parameters:
+      - description: User's email address
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Array of user details '
+          schema:
+            items:
+              $ref: '#/definitions/domain.Users'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/domain.Users'
+            type: array
+      security:
+      - Bearer: []
+      - ApiKeyHeaderAuth: []
+      summary: Search user by email
       tags:
       - User Management
   /admin/users/userlist:

@@ -252,7 +252,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "Bearer": []
                     }
                 ],
                 "description": "Edit block collumn of user",
@@ -299,7 +299,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/users/searchbyemail": {
+        "/admin/users/deleteuser": {
             "post": {
                 "security": [
                     {
@@ -337,6 +337,60 @@ const docTemplate = `{
                         "description": "Bad request",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/searchbyemail": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    },
+                    {
+                        "ApiKeyHeaderAuth": []
+                    }
+                ],
+                "description": "find user by email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Search user by email",
+                "parameters": [
+                    {
+                        "description": "User's email address",
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of user details ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Users"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Users"
+                            }
                         }
                     }
                 }

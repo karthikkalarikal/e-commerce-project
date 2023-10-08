@@ -56,7 +56,7 @@ type userBlock struct {
 // @Accept json
 // @Produce json
 // @Param user body userBlock true "blocked user id"
-// @Security ApiKeyHeaderAuth
+// @Security Bearer
 // @Success 200 {array} domain.Users "Array of user details "
 // @Failure 400 {array} domain.Users "Bad request"
 // @Router /admin/users/block [post]
@@ -87,8 +87,9 @@ func (u *AdminHandler) BlockUser(c *gin.Context) {
 // @Tags User Management
 // @Accept json
 // @Produce json
+// @Security Bearer
 //
-//	@Param email query string true "User's email address"
+//	@Param email body string true "User's email address"
 //
 // @Security ApiKeyHeaderAuth
 // @Success 200 {array} domain.Users "Array of user details "
@@ -121,7 +122,7 @@ func (u *AdminHandler) FindUserByEmail(c *gin.Context) {
 // @Security ApiKeyHeaderAuth
 // @Success 200 {string}  "Array of user details "
 // @Failure 400 {string}  "Bad request"
-// @Router /admin/users/searchbyemail [post]
+// @Router /admin/users/deleteuser [post]
 func (u *AdminHandler) DeleteUser(c *gin.Context) {
 	fmt.Println("*****Delete Handler*****")
 
