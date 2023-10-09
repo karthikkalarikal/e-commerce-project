@@ -21,7 +21,7 @@ func NewAdminUseCase(repo repo.AdminRepository) interfaces.AdminUseCase {
 	}
 }
 
-// user list for admin
+// --------------------------------user list for admin---------------------------\\
 func (usecase *adminUseCaseImpl) UserList() ([]models.UserDetails, error) {
 	userList, err := usecase.adminrepo.UserList()
 	if err != nil {

@@ -21,6 +21,19 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 	}
 }
 
+// @title Go + Gin E-Commerce API
+// @version 1.0.0
+// @description Stylezine is an E-commerce platform to purchase and sell Electronic itmes
+
+// @contact.name API Support
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @host localhost:8080
+// @BasePath /
+// @query.collection.format multi
+
 // @Summary ListProducts
 // @Description Retrive and display user list
 // @Tags User Management
@@ -29,9 +42,9 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 // @Security BearerTokenAuth
 // @Success 200 {array} models.UserDetails "Array of user details "
 // @Failure 400 {array} models.UserDetails "Bad request"
-// @Router /admin/users/userlist [post]
+// @Router /admin/users/userlist [get]
 func (u *AdminHandler) UserList(c *gin.Context) {
-	product_list, err := u.adminUseCase.UserList()
+	user_list, err := u.adminUseCase.UserList()
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "Users cannot be displayed", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
@@ -40,7 +53,7 @@ func (u *AdminHandler) UserList(c *gin.Context) {
 
 	message := "Userlist"
 
-	successRes := response.ClientResponse(http.StatusOK, message, product_list, nil)
+	successRes := response.ClientResponse(http.StatusOK, message, user_list, nil)
 	// fmt.Println(product_list)
 	c.JSON(http.StatusOK, successRes)
 }

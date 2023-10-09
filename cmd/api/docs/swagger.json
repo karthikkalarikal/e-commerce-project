@@ -1,7 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Stylezine is an E-commerce platform to purchase and sell Electronic itmes",
+        "title": "Go + Gin E-Commerce API",
+        "contact": {
+            "name": "API Support"
+        },
+        "version": "1.0.0"
     },
     "paths": {
         "/admin/product/addcategory": {
@@ -383,7 +388,7 @@
             }
         },
         "/admin/users/userlist": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -881,6 +886,13 @@
                     "type": "integer"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

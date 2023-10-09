@@ -135,7 +135,12 @@ definitions:
         type: integer
     type: object
 info:
-  contact: {}
+  contact:
+    name: API Support
+  description: Stylezine is an E-commerce platform to purchase and sell Electronic
+    itmes
+  title: Go + Gin E-Commerce API
+  version: 1.0.0
 paths:
   /admin/product/addcategory:
     post:
@@ -375,7 +380,7 @@ paths:
       tags:
       - User Management
   /admin/users/userlist:
-    post:
+    get:
       consumes:
       - application/json
       description: Retrive and display user list
@@ -564,4 +569,9 @@ paths:
               $ref: '#/definitions/models.Product'
             type: array
       summary: ViewProducts
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
