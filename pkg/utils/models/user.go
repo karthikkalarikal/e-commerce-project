@@ -6,12 +6,11 @@ type UserDetails struct {
 	Phone           string `json:"phone"`
 	Password        string `json:"password"`
 	ConfirmPassword string `json:"confirmpassword"`
-	Role            bool   `json:"role" default:"false"`
 }
 
 type Address struct {
-	Id        uint   `json:"id" gorm:"unique;not null"`
-	UserId    uint   `json:"user_id"`
+	Id        int    `json:"id" gorm:"unique;not null"`
+	UserId    int    `json:"user_id"`
 	Name      string `json:"name" validate:"required"`
 	HouseName string `json:"house_name" validate:"required"`
 	Street    string `json:"street" validate:"required"`
@@ -22,11 +21,11 @@ type Address struct {
 
 // to be shown after logging in
 type UserDetailsResponse struct {
-	Id    int    `json:"id"`
+	Id    int    `json:"user_id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 	Phone string `json:"phone"`
-	Role  bool   `json:"role" default:"false"`
+	// Role  bool   `json:"role" default:"false"`
 }
 
 // token and details , token to access protected routes
@@ -41,8 +40,8 @@ type UserLogin struct {
 }
 
 type UserSignInResponse struct {
-	Id       uint   `json:"id"`
-	UserID   uint   `json:"user_id"`
+	Id       int    `json:"id"`
+	UserID   int    `json:"user_id"`
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`

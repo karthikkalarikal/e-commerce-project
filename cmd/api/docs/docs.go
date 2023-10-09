@@ -448,7 +448,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Cart"
+                    "Cart Mangement"
                 ],
                 "summary": "Add to Cart",
                 "parameters": [
@@ -476,7 +476,50 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/otplogin": {
+        "/users/login": {
+            "post": {
+                "description": "Sign in a user and return user details and a token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Auth"
+                ],
+                "summary": "UserSignIN",
+                "parameters": [
+                    {
+                        "description": "User login details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User details and role",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSignInResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.UserSignInResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/otplogin": {
             "post": {
                 "description": "verify Phone number using OTP",
                 "consumes": [
@@ -522,9 +565,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/signin": {
+        "/users/signup": {
             "post": {
-                "description": "Sign in a user and return user details and a token",
+                "description": "Retrive UserDetails stored in DB and a auth token with success message",
                 "consumes": [
                     "application/json"
                 ],
@@ -534,23 +577,26 @@ const docTemplate = `{
                 "tags": [
                     "User Auth"
                 ],
-                "summary": "UserSignIN",
+                "summary": "UserSignUP",
                 "parameters": [
                     {
-                        "description": "User login details",
+                        "description": "User details",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserLogin"
+                            "$ref": "#/definitions/models.UserDetails"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "User details and role",
+                    "201": {
+                        "description": "User details and token",
                         "schema": {
-                            "$ref": "#/definitions/models.UserSignInResponse"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.UserDetails"
+                            }
                         }
                     },
                     "400": {
@@ -565,7 +611,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/verifyotp": {
+        "/users/verifyotp": {
             "post": {
                 "description": "verify Phone number using OTP",
                 "consumes": [
@@ -596,52 +642,6 @@ const docTemplate = `{
                             "type": "array",
                             "items": {
                                 "$ref": "#/definitions/models.UserSignInResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.UserSignInResponse"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/users/signup": {
-            "get": {
-                "description": "Retrive UserDetails stored in DB and a auth token with success message",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User Auth"
-                ],
-                "summary": "UserSignUP",
-                "parameters": [
-                    {
-                        "description": "User details",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UserDetails"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User details and token",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.UserDetails"
                             }
                         }
                     },
@@ -824,10 +824,6 @@ const docTemplate = `{
                 },
                 "phone": {
                     "type": "string"
-                },
-                "role": {
-                    "type": "boolean",
-                    "default": false
                 }
             }
         },

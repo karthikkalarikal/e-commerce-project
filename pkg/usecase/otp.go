@@ -15,17 +15,20 @@ import (
 )
 
 type otpUseCaseImpl struct {
-	cfg     config.Config
-	otpRepo interfaces.OtpRepository
+	cfg      config.Config
+	otpRepo  interfaces.OtpRepository
+	userRepo interfaces.UserRepository
 }
 
-func NewOtpUsecase(repo interfaces.OtpRepository, cfg config.Config) usecase.OtpUseCase {
+func NewOtpUsecase(repo interfaces.OtpRepository, cfg config.Config, repoUser interfaces.UserRepository) usecase.OtpUseCase {
 	return &otpUseCaseImpl{
-		otpRepo: repo,
-		cfg:     cfg,
+		otpRepo:  repo,
+		cfg:      cfg,
+		userRepo: repoUser,
 	}
 }
 
+// -----------------------------verify otp------------------------------------\\
 func (otp *otpUseCaseImpl) VerifyOTP(code models.VerifyData) (models.TokenUsers, error) {
 	twilioClient := twilio.NewRestClientWithParams(twilio.ClientParams{
 		Username: otp.cfg.ACCOUNTSID,
@@ -66,11 +69,19 @@ func (otp *otpUseCaseImpl) VerifyOTP(code models.VerifyData) (models.TokenUsers,
 	}, nil
 }
 
+// -------------------------------------------send otp ------------------------------------------\\
 func (otp *otpUseCaseImpl) SendOTP(phone string) error {
 	fmt.Println("i am here")
-	ok := otp.otpRepo.FindUserByMobileNumber(phone)
-	if !ok {
+	user, err := otp.otpRepo.FindUserByMobileNumber(phone)
+	if err != nil {
 		return errors.New("the user does not exist")
+	}
+	ok, err := otp.userRepo.UserBlockedStatus(user.Email)
+	if err != nil {
+		return errors.New("error gettin user status")
+	}
+	if ok {
+		return errors.New("the user is blocked by admin")
 	}
 
 	twilioClient := twilio.NewRestClientWithParams(twilio.ClientParams{
@@ -84,7 +95,7 @@ func (otp *otpUseCaseImpl) SendOTP(phone string) error {
 	params.SetChannel("sms")
 	fmt.Println("service id", otp.cfg.SERVICESID, otp.cfg.AUTHTOKEN, otp.cfg.ACCOUNTSID, otp.cfg)
 	fmt.Println("params", params)
-	_, err := twilioClient.VerifyV2.CreateVerification(otp.cfg.SERVICESID, params)
+	_, err = twilioClient.VerifyV2.CreateVerification(otp.cfg.SERVICESID, params)
 	if err != nil {
 		fmt.Println(err)
 

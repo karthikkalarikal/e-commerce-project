@@ -26,9 +26,9 @@ func NewUserHandler(usecase interfaces.UserUseCase) *UserHandler {
 // @Accept json
 // @Produce json
 // @Param user body models.UserDetails true "User details"
-// @Success 200 {array} models.UserDetails "User details and token"
-// @Failure 400 {array} models.UserSignInResponse "Bad request"
-// @Router /users/signup [get]
+// @Success 201 {array} models.UserDetails "User details and token"
+// @Failure 400 {array} models.UserSignInResponse{} "Bad request"
+// @Router /users/signup [post]
 func (u *UserHandler) UserSignUp(c *gin.Context) {
 	var user models.UserDetails
 
@@ -73,7 +73,7 @@ func (u *UserHandler) UserSignUp(c *gin.Context) {
 // @Param user body models.UserLogin true "User login details"
 // @Success 200 {object} models.UserSignInResponse "User details and role"
 // @Failure 400 {array} models.UserSignInResponse "Bad request"
-// @Router /user/signin [post]
+// @Router /users/login [post]
 func (u *UserHandler) LoginHandler(c *gin.Context) {
 	var user models.UserLogin
 

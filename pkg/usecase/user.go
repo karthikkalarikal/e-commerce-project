@@ -22,6 +22,7 @@ func NewUserUseCase(repo interfaces.UserRepository) usecase.UserUseCase {
 	}
 }
 
+// ------------------------------------------user sign up------------------------------------\\
 func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers, error) {
 	userExist := u.userRepo.CheckUserAvailability(user.Email)
 
@@ -76,7 +77,7 @@ func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers
 
 }
 
-// log in
+// ----------------------------------log in------------------------------------------\\
 func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, error, bool) {
 
 	ok := u.userRepo.CheckUserAvailability(user.Email)
@@ -93,6 +94,7 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 	}
 
 	user_details, err := u.userRepo.FindUserByEmail(user.Email)
+	// fmt.Println("user details", user_details)
 	if err != nil {
 		return models.TokenUsers{}, errors.New("internal error"), false
 	}
@@ -105,7 +107,7 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 	if user_details.Role {
 		var adminDetails models.AdminDetailsResponse
 
-		adminDetails.Id = int(user_details.Id)
+		adminDetails.Id = user_details.UserID
 		adminDetails.Name = user_details.Name
 		adminDetails.Email = user_details.Email
 		adminDetails.Phone = user_details.Phone
@@ -124,7 +126,7 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 
 	var userDetails models.UserDetailsResponse
 
-	userDetails.Id = int(user_details.Id)
+	userDetails.Id = user_details.UserID
 	userDetails.Name = user_details.Name
 	userDetails.Email = user_details.Email
 	userDetails.Phone = user_details.Phone

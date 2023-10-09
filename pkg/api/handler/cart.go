@@ -22,12 +22,12 @@ func NewCartHandler(usecase interfaces.CartUseCase) *CartHandler {
 
 // @Summary Add to Cart
 // @Description Add product to the cart using product id
-// @Tags User Cart
+// @Tags Cart Mangement
 // @Accept json
 // @Produce json
 // @Param id path string true "product-id"
 // @Security BearerTokenAuth
-// @Success 200 {object} response.Response{}
+// @Success 200 {object} response.Response
 // @Failure 500 {object} response.Response{}
 // @Router /cart/addtocart/{id} [put]
 func (handler *CartHandler) AddToCart(ctx *gin.Context) {
@@ -56,3 +56,5 @@ func (handler *CartHandler) AddToCart(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, successRes)
 
 }
+
+// Cart item listing

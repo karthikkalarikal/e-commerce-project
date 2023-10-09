@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -18,10 +19,11 @@ func NewUserRepository(DB *gorm.DB) interfaces.UserRepository {
 	}
 }
 
+// --------------------User Sign Up----------------------------------------\\
 func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsResponse, error) {
 	var userDetails models.UserDetailsResponse
 
-	err := u.DB.Raw("insert into users(name, email, password, phone) values (?,?,?,?) returning id, name, email,phone", user.Name, user.Email, user.Password, user.Phone).Scan(&userDetails).Error
+	err := u.DB.Raw("insert into users(name, email, password, phone) values (?,?,?,?) returning *", user.Name, user.Email, user.Password, user.Phone).Scan(&userDetails).Error
 
 	if err != nil {
 		return models.UserDetailsResponse{}, err
@@ -30,6 +32,7 @@ func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsRe
 	return userDetails, nil
 }
 
+// ----------------Check User Availability-----------------------\\
 func (c *userDatabase) CheckUserAvailability(email string) bool {
 	var count int
 
@@ -41,7 +44,7 @@ func (c *userDatabase) CheckUserAvailability(email string) bool {
 	return count > 0
 }
 
-// blocked status
+// -----------------------------------blocked status--------------------------------------\\
 func (c *userDatabase) UserBlockedStatus(email string) (bool, error) {
 	var isBlocked bool
 
@@ -50,24 +53,25 @@ func (c *userDatabase) UserBlockedStatus(email string) (bool, error) {
 	if err := c.DB.Raw(query, email).Scan(&isBlocked).Error; err != nil {
 		return false, err
 	}
+	fmt.Println("blocked", isBlocked)
 	return isBlocked, nil
 }
 
-//find user details
+//----------------------------------------find user details-------------------------------\\
 
 func (c *userDatabase) FindUserByEmail(email string) (models.UserSignInResponse, error) {
 	var user_details models.UserSignInResponse
 
 	query := "SELECT * FROM users WHERE email = ?"
 	err := c.DB.Raw(query, email).Scan(&user_details).Error
-
+	fmt.Println(user_details)
 	if err != nil {
 		return models.UserSignInResponse{}, errors.New("error checking user details")
 	}
 	return user_details, nil
 }
 
-//find the role
+// ------------------------------------------find the role--------------------------------------\\
 
 func (c *userDatabase) CheckRole(email string) (bool, error) {
 	var isBlocked bool

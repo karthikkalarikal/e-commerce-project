@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/api/handler"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/api/middlewar"
 )
 
 func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHandler *handler.OtpHandler, productHandler *handler.ProductHandler, cartHandler *handler.CartHandler) {
@@ -13,6 +14,13 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 	engine.POST("/verifyotp", otpHandler.VerifyOTP)
 
 	engine.GET("/viewproducts", productHandler.ListProducts)
-	
-	engine.PUT("/addtocart/:id", cartHandler.AddToCart)
+
+	engine.Use(middlewar.AdminMiddleware)
+	{
+		usermanagement := engine.Group("/users")
+		{
+			usermanagement.POST("/cart/:id", cartHandler.AddToCart)
+		}
+	}
+
 }
