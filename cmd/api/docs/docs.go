@@ -897,7 +897,7 @@ const docTemplate = `{
         }
     },
     "securityDefinitions": {
-        "BearerAuth": {
+        "BearerTokenAuth": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

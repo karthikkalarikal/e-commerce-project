@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "github.com/karthikkalarikal/ecommerce-project/cmd/api/docs"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/api/handler"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/routes"
 	swaggerFiles "github.com/swaggo/files"

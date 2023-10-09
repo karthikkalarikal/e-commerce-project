@@ -105,6 +105,7 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 	}
 
 	if user_details.Role {
+		fmt.Println("user admin")
 		var adminDetails models.AdminDetailsResponse
 
 		adminDetails.Id = user_details.UserID
@@ -126,6 +127,7 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 
 	var userDetails models.UserDetailsResponse
 
+	fmt.Println("user user")
 	userDetails.Id = user_details.UserID
 	userDetails.Name = user_details.Name
 	userDetails.Email = user_details.Email

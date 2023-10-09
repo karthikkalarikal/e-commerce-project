@@ -570,7 +570,7 @@ paths:
             type: array
       summary: ViewProducts
 securityDefinitions:
-  BearerAuth:
+  BearerTokenAuth:
     in: header
     name: Authorization
     type: apiKey

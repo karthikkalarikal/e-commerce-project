@@ -24,10 +24,8 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 // @title Go + Gin E-Commerce API
 // @version 1.0.0
 // @description Stylezine is an E-commerce platform to purchase and sell Electronic itmes
-
 // @contact.name API Support
-
-// @securityDefinitions.apikey BearerAuth
+// @securityDefinitions.apikey BearerTokenAuth
 // @in header
 // @name Authorization
 // @host localhost:8080
