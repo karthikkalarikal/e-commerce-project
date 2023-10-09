@@ -21,11 +21,20 @@ func NewAdminUseCase(repo repo.AdminRepository) interfaces.AdminUseCase {
 	}
 }
 
-// --------------------------------user list for admin---------------------------\\
-func (usecase *adminUseCaseImpl) UserList() ([]models.UserDetails, error) {
-	userList, err := usecase.adminrepo.UserList()
+// --------------------------------user list for admin--------------------------- \\
+func (usecase *adminUseCaseImpl) UserList(pageNo int, pageList int) ([]models.UserDetailsResponse, error) {
+
+	total, _ := usecase.adminrepo.CountUsers()
+	fmt.Println("total", total)
+
+	if pageNo <= 0 {
+		pageNo = 1
+	}
+	offset := (pageNo - 1) * pageList
+
+	userList, err := usecase.adminrepo.UserList(pageList, offset)
 	if err != nil {
-		return []models.UserDetails{}, err
+		return []models.UserDetailsResponse{}, err
 	}
 
 	return userList, nil
@@ -45,11 +54,10 @@ func (usecase *adminUseCaseImpl) BlockUser(id int, block bool) (domain.Users, er
 	return user, err
 }
 
-// search user by email
-func (usecase *adminUseCaseImpl) FindUserByEmail(ctx *gin.Context) ([]domain.Users, error) {
+// ------------------------------------------search user by email----------------------------- \\
+func (usecase *adminUseCaseImpl) FindUserByEmail(email string) ([]domain.Users, error) {
 	var user []domain.Users
 
-	email := ctx.Param("email")
 	user, err := usecase.adminrepo.FindUserByEmail(email)
 	if err != nil {
 		return []domain.Users{}, err

@@ -7,9 +7,9 @@ import (
 )
 
 type AdminUseCase interface {
-	UserList() ([]models.UserDetails, error)
+	UserList(int, int) ([]models.UserDetailsResponse, error)
 	BlockUser(id int, block bool) (domain.Users, error)
-	FindUserByEmail(ctx *gin.Context) ([]domain.Users, error)
+	FindUserByEmail(email string) ([]domain.Users, error)
 	DeleteUser(ctx *gin.Context) (string, error)
 	AddProduct(domain.Product) (domain.Product, error)
 	EditProduct(domain.Product) (domain.Product, error)

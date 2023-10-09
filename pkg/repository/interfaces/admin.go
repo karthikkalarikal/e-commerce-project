@@ -6,7 +6,7 @@ import (
 )
 
 type AdminRepository interface {
-	UserList() ([]models.UserDetails, error)
+	UserList(int, int) ([]models.UserDetailsResponse, error)
 	BlockUser(id int, block bool) (domain.Users, error)
 	FindUserByEmail(email string) ([]domain.Users, error)
 	DeleteUser(id int) (bool, error)
@@ -15,4 +15,5 @@ type AdminRepository interface {
 	DeleteProduct(id int) (domain.Product, error)
 	FindProductById(id int) (domain.Product, error)
 	AddCategory(category domain.Category) (domain.Category, error)
+	CountUsers() (int, error)
 }

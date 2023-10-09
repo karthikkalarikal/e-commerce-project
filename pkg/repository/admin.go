@@ -17,17 +17,17 @@ func NewAdminRepository(db *gorm.DB) interfaces.AdminRepository {
 	}
 }
 
-// view all the users in the database
-func (db *adminRepositoryImpl) UserList() ([]models.UserDetails, error) {
+// -------------------view all the users in the database------------------------------ \\
+func (db *adminRepositoryImpl) UserList(pageList int, offset int) ([]models.UserDetailsResponse, error) {
 
-	var userList []models.UserDetails
+	var userList []models.UserDetailsResponse
 
-	query := "SELECT * FROM users"
+	query := "SELECT * FROM users LIMIT $1 OFFSET $2"
 
-	err := db.db.Raw(query).Scan(&userList).Error
+	err := db.db.Raw(query, pageList, offset).Scan(&userList).Error
 
 	if err != nil {
-		return []models.UserDetails{}, err
+		return []models.UserDetailsResponse{}, err
 	}
 
 	return userList, nil
@@ -141,4 +141,17 @@ func (db *adminRepositoryImpl) AddCategory(category domain.Category) (domain.Cat
 	}
 
 	return adCat, nil
+}
+
+// ---------------------check the number of users--------------------- \\
+func (db *adminRepositoryImpl) CountUsers() (int, error) {
+	var count int
+
+	query := "select count(*) from users"
+	if err := db.db.Raw(query).Scan(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return count, nil
+
 }

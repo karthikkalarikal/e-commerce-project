@@ -344,8 +344,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/users/searchbyemail": {
-            "post": {
+        "/admin/users/searchemail": {
+            "get": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -402,24 +402,35 @@ const docTemplate = `{
                         "BearerTokenAuth": []
                     }
                 ],
-                "description": "Retrive and display user list",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Retrive and display user list according to instructions",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "User Management"
                 ],
-                "summary": "ListProducts",
+                "summary": "List the users you could specify page and no of users in one page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Results per page (default 10)",
+                        "name": "per_page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Array of user details ",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.UserDetails"
+                                "$ref": "#/definitions/response.Response"
                             }
                         }
                     },
@@ -428,7 +439,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.UserDetails"
+                                "$ref": "#/definitions/response.Response"
                             }
                         }
                     }

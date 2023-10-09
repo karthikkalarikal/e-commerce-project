@@ -32,17 +32,26 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 // @BasePath /
 // @query.collection.format multi
 
-// @Summary ListProducts
-// @Description Retrive and display user list
+// FindUserByEmil godoc
+// @Summary List the users you could specify page and no of users in one page
+// @Description Retrive and display user list according to instructions
 // @Tags User Management
-// @Accept json
 // @Produce json
+// @Param page query int false "Page number (default 1)"
+// @Param per_page query int false "Results per page (default 10)"
 // @Security BearerTokenAuth
-// @Success 200 {array} models.UserDetails "Array of user details "
-// @Failure 400 {array} models.UserDetails "Bad request"
+// @Success 200 {array} response.Response "Array of user details "
+// @Failure 400 {array} response.Response "Bad request"
 // @Router /admin/users/userlist [get]
 func (u *AdminHandler) UserList(c *gin.Context) {
-	user_list, err := u.adminUseCase.UserList()
+
+	pageNo := c.DefaultQuery("page", "1")        // default 1
+	pageList := c.DefaultQuery("per_page", "10") // default to 10
+
+	pageNoInt, _ := strconv.Atoi(pageNo)
+	pageListInt, _ := strconv.Atoi(pageList)
+
+	user_list, err := u.adminUseCase.UserList(pageNoInt, pageListInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "Users cannot be displayed", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
@@ -52,7 +61,6 @@ func (u *AdminHandler) UserList(c *gin.Context) {
 	message := "Userlist"
 
 	successRes := response.ClientResponse(http.StatusOK, message, user_list, nil)
-	// fmt.Println(product_list)
 	c.JSON(http.StatusOK, successRes)
 }
 
@@ -104,11 +112,12 @@ func (u *AdminHandler) BlockUser(c *gin.Context) {
 // @Security BearerTokenAuth
 // @Success 200 {array} domain.Users "Array of user details "
 // @Failure 400 {array} domain.Users "Bad request"
-// @Router /admin/users/searchbyemail [post]
+// @Router /admin/users/searchemail [get]
 func (u *AdminHandler) FindUserByEmail(c *gin.Context) {
 	// fmt.Println("here")
+	email := c.Query("email")
 
-	user, err := u.adminUseCase.FindUserByEmail(c)
+	user, err := u.adminUseCase.FindUserByEmail(email)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in values", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
