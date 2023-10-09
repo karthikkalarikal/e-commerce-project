@@ -26,7 +26,7 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 // @Tags User Management
 // @Accept json
 // @Produce json
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {array} models.UserDetails "Array of user details "
 // @Failure 400 {array} models.UserDetails "Bad request"
 // @Router /admin/users/userlist [post]
@@ -56,7 +56,7 @@ type userBlock struct {
 // @Accept json
 // @Produce json
 // @Param user body userBlock true "blocked user id"
-// @Security Bearer
+// @Security BearerTokenAuth
 // @Success 200 {array} domain.Users "Array of user details "
 // @Failure 400 {array} domain.Users "Bad request"
 // @Router /admin/users/block [post]
@@ -87,11 +87,10 @@ func (u *AdminHandler) BlockUser(c *gin.Context) {
 // @Tags User Management
 // @Accept json
 // @Produce json
-// @Security Bearer
 //
 //	@Param email body string true "User's email address"
 //
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {array} domain.Users "Array of user details "
 // @Failure 400 {array} domain.Users "Bad request"
 // @Router /admin/users/searchbyemail [post]
@@ -119,7 +118,7 @@ func (u *AdminHandler) FindUserByEmail(c *gin.Context) {
 //
 //	@Param id query int true "User's id"
 //
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {string}  "Array of user details "
 // @Failure 400 {string}  "Bad request"
 // @Router /admin/users/deleteuser [post]
@@ -144,7 +143,7 @@ func (u *AdminHandler) DeleteUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param product body domain.Product true "Product object"
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {string}  domain.Product "Added product details"
 // @Failure 400 {string}  response.ClientErrorResponse "Bad request"
 // @Router /admin/product/addproduct [post]
@@ -175,7 +174,7 @@ func (u *AdminHandler) AddProduct(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param product body domain.Product true "Product object"
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {string}  domain.Product "Edit product details"
 // @Failure 400 {string}  response.ClientErrorResponse "Bad request"
 // @Router /admin/product/editproduct [post]
@@ -207,7 +206,7 @@ func (u *AdminHandler) EditProduct(c *gin.Context) {
 //
 //	@Param id query int true "product id"
 //
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {array} domain.Product "Array of deleted product details "
 // @Failure 400 {array} domain.Product  "Bad request"
 // @Router /admin/product/deleteproduct [post]
@@ -239,7 +238,7 @@ func (u *AdminHandler) DeleteProduct(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param product body domain.Category true "Category object"
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {string}  domain.Category "Added Category details"
 // @Failure 400 {string}  response.ClientErrorResponse "Bad request"
 // @Router /admin/product/addcategory [post]

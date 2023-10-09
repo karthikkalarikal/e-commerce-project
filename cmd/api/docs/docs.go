@@ -19,7 +19,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Add category by admin",
@@ -64,7 +64,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Add product by admin",
@@ -109,7 +109,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Delete product by id",
@@ -158,7 +158,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Edit product by admin",
@@ -203,7 +203,7 @@ const docTemplate = `{
             "patch": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "delete Category by id",
@@ -252,7 +252,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "Bearer": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Edit block collumn of user",
@@ -303,7 +303,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Delete user by id",
@@ -346,10 +346,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "Bearer": []
-                    },
-                    {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "find user by email",
@@ -400,7 +397,7 @@ const docTemplate = `{
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Retrive and display user list",
@@ -440,7 +437,7 @@ const docTemplate = `{
             "put": {
                 "security": [
                     {
-                        "Bearer": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Add product to the cart using product id",

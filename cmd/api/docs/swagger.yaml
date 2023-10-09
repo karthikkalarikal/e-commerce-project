@@ -164,7 +164,7 @@ paths:
           schema:
             type: string
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: Add category
       tags:
       - Product Management
@@ -192,7 +192,7 @@ paths:
           schema:
             type: string
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: Add product
       tags:
       - Product Management
@@ -223,7 +223,7 @@ paths:
               $ref: '#/definitions/domain.Product'
             type: array
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: Delete product
       tags:
       - Product Management
@@ -251,7 +251,7 @@ paths:
           schema:
             type: string
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: Edit product
       tags:
       - Product Management
@@ -282,7 +282,7 @@ paths:
               $ref: '#/definitions/domain.Category'
             type: array
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: delete category
       tags:
       - Product Management
@@ -314,7 +314,7 @@ paths:
               $ref: '#/definitions/domain.Users'
             type: array
       security:
-      - Bearer: []
+      - BearerTokenAuth: []
       summary: Block/Unblock-User
       tags:
       - User Management
@@ -341,7 +341,7 @@ paths:
           schema:
             type: string
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: Delete user
       tags:
       - User Management
@@ -373,8 +373,7 @@ paths:
               $ref: '#/definitions/domain.Users'
             type: array
       security:
-      - Bearer: []
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: Search user by email
       tags:
       - User Management
@@ -399,7 +398,7 @@ paths:
               $ref: '#/definitions/models.UserDetails'
             type: array
       security:
-      - ApiKeyHeaderAuth: []
+      - BearerTokenAuth: []
       summary: ListProducts
       tags:
       - User Management
@@ -426,7 +425,7 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       security:
-      - Bearer: []
+      - BearerTokenAuth: []
       summary: Add to Cart
       tags:
       - User Cart

@@ -26,7 +26,7 @@ func NewCartHandler(usecase interfaces.CartUseCase) *CartHandler {
 // @Accept json
 // @Produce json
 // @Param id path string true "product-id"
-// @Security Bearer
+// @Security BearerTokenAuth
 // @Success 200 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
 // @Router /cart/addtocart/{id} [put]

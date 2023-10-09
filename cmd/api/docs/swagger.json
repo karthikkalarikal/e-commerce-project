@@ -8,7 +8,7 @@
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Add category by admin",
@@ -53,7 +53,7 @@
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Add product by admin",
@@ -98,7 +98,7 @@
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Delete product by id",
@@ -147,7 +147,7 @@
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Edit product by admin",
@@ -192,7 +192,7 @@
             "patch": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "delete Category by id",
@@ -241,7 +241,7 @@
             "post": {
                 "security": [
                     {
-                        "Bearer": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Edit block collumn of user",
@@ -292,7 +292,7 @@
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Delete user by id",
@@ -335,10 +335,7 @@
             "post": {
                 "security": [
                     {
-                        "Bearer": []
-                    },
-                    {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "find user by email",
@@ -389,7 +386,7 @@
             "post": {
                 "security": [
                     {
-                        "ApiKeyHeaderAuth": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Retrive and display user list",
@@ -429,7 +426,7 @@
             "put": {
                 "security": [
                     {
-                        "Bearer": []
+                        "BearerTokenAuth": []
                     }
                 ],
                 "description": "Add product to the cart using product id",

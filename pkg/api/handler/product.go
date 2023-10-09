@@ -53,7 +53,7 @@ func (u *ProductHandler) ListProducts(c *gin.Context) {
 //
 //	@Param id query int true "category_id"
 //
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {array} domain.Category "Update Category  "
 // @Failure 400 {array} domain.Category  "Bad request"
 // @Router /admin/product/updatecategory [patch]
@@ -94,7 +94,7 @@ func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 //
 //	@Param id query int true "category_id"
 //
-// @Security ApiKeyHeaderAuth
+// @Security BearerTokenAuth
 // @Success 200 {array} domain.Category "delete Category  "
 // @Failure 400 {array} domain.Category  "Bad request"
 // @Router /admin/product/updatecategory [patch]
