@@ -54,11 +54,13 @@ func (usecase *adminUseCaseImpl) BlockUser(id int, block bool) (domain.Users, er
 	return user, err
 }
 
-// ------------------------------------------search user by email----------------------------- \\
-func (usecase *adminUseCaseImpl) FindUserByEmail(email string) ([]domain.Users, error) {
+// ------------------------------------------search user ------------------------------------------ \\
+func (usecase *adminUseCaseImpl) FindUser(email string, name string, id string, pageNo int, pageList int) ([]domain.Users, error) {
 	var user []domain.Users
 
-	user, err := usecase.adminrepo.FindUserByEmail(email)
+	offset := (pageNo - 1) * pageList
+	fmt.Println("page", pageList, "offset", offset)
+	user, err := usecase.adminrepo.FindUser(email, name, id, pageList, offset)
 	if err != nil {
 		return []domain.Users{}, err
 	}

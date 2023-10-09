@@ -17,7 +17,7 @@ func NewAdminRepository(db *gorm.DB) interfaces.AdminRepository {
 	}
 }
 
-// -------------------view all the users in the database------------------------------ \\
+// ----------------------view all the users in the database------------------------------ \\
 func (db *adminRepositoryImpl) UserList(pageList int, offset int) ([]models.UserDetailsResponse, error) {
 
 	var userList []models.UserDetailsResponse
@@ -45,17 +45,44 @@ func (db *adminRepositoryImpl) BlockUser(id int, block bool) (domain.Users, erro
 	return user, nil
 }
 
-// search user by email
-func (db *adminRepositoryImpl) FindUserByEmail(email string) ([]domain.Users, error) {
-	var user []domain.Users
+// -----------------------------------search user by email ---------------------------------------\\
+func (db *adminRepositoryImpl) FindUser(email string, name string, id string, pageList int, offset int) ([]domain.Users, error) {
+	var users []domain.Users
 
-	query := "select * from users where email like ?"
+	args := []interface{}{}
+	query := "select * from users where 1=1"
 
-	err := db.db.Raw(query, "%"+email+"%").Scan(&user).Error
+	if email != "" {
+		query += " and email = ?"
+		searchParam := "%" + email + "%"
+		args = append(args, searchParam)
+	}
+	if name != "" {
+		query += " and name = ?"
+		searchParam := "%" + name + "%"
+		args = append(args, searchParam)
+	}
+
+	if id != "" {
+		query += " and id = ?"
+		// idInt, err := strconv.Atoi(id)
+		// if err != nil {
+		// 	return []domain.Users{}, err
+
+		// }
+		searchParam := "%" + id + "%"
+		args = append(args, searchParam)
+	}
+
+	query += " limit ? offset ?"
+	args = append(args, pageList, offset)
+
+	err := db.db.Raw(query, args...).Scan(&users).Error
 	if err != nil {
 		return []domain.Users{}, err
 	}
-	return user, nil
+
+	return users, nil
 }
 
 // delete user

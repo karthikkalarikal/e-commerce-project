@@ -8,7 +8,7 @@ import (
 type AdminRepository interface {
 	UserList(int, int) ([]models.UserDetailsResponse, error)
 	BlockUser(id int, block bool) (domain.Users, error)
-	FindUserByEmail(email string) ([]domain.Users, error)
+	FindUser(email string, name string, id string, pageList int, offset int) ([]domain.Users, error)
 	DeleteUser(id int) (bool, error)
 	AddProduct(domain.Product) (domain.Product, error)
 	EditProduct(domain.Product) (domain.Product, error)

@@ -344,14 +344,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/users/searchemail": {
+        "/admin/users/searchuser": {
             "get": {
                 "security": [
                     {
                         "BearerTokenAuth": []
                     }
                 ],
-                "description": "find user by email",
+                "description": "Search for users based on various criteria with pagination.",
                 "consumes": [
                     "application/json"
                 ],
@@ -361,16 +361,37 @@ const docTemplate = `{
                 "tags": [
                     "User Management"
                 ],
-                "summary": "Search user by email",
+                "summary": "Search user by various criteria",
                 "parameters": [
                     {
-                        "description": "User's email address",
+                        "type": "string",
+                        "description": "Name to search for",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Email address to search for",
                         "name": "email",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "ID to search for",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Result per page (default 1)",
+                        "name": "per_page",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -379,7 +400,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Users"
+                                "$ref": "#/definitions/response.Response"
                             }
                         }
                     },
@@ -388,7 +409,16 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Users"
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error in server",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
                             }
                         }
                     }

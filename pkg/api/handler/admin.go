@@ -32,7 +32,7 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 // @BasePath /
 // @query.collection.format multi
 
-// FindUserByEmil godoc
+// GetUserList godoc
 // @Summary List the users you could specify page and no of users in one page
 // @Description Retrive and display user list according to instructions
 // @Tags User Management
@@ -101,23 +101,39 @@ func (u *AdminHandler) BlockUser(c *gin.Context) {
 	c.JSON(http.StatusOK, successRes)
 }
 
-// @Summary Search user by email
-// @Description find user by email
+// FindUsers godoc
+// @Summary Search user by various criteria
+// @Description Search for users based on various criteria with pagination.
 // @Tags User Management
 // @Accept json
 // @Produce json
-//
-//	@Param email body string true "User's email address"
-//
+// @Param name query string false "Name to search for"
+// @Param email query string false "Email address to search for"
+// @Param id query int false "ID to search for"
+// @Param page query int false "Page number (default 1)"
+// @Param per_page query int false "Result per page (default 1)"
 // @Security BearerTokenAuth
-// @Success 200 {array} domain.Users "Array of user details "
-// @Failure 400 {array} domain.Users "Bad request"
-// @Router /admin/users/searchemail [get]
-func (u *AdminHandler) FindUserByEmail(c *gin.Context) {
-	// fmt.Println("here")
-	email := c.Query("email")
+// @Success 200 {array} response.Response "Array of user details "
+// @Failure 400 {array} response.Response "Bad request"
+// @Failure 500 {array} response.Response "Error in server"
+// @Router /admin/users/searchuser [get]
+func (u *AdminHandler) FindUser(c *gin.Context) {
 
-	user, err := u.adminUseCase.FindUserByEmail(email)
+	email := c.Query("email")
+	name := c.Query("name")
+	id := c.Query("id")
+	pageNo := c.DefaultQuery("page", "1")
+	pageList := c.DefaultQuery("per_page", "10")
+	pageNoInt, err := strconv.Atoi(pageNo)
+	if err != nil {
+		pageNoInt = 1
+	}
+	pageListInt, err := strconv.Atoi(pageList)
+	if err != nil {
+		pageListInt = 10
+	}
+
+	user, err := u.adminUseCase.FindUser(email, name, id, pageNoInt, pageListInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in values", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)

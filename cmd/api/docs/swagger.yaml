@@ -347,18 +347,32 @@ paths:
       summary: Delete user
       tags:
       - User Management
-  /admin/users/searchemail:
+  /admin/users/searchuser:
     get:
       consumes:
       - application/json
-      description: find user by email
+      description: Search for users based on various criteria with pagination.
       parameters:
-      - description: User's email address
-        in: body
+      - description: Name to search for
+        in: query
+        name: name
+        type: string
+      - description: Email address to search for
+        in: query
         name: email
-        required: true
-        schema:
-          type: string
+        type: string
+      - description: ID to search for
+        in: query
+        name: id
+        type: integer
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Result per page (default 1)
+        in: query
+        name: per_page
+        type: integer
       produces:
       - application/json
       responses:
@@ -366,17 +380,23 @@ paths:
           description: 'Array of user details '
           schema:
             items:
-              $ref: '#/definitions/domain.Users'
+              $ref: '#/definitions/response.Response'
             type: array
         "400":
           description: Bad request
           schema:
             items:
-              $ref: '#/definitions/domain.Users'
+              $ref: '#/definitions/response.Response'
+            type: array
+        "500":
+          description: Error in server
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
             type: array
       security:
       - BearerTokenAuth: []
-      summary: Search user by email
+      summary: Search user by various criteria
       tags:
       - User Management
   /admin/users/userlist:

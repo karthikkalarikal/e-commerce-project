@@ -14,7 +14,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 		{
 			usermanagement.GET("/userlist", adminHandler.UserList)
 			usermanagement.POST("/block", adminHandler.BlockUser)
-			usermanagement.POST("/searchemail", adminHandler.FindUserByEmail)
+			usermanagement.GET("/searchuser", adminHandler.FindUser)
 			usermanagement.POST("/deleteuser", adminHandler.DeleteUser)
 		}
 		productmanagement := engine.Group("/product")
