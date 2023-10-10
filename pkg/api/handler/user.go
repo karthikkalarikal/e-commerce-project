@@ -254,3 +254,42 @@ func (u *UserHandler) GetAddress(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, successRes)
 }
+
+// @Summary EditUserDetails
+// @Description Edit User Details and store in db
+// @Tags User Profile
+// @Accept json
+// @Produce json
+// @Security BearerTokenAuth
+// @Param user_id query int true "User Id"
+// @Param user body models.UserDetailsResponse false "User details"
+// @Success 201 {array} models.UserDetails "User details"
+// @Failure 400 {array} models.UserSignInResponse{} "Bad request"
+// @Router /users/user/edit [put]
+func (u *UserHandler) EditUserDetails(c *gin.Context) {
+	var user models.UserDetailsResponse
+	userId := c.Query("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	if err := c.BindJSON(&user); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	body, err := u.userUseCase.EditUserDetails(userIdInt, user)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error updating the values", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusCreated, "addresses fetched succesfully", body, nil)
+	// fmt.Println(userCreated)
+
+	c.JSON(http.StatusCreated, successRes)
+}

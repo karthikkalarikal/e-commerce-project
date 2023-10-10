@@ -200,3 +200,14 @@ func (u *userUseCaseImpl) FindAddressByUI(userId int) ([]models.Address, error) 
 
 	return body, nil
 }
+
+// --------------------------------- edit user details -----------------------------------------\\
+
+func (u *userUseCaseImpl) EditUserDetails(userId int, user models.UserDetailsResponse) (models.UserDetailsResponse, error) {
+	body, err := u.userRepo.EditUserDetails(userId, user)
+	if err != nil {
+		return models.UserDetailsResponse{}, err
+	}
+
+	return body, nil
+}

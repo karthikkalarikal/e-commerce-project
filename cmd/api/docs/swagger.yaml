@@ -79,6 +79,17 @@ definitions:
       phone:
         type: string
     type: object
+  models.UserDetailsResponse:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      user_id:
+        type: integer
+    type: object
   models.UserLogin:
     properties:
       email:
@@ -734,6 +745,42 @@ paths:
       security:
       - BearerTokenAuth: []
       summary: ViewAddress
+      tags:
+      - User Profile
+  /users/user/edit:
+    put:
+      consumes:
+      - application/json
+      description: Edit User Details and store in db
+      parameters:
+      - description: User Id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: User details
+        in: body
+        name: user
+        schema:
+          $ref: '#/definitions/models.UserDetailsResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User details
+          schema:
+            items:
+              $ref: '#/definitions/models.UserDetails'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/models.UserSignInResponse'
+            type: array
+      security:
+      - BearerTokenAuth: []
+      summary: EditUserDetails
       tags:
       - User Profile
   /users/user/select:

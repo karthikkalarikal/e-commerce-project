@@ -12,4 +12,5 @@ type UserUseCase interface {
 	SelectAddress(int, bool) (models.Address, error)
 	FindUserById(int) (domain.Users, error)
 	FindAddressByUI(int) ([]models.Address, error)
+	EditUserDetails(int, models.UserDetailsResponse) (models.UserDetailsResponse, error)
 }

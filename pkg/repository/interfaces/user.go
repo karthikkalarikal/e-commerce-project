@@ -11,4 +11,5 @@ type UserRepository interface {
 	AddAddress(models.Address, int) error
 	FindAddress(int) ([]models.Address, error)
 	SelectAddress(addressId int, val bool) (models.Address, error)
+	EditUserDetails(int, models.UserDetailsResponse) (models.UserDetailsResponse, error)
 }

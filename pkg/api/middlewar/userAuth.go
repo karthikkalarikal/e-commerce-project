@@ -1,6 +1,7 @@
 package middlewar
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -9,13 +10,16 @@ import (
 )
 
 func UserMiddleware(c *gin.Context) {
+	fmt.Println("**********user Middleware**************")
 	tokenString := c.GetHeader("Authorization")
+	fmt.Println("tokenString", tokenString)
 	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing authorization token"})
 		c.Abort()
 		return
 	}
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+	fmt.Println("here 1")
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte("super-secret-key"), nil

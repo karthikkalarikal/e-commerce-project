@@ -112,6 +112,7 @@ func (c *userDatabase) FindAddress(userId int) ([]models.Address, error) {
 }
 
 // ------------------------------------------ select the address --------------------------------------\\
+
 func (c *userDatabase) SelectAddress(addressId int, val bool) (models.Address, error) {
 	var address models.Address
 
@@ -125,4 +126,43 @@ func (c *userDatabase) SelectAddress(addressId int, val bool) (models.Address, e
 		return models.Address{}, err
 	}
 	return address, nil
+}
+
+// ----------------------------------------- edit user details ------------------------------------------\\
+
+func (c *userDatabase) EditUserDetails(userId int, user models.UserDetailsResponse) (models.UserDetailsResponse, error) {
+	var body models.UserDetailsResponse
+
+	args := []interface{}{}
+	query := "update users set"
+
+	if user.Email != "" {
+		query += " email = $1,"
+
+		args = append(args, user.Email)
+	}
+	if user.Name != "" {
+		query += " name = $2,"
+		args = append(args, user.Name)
+	}
+
+	if user.Phone != "" {
+		query += " phone = $3,"
+
+		args = append(args, user.Phone)
+	}
+	query = query[:len(query)-1] + " where user_id = $4"
+
+	args = append(args, userId)
+	// fmt.Println(query, args)
+	err := c.DB.Exec(query, args...).Error
+	if err != nil {
+		return models.UserDetailsResponse{}, err
+	}
+	query2 := "select * from users where user_id = ?"
+	if err := c.DB.Raw(query2, userId).Scan(&body).Error; err != nil {
+		return models.UserDetailsResponse{}, err
+	}
+
+	return body, nil
 }
