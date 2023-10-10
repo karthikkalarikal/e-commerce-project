@@ -421,6 +421,112 @@ paths:
       summary: List the users you could specify page and no of users in one page
       tags:
       - User Management
+  /users/carts/addtocart:
+    post:
+      consumes:
+      - application/json
+      description: Add product to the cart using product id
+      parameters:
+      - description: user_id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: product_id
+        in: query
+        name: product_id
+        required: true
+        type: integer
+      - description: Cart details
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.Cart'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Add to Cart
+      tags:
+      - Cart Mangement
+  /users/carts/quantity:
+    patch:
+      description: Change the quantity of the cart items
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: product_id
+        in: query
+        name: product_id
+        required: true
+        type: integer
+      - description: quantity
+        in: query
+        name: quantity
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Array of product details '
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+      security:
+      - BearerTokenAuth: []
+      summary: Update the quantity of cart
+      tags:
+      - Cart Mangement
+  /users/carts/viewcart:
+    get:
+      description: Retrive and display product list in cart
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Array of product details '
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+      security:
+      - BearerTokenAuth: []
+      summary: List the products in cart
+      tags:
+      - Cart Mangement
   /users/login:
     post:
       consumes:
@@ -510,44 +616,6 @@ paths:
       summary: UserSignUP
       tags:
       - User Auth
-  /users/user/addtocart:
-    post:
-      consumes:
-      - application/json
-      description: Add product to the cart using product id
-      parameters:
-      - description: user_id
-        in: query
-        name: user_id
-        required: true
-        type: integer
-      - description: product_id
-        in: query
-        name: product_id
-        required: true
-        type: integer
-      - description: Cart details
-        in: body
-        name: product
-        required: true
-        schema:
-          $ref: '#/definitions/models.Cart'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: fail
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerTokenAuth: []
-      summary: Add to Cart
-      tags:
-      - Cart Mangement
   /users/verifyotp:
     post:
       consumes:

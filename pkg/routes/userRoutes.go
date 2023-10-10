@@ -18,9 +18,11 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 
 	engine.Use(middlewar.UserMiddleware)
 	{
-		usermanagement := engine.Group("/user")
+		usermanagement := engine.Group("/carts")
 		{
 			usermanagement.POST("/addtocart", cartHandler.AddToCart)
+			usermanagement.GET("/viewcart", cartHandler.CartItemListing)
+			usermanagement.PATCH("/quantity", cartHandler.CartItemQuatityModification)
 		}
 	}
 
