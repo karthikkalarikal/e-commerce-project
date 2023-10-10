@@ -83,3 +83,30 @@ func (c *userDatabase) CheckRole(email string) (bool, error) {
 	}
 	return isBlocked, nil
 }
+
+// ------------------------------------------- add address --------------------------------------\\
+
+func (c *userDatabase) AddAddress(address models.Address, userId int) error {
+
+	query := `insert into addresses(user_id,name,house_name,street,city,state,pin) values ($1,$2,$3,$4,$5,$6,$7)`
+
+	if err := c.DB.Exec(query, userId, address.Name, address.HouseName, address.Street, address.City, address.State, address.Pin).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ------------------------------------------- get all addresses of user---------------------------\\
+func (c *userDatabase) FindAddress(userId int) ([]models.Address, error) {
+	var addresses []models.Address
+
+	query := `
+				select * from addresses where user_id = $1
+	`
+	if err := c.DB.Raw(query, userId).Scan(&addresses).Error; err != nil {
+		return []models.Address{}, err
+	}
+
+	return addresses, nil
+}

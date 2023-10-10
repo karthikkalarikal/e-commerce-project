@@ -8,4 +8,6 @@ type UserRepository interface {
 	UserBlockedStatus(email string) (bool, error)
 	FindUserByEmail(email string) (models.UserSignInResponse, error)
 	CheckRole(email string) (bool, error)
+	AddAddress(models.Address, int) error
+	FindAddress(int) ([]models.Address, error)
 }

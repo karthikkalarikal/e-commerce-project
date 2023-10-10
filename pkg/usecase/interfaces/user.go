@@ -7,4 +7,5 @@ import (
 type UserUseCase interface {
 	UserSignUp(User models.UserDetails) (models.TokenUsers, error)
 	LoginHandler(user models.UserLogin) (interface{}, error, bool)
+	AddAddress(models.Address, int) ([]models.Address, error)
 }

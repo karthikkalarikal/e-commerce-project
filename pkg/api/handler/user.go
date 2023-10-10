@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -103,4 +104,56 @@ func (u *UserHandler) LoginHandler(c *gin.Context) {
 	}
 	successRes := response.ClientResponse(http.StatusOK, message, user_details, nil)
 	c.JSON(http.StatusOK, successRes)
+}
+
+// @Summary Address
+// @Description Enter and save userAdress along with userId
+// @Tags Address Management
+// @Accept json
+// @Produce json
+// @Param user_id query int true "User Id"
+// @Param user body models.Address true "User details"
+// @Security BearerTokenAuth
+// @Success 201 {array} models.UserDetails "User details and token"
+// @Failure 400 {array} models.UserSignInResponse{} "Bad request"
+// @Router /users/user/address [post]
+func (u *UserHandler) UserAddress(c *gin.Context) {
+	var address models.Address
+	userId := c.Query("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	//bind user details to struct
+	if err := c.BindJSON(&address); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	//checking validity
+
+	err = validator.New().Struct(address)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "constraints not satisfied", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+
+	}
+	//buisness logic
+	// fmt.Println(user)
+	userAddress, err := u.userUseCase.AddAddress(address, userIdInt)
+
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "address added succesfully ", nil, err.Error())
+		c.JSON(http.StatusCreated, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusCreated, "address added succesfully", userAddress, nil)
+	// fmt.Println(userCreated)
+
+	c.JSON(http.StatusCreated, successRes)
 }

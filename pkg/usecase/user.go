@@ -23,6 +23,7 @@ func NewUserUseCase(repo interfaces.UserRepository) usecase.UserUseCase {
 }
 
 // ------------------------------------------user sign up------------------------------------\\
+
 func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers, error) {
 	userExist := u.userRepo.CheckUserAvailability(user.Email)
 
@@ -78,6 +79,7 @@ func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers
 }
 
 // ----------------------------------log in------------------------------------------\\
+
 func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, error, bool) {
 
 	ok := u.userRepo.CheckUserAvailability(user.Email)
@@ -143,4 +145,20 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 		Token: tokenString,
 	}, nil, false
 
+}
+
+// -------------------------------------------------add address -----------------------------------------------------------\\
+
+func (u *userUseCaseImpl) AddAddress(address models.Address, userId int) ([]models.Address, error) {
+
+	err := u.userRepo.AddAddress(address, userId)
+	if err != nil {
+		return []models.Address{}, err
+	}
+
+	addresses, err := u.userRepo.FindAddress(userId)
+	if err != nil {
+		return []models.Address{}, err
+	}
+	return addresses, nil
 }

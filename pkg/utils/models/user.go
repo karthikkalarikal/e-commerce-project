@@ -9,8 +9,6 @@ type UserDetails struct {
 }
 
 type Address struct {
-	Id        int    `json:"id" gorm:"unique;not null"`
-	UserId    int    `json:"user_id"`
 	Name      string `json:"name" validate:"required"`
 	HouseName string `json:"house_name" validate:"required"`
 	Street    string `json:"street" validate:"required"`

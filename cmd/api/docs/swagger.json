@@ -860,6 +860,64 @@
                 }
             }
         },
+        "/users/user/address": {
+            "post": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Enter and save userAdress along with userId",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Address Management"
+                ],
+                "summary": "Address",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User Id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "User details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User details and token",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.UserDetails"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.UserSignInResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/verifyotp": {
             "post": {
                 "description": "verify Phone number using OTP",
@@ -1015,6 +1073,37 @@
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Address": {
+            "type": "object",
+            "required": [
+                "city",
+                "house_name",
+                "name",
+                "pin",
+                "state",
+                "street"
+            ],
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "house_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "pin": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
                 }
             }
         },
