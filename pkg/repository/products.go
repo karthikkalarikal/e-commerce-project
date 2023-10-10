@@ -73,6 +73,22 @@ func (prod *productRepositoryImpl) ListProducts(pageList, offset int) ([]models.
 	return product_list, nil
 }
 
+// --------------------------------------list products by category--------------------------------------\\
+func (prod *productRepositoryImpl) ListProductsByCategory(catId int) ([]models.Product, error) {
+	var productList []models.Product
+
+	query := `select * from products
+			  join categories
+		      on products.category_id = categories.category_id 
+			  where categories.category_id = $1`
+
+	if err := prod.repo.Raw(query, catId).Scan(&productList).Error; err != nil {
+		return []models.Product{}, err
+	}
+
+	return productList, nil
+}
+
 // update categories
 
 func (prod *productRepositoryImpl) UpdateCategory(category domain.Category, id int) (domain.Category, error) {

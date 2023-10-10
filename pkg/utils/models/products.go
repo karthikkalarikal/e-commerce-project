@@ -12,3 +12,11 @@ type Product struct {
 type Category struct {
 	CategoryName string `json:"category_name"`
 }
+
+type ProductwithCat struct {
+	CategoryName string `json:"category_name"`
+	ProductName  string `json:"product_name"`
+	Colour       string `json:"colour"`
+	Stock        string `json:"stock"`
+	Price        string `json:"price"`
+}

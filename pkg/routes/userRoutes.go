@@ -14,8 +14,9 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 	engine.POST("/verifyotp", otpHandler.VerifyOTP)
 
 	engine.GET("/viewproducts", productHandler.ListProducts)
+	engine.GET("/viewbycategories", productHandler.ListByCategoreis)
 
-	engine.Use(middlewar.AdminMiddleware)
+	engine.Use(middlewar.UserMiddleware)
 	{
 		usermanagement := engine.Group("/user")
 		{

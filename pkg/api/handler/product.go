@@ -85,12 +85,12 @@ func (u *ProductHandler) DeleteProduct(c *gin.Context) {
 }
 
 // GetProductList godoc
-// @Summary List the users you could specify page and no of products in one page
+// @Summary List the products you could specify page and no of products in one page
 // @Description Retrive and display product list according to instructions
 // @Tags General
 // @Produce json
 // @Param page query int false "Page number (default 1)"
-// @Param per_page query int false "Results per page (default 10)"
+// @Param per_page query int false "Results per page (default 5)"
 // @Success 200 {array} response.Response "Array of product details "
 // @Failure 400 {array} response.Response "Bad request"
 // @Router /users/viewproducts [get]
@@ -113,6 +113,41 @@ func (u *ProductHandler) ListProducts(c *gin.Context) {
 	}
 
 	product_list, err := u.productUsecase.ListProducts(pageNoInt, pageListInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Products cannot be displayed", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	message := "products list"
+
+	successRes := response.ClientResponse(http.StatusOK, message, product_list, nil)
+	// fmt.Println(product_list)
+	c.JSON(http.StatusOK, successRes)
+}
+
+// GetProductListByCategries godoc
+// @Summary List the products sort by category
+// @Description Retrive and display product list according to instructions
+// @Tags General
+// @Produce json
+// @Param page query int false "Page number (default 1)"
+// @Param per_page query int false "Results per page (default 5)"
+// @Param category_id query int true "the id"
+// @Success 200 {array} response.Response "Array of product details "
+// @Failure 400 {array} response.Response "Bad request"
+// @Router /users/viewbycategories [get]
+func (u *ProductHandler) ListByCategoreis(c *gin.Context) {
+
+	categoryId := c.Query("category_id")
+	categoryIdInt, err := strconv.Atoi(categoryId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Products cannot be displayed", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	product_list, err := u.productUsecase.ListProductsByCategory(categoryIdInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "Products cannot be displayed", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)

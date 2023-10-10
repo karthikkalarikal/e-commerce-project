@@ -10,7 +10,7 @@ import (
 )
 
 func AdminMiddleware(c *gin.Context) {
-	fmt.Println("*****Middle ware Auth******8")
+	fmt.Println("*****Middle ware Auth*******")
 	tokenString := c.GetHeader("Authorization")
 	// fmt.Println("here")
 	if tokenString == "" {

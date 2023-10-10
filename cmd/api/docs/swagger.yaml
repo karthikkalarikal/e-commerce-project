@@ -578,6 +578,41 @@ paths:
       summary: VerifyOTP
       tags:
       - User Auth
+  /users/viewbycategories:
+    get:
+      description: Retrive and display product list according to instructions
+      parameters:
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Results per page (default 5)
+        in: query
+        name: per_page
+        type: integer
+      - description: the id
+        in: query
+        name: category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Array of product details '
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+      summary: List the products sort by category
+      tags:
+      - General
   /users/viewproducts:
     get:
       description: Retrive and display product list according to instructions
@@ -586,7 +621,7 @@ paths:
         in: query
         name: page
         type: integer
-      - description: Results per page (default 10)
+      - description: Results per page (default 5)
         in: query
         name: per_page
         type: integer
@@ -605,7 +640,8 @@ paths:
             items:
               $ref: '#/definitions/response.Response'
             type: array
-      summary: List the users you could specify page and no of products in one page
+      summary: List the products you could specify page and no of products in one
+        page
       tags:
       - General
 securityDefinitions:

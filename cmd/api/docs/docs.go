@@ -755,7 +755,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/viewproducts": {
+        "/users/viewbycategories": {
             "get": {
                 "description": "Retrive and display product list according to instructions",
                 "produces": [
@@ -764,7 +764,7 @@ const docTemplate = `{
                 "tags": [
                     "General"
                 ],
-                "summary": "List the users you could specify page and no of products in one page",
+                "summary": "List the products sort by category",
                 "parameters": [
                     {
                         "type": "integer",
@@ -774,7 +774,60 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "Results per page (default 10)",
+                        "description": "Results per page (default 5)",
+                        "name": "per_page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "the id",
+                        "name": "category_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of product details ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/viewproducts": {
+            "get": {
+                "description": "Retrive and display product list according to instructions",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "General"
+                ],
+                "summary": "List the products you could specify page and no of products in one page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Results per page (default 5)",
                         "name": "per_page",
                         "in": "query"
                     }

@@ -76,6 +76,17 @@ func (u *productUseCaseImpl) ListProducts(pageNo, pageList int) ([]models.Produc
 	return productList, nil
 }
 
+// ---------------------------------------lists prducts by category--------------------------------\\
+func (u *productUseCaseImpl) ListProductsByCategory(catInt int) ([]models.Product, error) {
+
+	productList, err := u.usecase.ListProductsByCategory(catInt)
+	if err != nil {
+		return []models.Product{}, err
+	}
+	// fmt.Println(productList)
+	return productList, nil
+}
+
 // update category usecase
 func (u *productUseCaseImpl) UpdateCategory(category domain.Category, id int) (domain.Category, error) {
 	body, err := u.usecase.UpdateCategory(category, id)
