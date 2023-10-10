@@ -21,7 +21,7 @@ func NewProductUsecase(usecase interfaces.ProductRepository, helperRepo interfac
 	}
 }
 
-// ------------------------------add products --------------------------------------\\
+// ---------------------------------------------- add products -------------------------------------------------\\
 func (usecase *productUseCaseImpl) AddProduct(products models.Product) (domain.Product, error) {
 	product, err := usecase.usecase.AddProduct(products)
 	if err != nil {
@@ -31,7 +31,7 @@ func (usecase *productUseCaseImpl) AddProduct(products models.Product) (domain.P
 
 }
 
-// -----------------------------add category ----------------------------------------\\
+// ----------------------------------------------- add category -----------------------------------------------\\
 func (usecase *productUseCaseImpl) AddCategory(category domain.Category) (domain.Category, error) {
 	adCat, err := usecase.usecase.AddCategory(category)
 	if err != nil {
@@ -41,7 +41,7 @@ func (usecase *productUseCaseImpl) AddCategory(category domain.Category) (domain
 
 }
 
-// ------------------------------delete products ----------------------------------------\\
+// -------------------------------------------------delete products ----------------------------------------------\\
 func (usecase *productUseCaseImpl) DeleteProduct(id int) (domain.Product, error) {
 	fmt.Println("******delete repo********")
 	var delProduct domain.Product
@@ -82,11 +82,21 @@ func (u *productUseCaseImpl) UpdateCategory(category domain.Category, id int) (d
 	return body, nil
 }
 
-// delete categories usecase
+// --------------------------------------------------delete categories usecase ---------------------------------------------\\
 func (u *productUseCaseImpl) DeleteCategory(id int) (domain.Category, error) {
 	body, err := u.usecase.DeleteCategory(id)
 	if err != nil {
 		return domain.Category{}, err
 	}
 	return body, nil
+}
+
+// ------------------------------------------------------edit products ------------------------------------------------------\\
+func (usecase *productUseCaseImpl) EditProduct(product domain.Product, id int) (domain.Product, error) {
+
+	modProduct, err := usecase.usecase.EditProduct(product, id)
+	if err != nil {
+		return domain.Product{}, err
+	}
+	return modProduct, nil
 }

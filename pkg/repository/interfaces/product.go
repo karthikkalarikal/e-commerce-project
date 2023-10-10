@@ -12,4 +12,5 @@ type ProductRepository interface {
 	AddProduct(models.Product) (domain.Product, error)
 	DeleteProduct(id int) (bool, error)
 	AddCategory(category domain.Category) (domain.Category, error)
+	EditProduct(domain.Product, int) (domain.Product, error)
 }

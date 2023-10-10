@@ -86,13 +86,5 @@ func (usecase *adminUseCaseImpl) DeleteUser(id int) (domain.Users, error) {
 }
 
 
-// edit products
-func (usecase *adminUseCaseImpl) EditProduct(product domain.Product) (domain.Product, error) {
-	modProduct, err := usecase.adminrepo.EditProduct(product)
-	if err != nil {
-		return domain.Product{}, err
-	}
-	return modProduct, nil
-}
 
 

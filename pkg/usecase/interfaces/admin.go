@@ -10,7 +10,4 @@ type AdminUseCase interface {
 	BlockUser(id int) (domain.Users, error)
 	FindUser(email string, name string, id string, pageNo int, pageList int) ([]domain.Users, error)
 	DeleteUser(id int) (domain.Users, error)
-	EditProduct(domain.Product) (domain.Product, error)
-	
-	
 }

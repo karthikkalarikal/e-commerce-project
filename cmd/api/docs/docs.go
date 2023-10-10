@@ -107,6 +107,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/product/deletecategory/{category_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "delete Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Management"
+                ],
+                "summary": "delete category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "category_id",
+                        "name": "category_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete Category  ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/admin/product/deleteproduct/{product_id}": {
             "delete": {
                 "security": [
@@ -150,8 +199,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/product/editproduct": {
-            "post": {
+        "/admin/product/editproduct/{product_id}": {
+            "put": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -170,12 +219,19 @@ const docTemplate = `{
                 "summary": "Edit product",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "product_id",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "Product object",
                         "name": "product",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Product"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 ],
@@ -225,53 +281,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Update Category  ",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Category"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Category"
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "BearerTokenAuth": []
-                    }
-                ],
-                "description": "delete Category by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product Management"
-                ],
-                "summary": "delete category",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "category_id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "delete Category  ",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -766,35 +775,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                }
-            }
-        },
-        "domain.Product": {
-            "type": "object",
-            "properties": {
-                "category_id": {
-                    "type": "integer"
-                },
-                "colour": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "price": {
-                    "type": "string"
-                },
-                "product_image": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "product_name": {
-                    "type": "string"
-                },
-                "stock": {
-                    "type": "string"
                 }
             }
         },

@@ -12,4 +12,5 @@ type ProductUseCase interface {
 	AddProduct(models.Product) (domain.Product, error)
 	DeleteProduct(id int) (domain.Product, error)
 	AddCategory(domain.Category) (domain.Category, error)
+	EditProduct(domain.Product, int) (domain.Product, error)
 }

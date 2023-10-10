@@ -20,11 +20,11 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 		productmanagement := engine.Group("/product")
 		{
 			productmanagement.POST("/addproduct", productHandler.AddProduct)
-			productmanagement.POST("/editproduct", adminHandler.EditProduct)
+			productmanagement.PUT("/editproduct/:product_id", productHandler.EditProduct)
 			productmanagement.DELETE("/deleteproduct/:product_id", productHandler.DeleteProduct)
 			productmanagement.POST("/addcategory", productHandler.AddCategory)
 			productmanagement.PUT("/updatecategory/:id", productHandler.UpdateCategory)
-			productmanagement.DELETE("/deletecategory/:id", productHandler.DeleteCategory)
+			productmanagement.DELETE("/deletecategory/:category_id", productHandler.DeleteCategory)
 		}
 	}
 

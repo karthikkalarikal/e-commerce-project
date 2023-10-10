@@ -92,7 +92,7 @@ func (prod *productRepositoryImpl) UpdateCategory(category domain.Category, id i
 	return body, nil
 }
 
-// delete categories
+// ------------------------------------------delete categories -------------------------------------------------\\
 
 func (prod *productRepositoryImpl) DeleteCategory(id int) (domain.Category, error) {
 	var body domain.Category
@@ -101,12 +101,29 @@ func (prod *productRepositoryImpl) DeleteCategory(id int) (domain.Category, erro
 	query2 := "delete from categories where category_id = ?"
 	fmt.Println(id)
 
-	if err := prod.repo.Raw(query2, id).Scan(&body).Error; err != nil {
+	if err := prod.repo.Raw(query, id).Scan(&body).Error; err != nil {
 		return domain.Category{}, err
 	}
 
-	if err := prod.repo.Exec(query, id).Error; err != nil {
+	if err := prod.repo.Exec(query2, id).Error; err != nil {
 		return domain.Category{}, err
 	}
 	return body, nil
+}
+
+// -------------------------------------------- edit product -----------------------------------------------------\\
+func (db *productRepositoryImpl) EditProduct(product domain.Product, id int) (domain.Product, error) {
+	var modProduct domain.Product
+
+	query := "UPDATE products SET category_id = ? , product_name = ?, product_image = ?, colour = ?, stock = ?, price = ? WHERE product_id = ?"
+
+	if err := db.repo.Exec(query, product.CategoryId, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, id).Error; err != nil {
+		return domain.Product{}, err
+	}
+
+	if err := db.repo.First(&modProduct, id).Error; err != nil {
+		return domain.Product{}, err
+	}
+
+	return modProduct, nil
 }

@@ -154,16 +154,14 @@ func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 // @Tags Product Management
 // @Accept json
 // @Produce json
-//
-//	@Param id query int true "category_id"
-//
+// @Param category_id query int true "category_id"
 // @Security BearerTokenAuth
-// @Success 200 {array} domain.Category "delete Category  "
-// @Failure 400 {array} domain.Category  "Bad request"
-// @Router /admin/product/updatecategory [delete]
+// @Success 200 {array} response.Response "delete Category  "
+// @Failure 400 {array} response.Response  "Bad request"
+// @Router /admin/product/deletecategory/{category_id} [delete]
 func (u *ProductHandler) DeleteCategory(c *gin.Context) {
 
-	id_str := c.Param("id")
+	id_str := c.Query("category_id")
 	id, err := strconv.Atoi(id_str)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in converting the id", nil, err.Error())
@@ -212,4 +210,44 @@ func (u *ProductHandler) AddCategory(c *gin.Context) {
 
 	successRes := response.ClientResponse(http.StatusOK, "successfully added the category", returnCategory, nil)
 	c.JSON(http.StatusOK, successRes)
+}
+
+// EditProduct is a function to edit product by admin.
+// @Summary Edit product
+// @Description Edit product by admin
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product_id query int true "product_id"
+// @Param product body models.Product true "Product object"
+// @Security BearerTokenAuth
+// @Success 200 {string}  response.Response "Edit product details"
+// @Failure 400 {string}  response.Response "Bad request"
+// @Router /admin/product/editproduct/{product_id} [put]
+func (u *ProductHandler) EditProduct(c *gin.Context) {
+	var product domain.Product
+
+	id := c.Query("product_id")
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "problems in the id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	if err := c.BindJSON(&product); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in the wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	modProduct, err := u.productUsecase.EditProduct(product, idInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not edit the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, "sucessfully edited product", modProduct, nil)
+	c.JSON(http.StatusOK, succesRes)
 }

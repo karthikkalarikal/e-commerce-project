@@ -108,24 +108,6 @@ func (db *adminRepositoryImpl) DeleteUser(id int) (domain.Users, error) {
 	return user, nil
 }
 
-// edit product
-func (db *adminRepositoryImpl) EditProduct(product domain.Product) (domain.Product, error) {
-	var modProduct domain.Product
-
-	query := "UPDATE products SET category_id = ? , product_name = ?, product_image = ?, colour = ?, stock = ?, price = ? WHERE id = ?"
-
-	if err := db.db.Exec(query, product.CategoryId, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, product.ProductId).Error; err != nil {
-		return domain.Product{}, err
-	}
-
-	if err := db.db.First(&modProduct, product.ProductId).Error; err != nil {
-		return domain.Product{}, err
-	}
-
-	return modProduct, nil
-}
-
-
 // ---------------------check the number of users--------------------- \\
 func (db *adminRepositoryImpl) CountUsers() (int, error) {
 	var count int
