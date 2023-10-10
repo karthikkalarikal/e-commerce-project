@@ -225,3 +225,32 @@ func (u *UserHandler) ViewUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, successRes)
 
 }
+
+// @Summary ViewAddress
+// @Description get Address by user id
+// @Tags User Profile
+// @Produce json
+// @Param user_id query int true "User Id"
+// @Security BearerTokenAuth
+// @Success 201 {object} response.Response "changed addres"
+// @Failure 400 {object} response.Response "Bad request"
+// @Router /users/user/addresses [get]
+func (u *UserHandler) GetAddress(c *gin.Context) {
+	userId := c.Query("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	user, err := u.userUseCase.FindAddressByUI(userIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error fetching address", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusCreated, "addresses fetched succesfully", user, nil)
+	// fmt.Println(userCreated)
+
+	c.JSON(http.StatusCreated, successRes)
+}

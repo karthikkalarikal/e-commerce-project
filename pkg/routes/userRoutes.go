@@ -33,6 +33,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 		usermanagement := engine.Group("/user")
 		{
 			usermanagement.GET("/viewdetails", userHandler.ViewUser)
+			usermanagement.GET("/addresses", userHandler.GetAddress)
 		}
 	}
 

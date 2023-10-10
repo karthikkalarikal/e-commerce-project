@@ -189,3 +189,14 @@ func (u *userUseCaseImpl) FindUserById(userId int) (domain.Users, error) {
 
 	return body, nil
 }
+
+// -------------------------------- get all addresses of user------------------------------\\
+func (u *userUseCaseImpl) FindAddressByUI(userId int) ([]models.Address, error) {
+
+	body, err := u.userRepo.FindAddress(userId)
+	if err != nil {
+		return []models.Address{}, err
+	}
+
+	return body, nil
+}
