@@ -287,15 +287,15 @@ paths:
       summary: Block/Unblock User
       tags:
       - User Management
-  /admin/users/deleteuser:
+  /admin/users/deleteuser/{user_id}:
     post:
       consumes:
       - application/json
       description: Delete user by id
       parameters:
-      - description: User's id
+      - description: user id
         in: query
-        name: id
+        name: user_id
         required: true
         type: integer
       produces:
@@ -304,14 +304,14 @@ paths:
         "200":
           description: 'Array of user details '
           schema:
-            type: string
+            type: body
         "400":
           description: Bad request
           schema:
-            type: string
+            type: body
       security:
       - BearerTokenAuth: []
-      summary: Delete user
+      summary: Delete User
       tags:
       - User Management
   /admin/users/searchuser:

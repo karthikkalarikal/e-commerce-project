@@ -11,12 +11,14 @@ import (
 )
 
 type adminRepositoryImpl struct {
-	db *gorm.DB
+	db   *gorm.DB
+	repo interfaces.HelperRepository
 }
 
-func NewAdminRepository(db *gorm.DB) interfaces.AdminRepository {
+func NewAdminRepository(db *gorm.DB, repo interfaces.HelperRepository) interfaces.AdminRepository {
 	return &adminRepositoryImpl{
-		db: db,
+		db:   db,
+		repo: repo,
 	}
 }
 
@@ -89,16 +91,21 @@ func (db *adminRepositoryImpl) FindUser(email string, name string, id string, pa
 	return users, nil
 }
 
-// delete user
-func (db *adminRepositoryImpl) DeleteUser(id int) (bool, error) {
+// ----------------------------------delete user -------------------------------------------------\\
+func (db *adminRepositoryImpl) DeleteUser(id int) (domain.Users, error) {
 	// fmt.Println("**delete repo")
-	query := "delete from users where id = ?"
-	// fmt.Println("id:", id)
-	err := db.db.Exec(query, id).Error
+	user, err := db.repo.GetUserDetailsThroughId(id)
 	if err != nil {
-		return false, err
+		return domain.Users{}, err
 	}
-	return true, nil
+
+	query2 := "delete from users where user_id = $1"
+	// fmt.Println("id:", id)
+	err = db.db.Exec(query2, id).Error
+	if err != nil {
+		return domain.Users{}, err
+	}
+	return user, nil
 }
 
 // add product

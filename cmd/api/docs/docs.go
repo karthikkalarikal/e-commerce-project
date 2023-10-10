@@ -290,7 +290,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/users/deleteuser": {
+        "/admin/users/deleteuser/{user_id}": {
             "post": {
                 "security": [
                     {
@@ -307,12 +307,12 @@ const docTemplate = `{
                 "tags": [
                     "User Management"
                 ],
-                "summary": "Delete user",
+                "summary": "Delete User",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User's id",
-                        "name": "id",
+                        "description": "user id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     }
@@ -321,13 +321,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Array of user details ",
                         "schema": {
-                            "type": "string"
+                            "type": "body"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "string"
+                            "type": "body"
                         }
                     }
                 }

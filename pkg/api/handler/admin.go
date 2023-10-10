@@ -140,31 +140,36 @@ func (u *AdminHandler) FindUser(c *gin.Context) {
 	c.JSON(http.StatusOK, successRes)
 }
 
-// Delete user
-
-// @Summary Delete user
+// DeleteUser godoc
+// @Summary Delete User
 // @Description Delete user by id
 // @Tags User Management
 // @Accept json
 // @Produce json
-//
-//	@Param id query int true "User's id"
-//
+// @Param user_id query int true "user id"
 // @Security BearerTokenAuth
-// @Success 200 {string}  "Array of user details "
-// @Failure 400 {string}  "Bad request"
-// @Router /admin/users/deleteuser [post]
+// @Success 200 {object} response.Response "Array of user details "
+// @Failure 400 {object} response.Response "Bad request"
+// @Router /admin/users/deleteuser/{user_id} [post]
 func (u *AdminHandler) DeleteUser(c *gin.Context) {
 	fmt.Println("*****Delete Handler*****")
 
-	message, err := u.adminUseCase.DeleteUser(c)
+	id := c.Query("user_id")
+	fmt.Println("id:", id)
+	id_int, err := strconv.Atoi(id)
 	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, message, nil, err.Error())
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in the user_id praram", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	user, err := u.adminUseCase.DeleteUser(id_int)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not delete the user", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 
-	succesRes := response.ClientResponse(http.StatusOK, message, nil, nil)
+	succesRes := response.ClientResponse(http.StatusOK, "succesfully deleted the user", user, nil)
 	c.JSON(http.StatusOK, succesRes)
 }
 
