@@ -13,7 +13,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 		usermanagement := engine.Group("/users")
 		{
 			usermanagement.GET("/userlist", adminHandler.UserList)
-			usermanagement.POST("/block", adminHandler.BlockUser)
+			usermanagement.PATCH("/block/:user_id", adminHandler.BlockUser)
 			usermanagement.GET("/searchuser", adminHandler.FindUser)
 			usermanagement.POST("/deleteuser", adminHandler.DeleteUser)
 		}

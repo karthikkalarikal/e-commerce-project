@@ -36,11 +36,11 @@ func (db *adminRepositoryImpl) UserList(pageList int, offset int) ([]models.User
 	return userList, nil
 }
 
-// user block or unblock
+// --------------------------------user block or unblock --------------------------------------------------\\
 func (db *adminRepositoryImpl) BlockUser(id int, block bool) (domain.Users, error) {
 	var user domain.Users
 
-	query := "update users set blocked = ? where id = ? returning *"
+	query := "update users set blocked = ? where user_id = ? returning *"
 	err := db.db.Raw(query, block, id).Scan(&user).Error
 	if err != nil {
 		return domain.Users{}, err

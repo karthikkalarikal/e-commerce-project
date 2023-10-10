@@ -64,40 +64,36 @@ func (u *AdminHandler) UserList(c *gin.Context) {
 	c.JSON(http.StatusOK, successRes)
 }
 
-type userBlock struct {
-	Id      int  `json:"id"`
-	Blocked bool `json:"blocked"`
-}
-
-// @Summary Block/Unblock-User
-// @Description Edit block collumn of user
+// Block/Unblock godoc
+// @Summary Block/Unblock User
+// @Description Block/Unblock on prompt
 // @Tags User Management
-// @Accept json
 // @Produce json
-// @Param user body userBlock true "blocked user id"
+// @Param user_id path int true "user id"
 // @Security BearerTokenAuth
-// @Success 200 {array} domain.Users "Array of user details "
-// @Failure 400 {array} domain.Users "Bad request"
-// @Router /admin/users/block [post]
+// @Success 200 {object} response.Response "The user details"
+// @Failure 400 {object} response.Response "Bad request"
+// @Router /admin/users/block/{user_id} [patch]
 func (u *AdminHandler) BlockUser(c *gin.Context) {
 	// fmt.Println("here")
-	var user userBlock
 
-	if err := c.BindJSON(&user); err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err.Error())
+	id := c.Param("user_id")
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in id", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 	// fmt.Println("here")
 
-	user_details, err := u.adminUseCase.BlockUser(user.Id, user.Blocked)
+	user_details, err := u.adminUseCase.BlockUser(idInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in values", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 
-	successRes := response.ClientResponse(http.StatusOK, "succesfully blocked", user_details, nil)
+	successRes := response.ClientResponse(http.StatusOK, "succesfully blocked/unblocked", user_details, nil)
 	c.JSON(http.StatusOK, successRes)
 }
 

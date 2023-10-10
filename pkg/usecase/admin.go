@@ -12,12 +12,14 @@ import (
 )
 
 type adminUseCaseImpl struct {
-	adminrepo repo.AdminRepository
+	adminrepo  repo.AdminRepository
+	helperrepo repo.HelperRepository
 }
 
-func NewAdminUseCase(repo repo.AdminRepository) interfaces.AdminUseCase {
+func NewAdminUseCase(adrepo repo.AdminRepository, helper repo.HelperRepository) interfaces.AdminUseCase {
 	return &adminUseCaseImpl{
-		adminrepo: repo,
+		adminrepo:  adrepo,
+		helperrepo: helper,
 	}
 }
 
@@ -41,12 +43,17 @@ func (usecase *adminUseCaseImpl) UserList(pageNo int, pageList int) ([]models.Us
 
 }
 
-// user block value logic
-func (usecase *adminUseCaseImpl) BlockUser(id int, block bool) (domain.Users, error) {
-	fmt.Println("here")
+// ---------------------------------------block user----------------------------------------------\\
+func (usecase *adminUseCaseImpl) BlockUser(id int) (domain.Users, error) {
+	// fmt.Println("here")
 	// var user domain.Users
+	// blocked status
+	users, err := usecase.helperrepo.GetUserDetailsThroughId(id)
+	if err != nil {
+		return domain.Users{}, err
+	}
 
-	user, err := usecase.adminrepo.BlockUser(id, block)
+	user, err := usecase.adminrepo.BlockUser(id, !users.Blocked)
 	if err != nil {
 		return domain.Users{}, err
 	}

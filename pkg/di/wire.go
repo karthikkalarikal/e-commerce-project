@@ -32,6 +32,7 @@ func InitializeAPI(cfg config.Config) (*http.ServerHTTP, error) {
 		repository.NewCartRepository,
 		usecase.NewCartUseCase,
 		handler.NewCartHandler,
+		repository.NewHelperRepository,
 	)
 	return &http.ServerHTTP{}, nil
 

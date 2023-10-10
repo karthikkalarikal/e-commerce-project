@@ -250,52 +250,41 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/users/block": {
-            "post": {
+        "/admin/users/block/{user_id}": {
+            "patch": {
                 "security": [
                     {
                         "BearerTokenAuth": []
                     }
                 ],
-                "description": "Edit block collumn of user",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Block/Unblock on prompt",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "User Management"
                 ],
-                "summary": "Block/Unblock-User",
+                "summary": "Block/Unblock User",
                 "parameters": [
                     {
-                        "description": "blocked user id",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/handler.userBlock"
-                        }
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Array of user details ",
+                        "description": "The user details",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Users"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Users"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -768,45 +757,6 @@ const docTemplate = `{
                 },
                 "stock": {
                     "type": "string"
-                }
-            }
-        },
-        "domain.Users": {
-            "type": "object",
-            "properties": {
-                "blocked": {
-                    "type": "boolean"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 8
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "role": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "handler.userBlock": {
-            "type": "object",
-            "properties": {
-                "blocked": {
-                    "type": "boolean"
-                },
-                "id": {
-                    "type": "integer"
                 }
             }
         },
