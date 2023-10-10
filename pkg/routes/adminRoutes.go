@@ -15,14 +15,14 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 			usermanagement.GET("/userlist", adminHandler.UserList)
 			usermanagement.PATCH("/block/:user_id", adminHandler.BlockUser)
 			usermanagement.GET("/searchuser", adminHandler.FindUser)
-			usermanagement.POST("/deleteuser/:user_id", adminHandler.DeleteUser)
+			usermanagement.DELETE("/deleteuser/:user_id", adminHandler.DeleteUser)
 		}
 		productmanagement := engine.Group("/product")
 		{
-			productmanagement.POST("/addproduct", adminHandler.AddProduct)
+			productmanagement.POST("/addproduct", productHandler.AddProduct)
 			productmanagement.POST("/editproduct", adminHandler.EditProduct)
-			productmanagement.POST("/deleteproduct/:id", adminHandler.DeleteProduct)
-			productmanagement.POST("/addcategory", adminHandler.AddCategory)
+			productmanagement.DELETE("/deleteproduct/:product_id", productHandler.DeleteProduct)
+			productmanagement.POST("/addcategory", productHandler.AddCategory)
 			productmanagement.PUT("/updatecategory/:id", productHandler.UpdateCategory)
 			productmanagement.DELETE("/deletecategory/:id", productHandler.DeleteCategory)
 		}

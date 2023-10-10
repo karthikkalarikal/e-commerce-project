@@ -108,78 +108,23 @@ func (db *adminRepositoryImpl) DeleteUser(id int) (domain.Users, error) {
 	return user, nil
 }
 
-// add product
-func (db *adminRepositoryImpl) AddProduct(product domain.Product) (domain.Product, error) {
-	var products domain.Product
-
-	query := "insert into products (category_id,product_name, product_image,colour,stock,price) values(?,?,?,?,?,?) returning *"
-
-	if err := db.db.Raw(query, product.CategoryID, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price).Scan(&products).Error; err != nil {
-		return domain.Product{}, err
-	}
-	return products, nil
-}
-
 // edit product
 func (db *adminRepositoryImpl) EditProduct(product domain.Product) (domain.Product, error) {
 	var modProduct domain.Product
 
 	query := "UPDATE products SET category_id = ? , product_name = ?, product_image = ?, colour = ?, stock = ?, price = ? WHERE id = ?"
 
-	if err := db.db.Exec(query, product.CategoryID, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, product.ProductID).Error; err != nil {
+	if err := db.db.Exec(query, product.CategoryId, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, product.ProductId).Error; err != nil {
 		return domain.Product{}, err
 	}
 
-	if err := db.db.First(&modProduct, product.ProductID).Error; err != nil {
+	if err := db.db.First(&modProduct, product.ProductId).Error; err != nil {
 		return domain.Product{}, err
 	}
 
 	return modProduct, nil
 }
 
-// delete product
-func (db *adminRepositoryImpl) DeleteProduct(id int) (domain.Product, error) {
-	var delProduct domain.Product
-
-	delProduct, err := db.FindProductById(id)
-	if err != nil {
-		return domain.Product{}, err
-
-	}
-
-	query := "DELETE FROM products WHERE id = ?"
-
-	if err = db.db.Exec(query, id).Error; err != nil {
-		return domain.Product{}, err
-	}
-	return delProduct, nil
-}
-
-// find product by id
-func (db *adminRepositoryImpl) FindProductById(id int) (domain.Product, error) {
-	var product domain.Product
-
-	query := "select * from products where id = ?"
-	if err := db.db.Raw(query, id).Scan(&product).Error; err != nil {
-		return domain.Product{}, err
-	}
-
-	return product, nil
-}
-
-// add category
-func (db *adminRepositoryImpl) AddCategory(category domain.Category) (domain.Category, error) {
-
-	var adCat domain.Category
-
-	query := "INSERT INTO categories(category_name) VALUES($1) RETURNING * ;"
-
-	if err := db.db.Raw(query, category.CategoryName).Scan(&adCat).Error; err != nil {
-		return domain.Category{}, err
-	}
-
-	return adCat, nil
-}
 
 // ---------------------check the number of users--------------------- \\
 func (db *adminRepositoryImpl) CountUsers() (int, error) {

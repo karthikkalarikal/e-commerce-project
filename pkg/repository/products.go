@@ -14,10 +14,47 @@ type productRepositoryImpl struct {
 	repo *gorm.DB
 }
 
-func NewProductRepository(repo *gorm.DB) interfaces.ProductRepository {
+func NewProductRepository(repo *gorm.DB, helprepo interfaces.HelperRepository) interfaces.ProductRepository {
 	return &productRepositoryImpl{
 		repo: repo,
 	}
+}
+
+// ------------------------------------add product -------------------------------------\\
+func (db *productRepositoryImpl) AddProduct(product models.Product) (domain.Product, error) {
+	var products domain.Product
+
+	query := "insert into products (category_id,product_name, product_image,colour,stock,price) values(?,?,?,?,?,?) returning *"
+
+	if err := db.repo.Raw(query, product.Category_id, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price).Scan(&products).Error; err != nil {
+		return domain.Product{}, err
+	}
+	return products, nil
+}
+
+// -----------------------------------add category ---------------------------------------\\
+func (db *productRepositoryImpl) AddCategory(category domain.Category) (domain.Category, error) {
+
+	var adCat domain.Category
+
+	query := "INSERT INTO categories(category_name) VALUES($1) RETURNING * ;"
+
+	if err := db.repo.Raw(query, category.CategoryName).Scan(&adCat).Error; err != nil {
+		return domain.Category{}, err
+	}
+
+	return adCat, nil
+}
+
+// ----------------------------------delete product------------------------------------------\\
+func (db *productRepositoryImpl) DeleteProduct(id int) (bool, error) {
+
+	query := "DELETE FROM products WHERE product_id = ?"
+
+	if err := db.repo.Exec(query, id).Error; err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 // list products

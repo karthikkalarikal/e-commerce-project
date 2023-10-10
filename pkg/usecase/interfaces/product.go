@@ -9,4 +9,7 @@ type ProductUseCase interface {
 	ListProducts() ([]models.Product, error)
 	UpdateCategory(category domain.Category, id int) (domain.Category, error)
 	DeleteCategory(id int) (domain.Category, error)
+	AddProduct(models.Product) (domain.Product, error)
+	DeleteProduct(id int) (domain.Product, error)
+	AddCategory(domain.Category) (domain.Category, error)
 }

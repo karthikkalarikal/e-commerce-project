@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/response"
 )
 
@@ -21,12 +22,74 @@ func NewProductHandler(usecase interfaces.ProductUseCase) *ProductHandler {
 	}
 }
 
+// AddProduct is a function to add a new product by admin.
+// @Summary Add product
+// @Description Add product by admin
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product body models.Product true "Product object"
+// @Security BearerTokenAuth
+// @Success 200 {object}  response.Response "Added product details"
+// @Failure 400 {object}  response.Response "Bad request"
+// @Router /admin/product/addproduct [post]
+func (u *ProductHandler) AddProduct(c *gin.Context) {
+	var product models.Product
+
+	if err := c.BindJSON(&product); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	returnProduct, err := u.productUsecase.AddProduct(product)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Could not add the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "successfully added the product", returnProduct, nil)
+	c.JSON(http.StatusOK, successRes)
+}
+
+// @Summary Delete product
+// @Description Delete product by id
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product_id query int true "product id"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "Array of deleted product details "
+// @Failure 400 {object} response.Response  "Bad request"
+// @Router /admin/product/deleteproduct/{product_id} [delete]
+func (u *ProductHandler) DeleteProduct(c *gin.Context) {
+
+	id_str := c.Query("product_id")
+	id, err := strconv.Atoi(id_str)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "id is in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	product, err := u.productUsecase.DeleteProduct(id)
+
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in deleting the product", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, "sucessfully deleted the product", product, nil)
+	c.JSON(http.StatusOK, succesRes)
+}
+
 // @Summary ViewProducts
 // @Description view products by a user
 // @Accept json
 // @Produce json
-// @Success 200 {object} models.Product "List of products"
-// @Failure 400 {array} models.Product "Bad request"
+// @Success 200 {object} response.Response "List of products"
+// @Failure 400 {object} response.Response "Bad request"
 // @Router /users/viewproducts [get]
 func (u *ProductHandler) ListProducts(c *gin.Context) {
 	fmt.Println("list product handler")
@@ -56,7 +119,7 @@ func (u *ProductHandler) ListProducts(c *gin.Context) {
 // @Security BearerTokenAuth
 // @Success 200 {array} domain.Category "Update Category  "
 // @Failure 400 {array} domain.Category  "Bad request"
-// @Router /admin/product/updatecategory [patch]
+// @Router /admin/product/updatecategory [post]
 func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 	var category domain.Category
 
@@ -97,7 +160,7 @@ func (u *ProductHandler) UpdateCategory(c *gin.Context) {
 // @Security BearerTokenAuth
 // @Success 200 {array} domain.Category "delete Category  "
 // @Failure 400 {array} domain.Category  "Bad request"
-// @Router /admin/product/updatecategory [patch]
+// @Router /admin/product/updatecategory [delete]
 func (u *ProductHandler) DeleteCategory(c *gin.Context) {
 
 	id_str := c.Param("id")
@@ -118,4 +181,35 @@ func (u *ProductHandler) DeleteCategory(c *gin.Context) {
 	succesRes := response.ClientResponse(http.StatusOK, "deleted a category successfully", category, nil)
 	c.JSON(http.StatusOK, succesRes)
 
+}
+
+// AddCategory is a function to add a new category by admin.
+// @Summary Add category
+// @Description Add category by admin
+// @Tags Product Management
+// @Accept json
+// @Produce json
+// @Param product body models.Category true "Category object"
+// @Security BearerTokenAuth
+// @Success 200 {object}  response.Response "Added Category details"
+// @Failure 400 {object}  response.Response"Bad request"
+// @Router /admin/product/addcategory [post]
+func (u *ProductHandler) AddCategory(c *gin.Context) {
+	var adCat domain.Category
+
+	if err := c.BindJSON(&adCat); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields provided are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	returnCategory, err := u.productUsecase.AddCategory(adCat)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Could not add the category", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "successfully added the category", returnCategory, nil)
+	c.JSON(http.StatusOK, successRes)
 }

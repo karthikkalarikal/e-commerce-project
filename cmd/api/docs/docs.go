@@ -42,7 +42,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Category"
+                            "$ref": "#/definitions/models.Category"
                         }
                     }
                 ],
@@ -50,13 +50,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Added Category details",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -87,7 +87,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Product"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 ],
@@ -95,20 +95,20 @@ const docTemplate = `{
                     "200": {
                         "description": "Added product details",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
             }
         },
-        "/admin/product/deleteproduct": {
-            "post": {
+        "/admin/product/deleteproduct/{product_id}": {
+            "delete": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -129,7 +129,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "product id",
-                        "name": "id",
+                        "name": "product_id",
                         "in": "query",
                         "required": true
                     }
@@ -138,19 +138,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Array of deleted product details ",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Product"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Product"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -202,7 +196,54 @@ const docTemplate = `{
             }
         },
         "/admin/product/updatecategory": {
-            "patch": {
+            "post": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Management"
+                ],
+                "summary": "update category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "category_id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update Category  ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -291,7 +332,7 @@ const docTemplate = `{
             }
         },
         "/admin/users/deleteuser/{user_id}": {
-            "post": {
+            "delete": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -321,13 +362,13 @@ const docTemplate = `{
                     "200": {
                         "description": "Array of user details ",
                         "schema": {
-                            "type": "body"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "body"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -703,16 +744,13 @@ const docTemplate = `{
                     "200": {
                         "description": "List of products",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Product"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -760,6 +798,14 @@ const docTemplate = `{
                 }
             }
         },
+        "models.Category": {
+            "type": "object",
+            "properties": {
+                "category_name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.OTPData": {
             "type": "object",
             "required": [
@@ -779,9 +825,6 @@ const docTemplate = `{
                 },
                 "colour": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "price": {
                     "type": "string"
@@ -903,7 +946,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Go + Gin E-Commerce API",
-	Description:      "Stylezine is an E-commerce platform to purchase and sell Electronic itmes",
+	Description:      "TechDeck is an E-commerce platform to purchase and sell Electronic itmes",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

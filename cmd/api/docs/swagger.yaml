@@ -25,6 +25,11 @@ definitions:
       stock:
         type: string
     type: object
+  models.Category:
+    properties:
+      category_name:
+        type: string
+    type: object
   models.OTPData:
     properties:
       phone:
@@ -38,8 +43,6 @@ definitions:
         type: integer
       colour:
         type: string
-      id:
-        type: integer
       price:
         type: string
       product_image:
@@ -111,7 +114,7 @@ definitions:
 info:
   contact:
     name: API Support
-  description: Stylezine is an E-commerce platform to purchase and sell Electronic
+  description: TechDeck is an E-commerce platform to purchase and sell Electronic
     itmes
   title: Go + Gin E-Commerce API
   version: 1.0.0
@@ -127,18 +130,18 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Category'
+          $ref: '#/definitions/models.Category'
       produces:
       - application/json
       responses:
         "200":
           description: Added Category details
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
         "400":
           description: Bad request
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
       security:
       - BearerTokenAuth: []
       summary: Add category
@@ -155,32 +158,32 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/domain.Product'
+          $ref: '#/definitions/models.Product'
       produces:
       - application/json
       responses:
         "200":
           description: Added product details
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
         "400":
           description: Bad request
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
       security:
       - BearerTokenAuth: []
       summary: Add product
       tags:
       - Product Management
-  /admin/product/deleteproduct:
-    post:
+  /admin/product/deleteproduct/{product_id}:
+    delete:
       consumes:
       - application/json
       description: Delete product by id
       parameters:
       - description: product id
         in: query
-        name: id
+        name: product_id
         required: true
         type: integer
       produces:
@@ -189,15 +192,11 @@ paths:
         "200":
           description: 'Array of deleted product details '
           schema:
-            items:
-              $ref: '#/definitions/domain.Product'
-            type: array
+            $ref: '#/definitions/response.Response'
         "400":
           description: Bad request
           schema:
-            items:
-              $ref: '#/definitions/domain.Product'
-            type: array
+            $ref: '#/definitions/response.Response'
       security:
       - BearerTokenAuth: []
       summary: Delete product
@@ -232,7 +231,7 @@ paths:
       tags:
       - Product Management
   /admin/product/updatecategory:
-    patch:
+    delete:
       consumes:
       - application/json
       description: delete Category by id
@@ -262,6 +261,36 @@ paths:
       summary: delete category
       tags:
       - Product Management
+    post:
+      consumes:
+      - application/json
+      description: Category by id
+      parameters:
+      - description: category_id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Update Category  '
+          schema:
+            items:
+              $ref: '#/definitions/domain.Category'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/domain.Category'
+            type: array
+      security:
+      - BearerTokenAuth: []
+      summary: update category
+      tags:
+      - Product Management
   /admin/users/block/{user_id}:
     patch:
       description: Block/Unblock on prompt
@@ -288,7 +317,7 @@ paths:
       tags:
       - User Management
   /admin/users/deleteuser/{user_id}:
-    post:
+    delete:
       consumes:
       - application/json
       description: Delete user by id
@@ -304,11 +333,11 @@ paths:
         "200":
           description: 'Array of user details '
           schema:
-            type: body
+            $ref: '#/definitions/response.Response'
         "400":
           description: Bad request
           schema:
-            type: body
+            $ref: '#/definitions/response.Response'
       security:
       - BearerTokenAuth: []
       summary: Delete User
@@ -555,13 +584,11 @@ paths:
         "200":
           description: List of products
           schema:
-            $ref: '#/definitions/models.Product'
+            $ref: '#/definitions/response.Response'
         "400":
           description: Bad request
           schema:
-            items:
-              $ref: '#/definitions/models.Product'
-            type: array
+            $ref: '#/definitions/response.Response'
       summary: ViewProducts
 securityDefinitions:
   BearerTokenAuth:

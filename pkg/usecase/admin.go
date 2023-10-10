@@ -85,15 +85,6 @@ func (usecase *adminUseCaseImpl) DeleteUser(id int) (domain.Users, error) {
 
 }
 
-// add products
-func (usecase *adminUseCaseImpl) AddProduct(products domain.Product) (domain.Product, error) {
-	product, err := usecase.adminrepo.AddProduct(products)
-	if err != nil {
-		return domain.Product{}, err
-	}
-	return product, nil
-
-}
 
 // edit products
 func (usecase *adminUseCaseImpl) EditProduct(product domain.Product) (domain.Product, error) {
@@ -104,23 +95,4 @@ func (usecase *adminUseCaseImpl) EditProduct(product domain.Product) (domain.Pro
 	return modProduct, nil
 }
 
-// delete products
-func (usecase *adminUseCaseImpl) DeleteProduct(id int) (domain.Product, error) {
 
-	delProduct, err := usecase.adminrepo.DeleteProduct(id)
-	if err != nil {
-		return domain.Product{}, nil
-	}
-
-	return delProduct, nil
-}
-
-// add category
-func (usecase *adminUseCaseImpl) AddCategory(category domain.Category) (domain.Category, error) {
-	adCat, err := usecase.adminrepo.AddCategory(category)
-	if err != nil {
-		return adCat, err
-	}
-	return adCat, nil
-
-}

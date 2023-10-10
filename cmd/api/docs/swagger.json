@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Stylezine is an E-commerce platform to purchase and sell Electronic itmes",
+        "description": "TechDeck is an E-commerce platform to purchase and sell Electronic itmes",
         "title": "Go + Gin E-Commerce API",
         "contact": {
             "name": "API Support"
@@ -34,7 +34,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Category"
+                            "$ref": "#/definitions/models.Category"
                         }
                     }
                 ],
@@ -42,13 +42,13 @@
                     "200": {
                         "description": "Added Category details",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -79,7 +79,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Product"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 ],
@@ -87,20 +87,20 @@
                     "200": {
                         "description": "Added product details",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
             }
         },
-        "/admin/product/deleteproduct": {
-            "post": {
+        "/admin/product/deleteproduct/{product_id}": {
+            "delete": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -121,7 +121,7 @@
                     {
                         "type": "integer",
                         "description": "product id",
-                        "name": "id",
+                        "name": "product_id",
                         "in": "query",
                         "required": true
                     }
@@ -130,19 +130,13 @@
                     "200": {
                         "description": "Array of deleted product details ",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Product"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/domain.Product"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -194,7 +188,54 @@
             }
         },
         "/admin/product/updatecategory": {
-            "patch": {
+            "post": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product Management"
+                ],
+                "summary": "update category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "category_id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update Category  ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Category"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -283,7 +324,7 @@
             }
         },
         "/admin/users/deleteuser/{user_id}": {
-            "post": {
+            "delete": {
                 "security": [
                     {
                         "BearerTokenAuth": []
@@ -313,13 +354,13 @@
                     "200": {
                         "description": "Array of user details ",
                         "schema": {
-                            "type": "body"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "body"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -695,16 +736,13 @@
                     "200": {
                         "description": "List of products",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/response.Response"
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Product"
-                            }
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -752,6 +790,14 @@
                 }
             }
         },
+        "models.Category": {
+            "type": "object",
+            "properties": {
+                "category_name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.OTPData": {
             "type": "object",
             "required": [
@@ -771,9 +817,6 @@
                 },
                 "colour": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "price": {
                     "type": "string"

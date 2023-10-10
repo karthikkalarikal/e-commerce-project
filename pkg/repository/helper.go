@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"gorm.io/gorm"
@@ -26,4 +28,16 @@ func (repo *helperRepositoryimpl) GetUserDetailsThroughId(id int) (domain.Users,
 		return domain.Users{}, err
 	}
 	return users, nil
+}
+
+// ----------------------------------------find product by id --------------------------------------------------\\
+func (db *helperRepositoryimpl) FindProductById(id int) (domain.Product, error) {
+	var product domain.Product
+
+	query := "select * from products where product_id = ?"
+	if err := db.db.Raw(query, id).Scan(&product).Error; err != nil {
+		return domain.Product{}, err
+	}
+	fmt.Println(product)
+	return product, nil
 }

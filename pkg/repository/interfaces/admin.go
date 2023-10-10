@@ -10,10 +10,7 @@ type AdminRepository interface {
 	BlockUser(id int, block bool) (domain.Users, error)
 	FindUser(email string, name string, id string, pageList int, offset int) ([]domain.Users, error)
 	DeleteUser(id int) (domain.Users, error)
-	AddProduct(domain.Product) (domain.Product, error)
 	EditProduct(domain.Product) (domain.Product, error)
-	DeleteProduct(id int) (domain.Product, error)
-	FindProductById(id int) (domain.Product, error)
-	AddCategory(category domain.Category) (domain.Category, error)
+
 	CountUsers() (int, error)
 }
