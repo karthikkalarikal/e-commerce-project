@@ -1,6 +1,9 @@
 package repository
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -45,38 +48,39 @@ func (db *adminRepositoryImpl) BlockUser(id int, block bool) (domain.Users, erro
 	return user, nil
 }
 
-// -----------------------------------search user by email ---------------------------------------\\
+// -----------------------------------search user--------------------- ---------------------------------------\\
 func (db *adminRepositoryImpl) FindUser(email string, name string, id string, pageList int, offset int) ([]domain.Users, error) {
+	fmt.Println("***************search repository*******************")
 	var users []domain.Users
 
 	args := []interface{}{}
 	query := "select * from users where 1=1"
 
 	if email != "" {
-		query += " and email = ?"
+		query += " and email like ?"
 		searchParam := "%" + email + "%"
 		args = append(args, searchParam)
 	}
 	if name != "" {
-		query += " and name = ?"
+		query += " and name like ?"
 		searchParam := "%" + name + "%"
 		args = append(args, searchParam)
 	}
 
 	if id != "" {
-		query += " and id = ?"
-		// idInt, err := strconv.Atoi(id)
-		// if err != nil {
-		// 	return []domain.Users{}, err
+		query += " and user_id = ?"
+		idInt, err := strconv.Atoi(id)
+		if err != nil {
+			return []domain.Users{}, err
 
-		// }
-		searchParam := "%" + id + "%"
+		}
+		searchParam := idInt
 		args = append(args, searchParam)
 	}
 
 	query += " limit ? offset ?"
 	args = append(args, pageList, offset)
-
+	// fmt.Println(query, args)
 	err := db.db.Raw(query, args...).Scan(&users).Error
 	if err != nil {
 		return []domain.Users{}, err
