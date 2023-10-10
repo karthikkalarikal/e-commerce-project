@@ -66,3 +66,17 @@ func (repo *cartRepositoryImpl) CartItemQuantityUpdations(userId, productId int,
 	}
 	return nil
 }
+
+// ----------------------------------------------- cart item deletion ------------------------------------------------------\\
+
+func (repo *cartRepositoryImpl) CartItemDeletion(userId, productId int) error {
+
+	query := `delete from carts
+				where user_id = $1
+				and product_id = $2
+	`
+	if err := repo.DB.Exec(query, userId, productId).Error; err != nil {
+		return err
+	}
+	return nil
+}

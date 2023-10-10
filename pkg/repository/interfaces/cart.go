@@ -9,4 +9,5 @@ type CartRepository interface {
 	AddToCart(domain.Cart, int, int) (domain.Cart, error)
 	CartItemListing(int) ([]models.CartItems, error)
 	CartItemQuantityUpdations(int, int, string) error
+	CartItemDeletion(int, int) error
 }

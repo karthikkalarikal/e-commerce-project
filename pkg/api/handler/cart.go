@@ -137,3 +137,40 @@ func (handler *CartHandler) CartItemQuatityModification(c *gin.Context) {
 	successRes := response.ClientResponse(http.StatusOK, "succesfully changed the quantity", cartItems, nil)
 	c.JSON(http.StatusOK, successRes)
 }
+
+// CartItemDeletion godoc
+// @Summary delete products from cart
+// @Description delet a product from cart
+// @Tags Cart Mangement
+// @Produce json
+// @Param user_id query int true "user id"
+// @Param product_id query int true "product_id"
+// @Security BearerTokenAuth
+// @Success 200 {array} response.Response "Array of product details "
+// @Failure 400 {array} response.Response "Bad request"
+// @Router /users/carts/delete [delete]
+func (handler *CartHandler) CartItemDeletion(c *gin.Context) {
+	fmt.Println("*************cart item mod****************")
+	user_id := c.Query("user_id")
+	userInt, err := strconv.Atoi(user_id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	product_id := c.Query("product_id")
+	productInt, err := strconv.Atoi(product_id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in product id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	cartItems, err := handler.cartUsecase.CartItemDeletion(userInt, productInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not delete", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusOK, "succesfully deleted the product", cartItems, nil)
+	c.JSON(http.StatusOK, successRes)
+}

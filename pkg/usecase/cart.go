@@ -57,3 +57,17 @@ func (usecase *cartUseCaseImpl) CartItemQuantityUpdations(userId, productInt int
 	return body, nil
 
 }
+
+// ----------------------------------------------cart item deletion ----------------------------------------------------\\
+func (usecase *cartUseCaseImpl) CartItemDeletion(userId, productInt int) ([]models.CartItems, error) {
+	if err := usecase.repo.CartItemDeletion(userId, productInt); err != nil {
+		return []models.CartItems{}, err
+	}
+
+	body, err := usecase.repo.CartItemListing(userId)
+	if err != nil {
+		return []models.CartItems{}, err
+	}
+
+	return body, nil
+}

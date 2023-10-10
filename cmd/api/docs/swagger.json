@@ -566,6 +566,59 @@
                 }
             }
         },
+        "/users/carts/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "delet a product from cart",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart Mangement"
+                ],
+                "summary": "delete products from cart",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "product_id",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of product details ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/carts/quantity": {
             "patch": {
                 "security": [
