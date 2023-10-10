@@ -961,6 +961,46 @@ const docTemplate = `{
                     "201": {
                         "description": "changed addres",
                         "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/user/viewdetails": {
+            "get": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "UserDetails",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Profile"
+                ],
+                "summary": "ViewUser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User Id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "changed addres",
+                        "schema": {
                             "$ref": "#/definitions/models.UserDetails"
                         }
                     },
@@ -1153,6 +1193,9 @@ const docTemplate = `{
                 },
                 "pin": {
                     "type": "string"
+                },
+                "selection": {
+                    "type": "boolean"
                 },
                 "state": {
                     "type": "string"

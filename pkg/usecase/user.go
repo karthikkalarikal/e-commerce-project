@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/helper"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	usecase "github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
@@ -14,11 +15,13 @@ import (
 
 type userUseCaseImpl struct {
 	userRepo interfaces.UserRepository
+	helpRepo interfaces.HelperRepository
 }
 
-func NewUserUseCase(repo interfaces.UserRepository) usecase.UserUseCase {
+func NewUserUseCase(repo interfaces.UserRepository, helpRepe interfaces.HelperRepository) usecase.UserUseCase {
 	return &userUseCaseImpl{
 		userRepo: repo,
+		helpRepo: helpRepe,
 	}
 }
 
@@ -170,6 +173,18 @@ func (u *userUseCaseImpl) SelectAddress(userId int, val bool) (models.Address, e
 	body, err := u.userRepo.SelectAddress(userId, val)
 	if err != nil {
 		return models.Address{}, err
+	}
+
+	return body, nil
+}
+
+// -------------------------------------------------- find user -------------------------------------------------------\\
+
+func (u *userUseCaseImpl) FindUserById(userId int) (domain.Users, error) {
+
+	body, err := u.helpRepo.GetUserDetailsThroughId(userId)
+	if err != nil {
+		return domain.Users{}, err
 	}
 
 	return body, nil

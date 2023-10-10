@@ -30,6 +30,10 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 			addressmanagement.POST("/address", userHandler.UserAddress)
 			addressmanagement.PATCH("/select", userHandler.SelectAddress)
 		}
+		usermanagement := engine.Group("/user")
+		{
+			usermanagement.GET("/viewdetails", userHandler.ViewUser)
+		}
 	}
 
 }

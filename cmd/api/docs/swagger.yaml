@@ -16,6 +16,8 @@ definitions:
         type: string
       pin:
         type: string
+      selection:
+        type: boolean
       state:
         type: string
       street:
@@ -729,6 +731,31 @@ paths:
         "201":
           description: changed addres
           schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: SelectAddress
+      tags:
+      - Address Management
+  /users/user/viewdetails:
+    get:
+      description: UserDetails
+      parameters:
+      - description: User Id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: changed addres
+          schema:
             $ref: '#/definitions/models.UserDetails'
         "400":
           description: Bad request
@@ -736,9 +763,9 @@ paths:
             $ref: '#/definitions/models.UserSignInResponse'
       security:
       - BearerTokenAuth: []
-      summary: SelectAddress
+      summary: ViewUser
       tags:
-      - Address Management
+      - User Profile
   /users/verifyotp:
     post:
       consumes:

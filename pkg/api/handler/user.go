@@ -165,8 +165,8 @@ func (u *UserHandler) UserAddress(c *gin.Context) {
 // @Param address_id query int true "Address Id"
 // @Param selection query bool true "selection "
 // @Security BearerTokenAuth
-// @Success 201 {object} models.UserDetails "changed addres"
-// @Failure 400 {object} models.UserSignInResponse{} "Bad request"
+// @Success 201 {object} response.Response "changed addres"
+// @Failure 400 {object} response.Response "Bad request"
 // @Router /users/user/select [patch]
 func (u *UserHandler) SelectAddress(c *gin.Context) {
 	addressId := c.Query("address_id")
@@ -190,6 +190,36 @@ func (u *UserHandler) SelectAddress(c *gin.Context) {
 		return
 	}
 	successRes := response.ClientResponse(http.StatusCreated, "address added succesfully", userAddress, nil)
+	// fmt.Println(userCreated)
+
+	c.JSON(http.StatusCreated, successRes)
+
+}
+
+// @Summary ViewUser
+// @Description UserDetails
+// @Tags User Profile
+// @Produce json
+// @Param user_id query int true "User Id"
+// @Security BearerTokenAuth
+// @Success 201 {object} models.UserDetails "changed addres"
+// @Failure 400 {object} models.UserSignInResponse{} "Bad request"
+// @Router /users/user/viewdetails [get]
+func (u *UserHandler) ViewUser(c *gin.Context) {
+	userId := c.Query("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	user, err := u.userUseCase.FindUserById(userIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error fetching user details", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusCreated, "user details fetched succesfully", user, nil)
 	// fmt.Println(userCreated)
 
 	c.JSON(http.StatusCreated, successRes)
