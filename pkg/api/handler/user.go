@@ -63,8 +63,7 @@ func (u *UserHandler) UserSignUp(c *gin.Context) {
 	c.JSON(http.StatusCreated, successRes)
 }
 
-//signin handler
-
+// signin handler
 // @Summary UserSignIN
 // @Description Sign in a user and return user details and a token
 // @Tags User Auth

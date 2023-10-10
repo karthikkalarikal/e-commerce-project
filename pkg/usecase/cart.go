@@ -16,10 +16,12 @@ func NewCartUseCase(usecase repository.CartRepository) interfaces.CartUseCase {
 	}
 }
 
-// add to cart usecase
-func (usecase *cartUseCaseImpl) AddToCart(cart domain.Cart, id int) (domain.Cart, error) {
+// ------------------------------------------add to cart usecase ---------------------------------------------- \\
+func (usecase *cartUseCaseImpl) AddToCart(cart domain.Cart, userId int, productId int) (domain.Cart, error) {
 
-	body, err := usecase.repo.AddToCart(cart, id)
+	// to do check for stocks
+
+	body, err := usecase.repo.AddToCart(cart, userId, productId)
 	if err != nil {
 		return domain.Cart{}, err
 	}

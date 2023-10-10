@@ -84,17 +84,35 @@ func (u *ProductHandler) DeleteProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, succesRes)
 }
 
-// @Summary ViewProducts
-// @Description view products by a user
-// @Accept json
+// GetProductList godoc
+// @Summary List the users you could specify page and no of products in one page
+// @Description Retrive and display product list according to instructions
+// @Tags General
 // @Produce json
-// @Success 200 {object} response.Response "List of products"
-// @Failure 400 {object} response.Response "Bad request"
+// @Param page query int false "Page number (default 1)"
+// @Param per_page query int false "Results per page (default 10)"
+// @Success 200 {array} response.Response "Array of product details "
+// @Failure 400 {array} response.Response "Bad request"
 // @Router /users/viewproducts [get]
 func (u *ProductHandler) ListProducts(c *gin.Context) {
 	fmt.Println("list product handler")
 
-	product_list, err := u.productUsecase.ListProducts()
+	pageNo := c.DefaultQuery("page", "1")       // default 1
+	pageList := c.DefaultQuery("per_page", "5") // default to 5
+	pageNoInt, err := strconv.Atoi(pageNo)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Products cannot be displayed", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	pageListInt, err := strconv.Atoi(pageList)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "Products cannot be displayed", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	product_list, err := u.productUsecase.ListProducts(pageNoInt, pageListInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "Products cannot be displayed", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)

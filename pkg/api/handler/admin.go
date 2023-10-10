@@ -37,7 +37,7 @@ func NewAdminHandler(usecase interfaces.AdminUseCase) *AdminHandler {
 // @Tags User Management
 // @Produce json
 // @Param page query int false "Page number (default 1)"
-// @Param per_page query int false "Results per page (default 10)"
+// @Param per_page query int false "Results per page (default 5)"
 // @Security BearerTokenAuth
 // @Success 200 {array} response.Response "Array of user details "
 // @Failure 400 {array} response.Response "Bad request"

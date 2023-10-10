@@ -57,18 +57,19 @@ func (db *productRepositoryImpl) DeleteProduct(id int) (bool, error) {
 	return true, nil
 }
 
-// list products
-func (prod *productRepositoryImpl) ListProducts() ([]models.Product, error) {
+// --------------------------------------list products --------------------------------------------\\
+func (prod *productRepositoryImpl) ListProducts(pageList, offset int) ([]models.Product, error) {
 
 	var product_list []models.Product
 
-	query := "SELECT * FROM products"
-	err := prod.repo.Raw(query).Scan(&product_list).Error
+	query := "SELECT * FROM products limit $1 offset $2"
+	fmt.Println(pageList, offset)
+	err := prod.repo.Raw(query, pageList, offset).Scan(&product_list).Error
 
 	if err != nil {
 		return []models.Product{}, errors.New("error checking user details")
 	}
-	fmt.Println(product_list)
+	fmt.Println("product list", product_list)
 	return product_list, nil
 }
 

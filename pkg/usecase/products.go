@@ -64,8 +64,11 @@ func (usecase *productUseCaseImpl) DeleteProduct(id int) (domain.Product, error)
 	}
 }
 
-func (u *productUseCaseImpl) ListProducts() ([]models.Product, error) {
-	productList, err := u.usecase.ListProducts()
+// -------------------------------------list products ---------------------------------------\\
+func (u *productUseCaseImpl) ListProducts(pageNo, pageList int) ([]models.Product, error) {
+
+	offset := (pageNo - 1) * pageList
+	productList, err := u.usecase.ListProducts(pageList, offset)
 	if err != nil {
 		return []models.Product{}, err
 	}

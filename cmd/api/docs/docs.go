@@ -488,7 +488,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "Results per page (default 10)",
+                        "description": "Results per page (default 5)",
                         "name": "per_page",
                         "in": "query"
                     }
@@ -510,49 +510,6 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/response.Response"
                             }
-                        }
-                    }
-                }
-            }
-        },
-        "/cart/addtocart/{id}": {
-            "put": {
-                "security": [
-                    {
-                        "BearerTokenAuth": []
-                    }
-                ],
-                "description": "Add product to the cart using product id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Cart Mangement"
-                ],
-                "summary": "Add to Cart",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "product-id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -693,6 +650,65 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/user/addtocart": {
+            "post": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Add product to the cart using product id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart Mangement"
+                ],
+                "summary": "Add to Cart",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "product_id",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Cart details",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Cart"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "fail",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/users/verifyotp": {
             "post": {
                 "description": "verify Phone number using OTP",
@@ -741,25 +757,45 @@ const docTemplate = `{
         },
         "/users/viewproducts": {
             "get": {
-                "description": "view products by a user",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "Retrive and display product list according to instructions",
                 "produces": [
                     "application/json"
                 ],
-                "summary": "ViewProducts",
+                "tags": [
+                    "General"
+                ],
+                "summary": "List the users you could specify page and no of products in one page",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Results per page (default 10)",
+                        "name": "per_page",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "List of products",
+                        "description": "Array of product details ",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
                         }
                     },
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
                         }
                     }
                 }
@@ -775,6 +811,17 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Cart": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "number"
+                },
+                "total_price": {
+                    "type": "number"
                 }
             }
         },

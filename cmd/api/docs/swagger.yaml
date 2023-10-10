@@ -6,6 +6,13 @@ definitions:
       id:
         type: integer
     type: object
+  models.Cart:
+    properties:
+      quantity:
+        type: number
+      total_price:
+        type: number
+    type: object
   models.Category:
     properties:
       category_name:
@@ -390,7 +397,7 @@ paths:
         in: query
         name: page
         type: integer
-      - description: Results per page (default 10)
+      - description: Results per page (default 5)
         in: query
         name: per_page
         type: integer
@@ -414,33 +421,6 @@ paths:
       summary: List the users you could specify page and no of users in one page
       tags:
       - User Management
-  /cart/addtocart/{id}:
-    put:
-      consumes:
-      - application/json
-      description: Add product to the cart using product id
-      parameters:
-      - description: product-id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerTokenAuth: []
-      summary: Add to Cart
-      tags:
-      - Cart Mangement
   /users/login:
     post:
       consumes:
@@ -530,6 +510,44 @@ paths:
       summary: UserSignUP
       tags:
       - User Auth
+  /users/user/addtocart:
+    post:
+      consumes:
+      - application/json
+      description: Add product to the cart using product id
+      parameters:
+      - description: user_id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: product_id
+        in: query
+        name: product_id
+        required: true
+        type: integer
+      - description: Cart details
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.Cart'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Add to Cart
+      tags:
+      - Cart Mangement
   /users/verifyotp:
     post:
       consumes:
@@ -562,21 +580,34 @@ paths:
       - User Auth
   /users/viewproducts:
     get:
-      consumes:
-      - application/json
-      description: view products by a user
+      description: Retrive and display product list according to instructions
+      parameters:
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Results per page (default 10)
+        in: query
+        name: per_page
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: List of products
+          description: 'Array of product details '
           schema:
-            $ref: '#/definitions/response.Response'
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
         "400":
           description: Bad request
           schema:
-            $ref: '#/definitions/response.Response'
-      summary: ViewProducts
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+      summary: List the users you could specify page and no of products in one page
+      tags:
+      - General
 securityDefinitions:
   BearerTokenAuth:
     in: header
