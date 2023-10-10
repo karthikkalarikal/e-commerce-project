@@ -10,4 +10,5 @@ type UserRepository interface {
 	CheckRole(email string) (bool, error)
 	AddAddress(models.Address, int) error
 	FindAddress(int) ([]models.Address, error)
+	SelectAddress(addressId int, val bool) (models.Address, error)
 }

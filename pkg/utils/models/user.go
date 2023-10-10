@@ -9,6 +9,7 @@ type UserDetails struct {
 }
 
 type Address struct {
+	Selection bool   `json:"selection"`
 	Name      string `json:"name" validate:"required"`
 	HouseName string `json:"house_name" validate:"required"`
 	Street    string `json:"street" validate:"required"`

@@ -110,3 +110,19 @@ func (c *userDatabase) FindAddress(userId int) ([]models.Address, error) {
 
 	return addresses, nil
 }
+
+// ------------------------------------------ select the address --------------------------------------\\
+func (c *userDatabase) SelectAddress(addressId int, val bool) (models.Address, error) {
+	var address models.Address
+
+	query := `
+		update addresses 
+		set selection = $1
+		where address_id = $2
+		returning *
+	`
+	if err := c.DB.Raw(query, val, addressId).Scan(&address).Error; err != nil {
+		return models.Address{}, err
+	}
+	return address, nil
+}

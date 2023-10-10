@@ -162,3 +162,15 @@ func (u *userUseCaseImpl) AddAddress(address models.Address, userId int) ([]mode
 	}
 	return addresses, nil
 }
+
+// -------------------------------------------------select address ----------------------------------------------------\\
+
+func (u *userUseCaseImpl) SelectAddress(userId int, val bool) (models.Address, error) {
+
+	body, err := u.userRepo.SelectAddress(userId, val)
+	if err != nil {
+		return models.Address{}, err
+	}
+
+	return body, nil
+}

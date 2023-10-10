@@ -926,6 +926,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/user/select": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Address selected for cash on delivery",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Address Management"
+                ],
+                "summary": "SelectAddress",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Address Id",
+                        "name": "address_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "selection ",
+                        "name": "selection",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "changed addres",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserDetails"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSignInResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users/verifyotp": {
             "post": {
                 "description": "verify Phone number using OTP",

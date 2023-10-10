@@ -157,3 +157,41 @@ func (u *UserHandler) UserAddress(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, successRes)
 }
+
+// @Summary SelectAddress
+// @Description Address selected for cash on delivery
+// @Tags Address Management
+// @Produce json
+// @Param address_id query int true "Address Id"
+// @Param selection query bool true "selection "
+// @Security BearerTokenAuth
+// @Success 201 {object} models.UserDetails "changed addres"
+// @Failure 400 {object} models.UserSignInResponse{} "Bad request"
+// @Router /users/user/select [patch]
+func (u *UserHandler) SelectAddress(c *gin.Context) {
+	addressId := c.Query("address_id")
+	addressIdInt, err := strconv.Atoi(addressId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "constraints not satisfied", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	val := c.Query("selection")
+	valBol, err := strconv.ParseBool(val)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "constraints not satisfied", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	userAddress, err := u.userUseCase.SelectAddress(addressIdInt, valBol)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "constraints not satisfied", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusCreated, "address added succesfully", userAddress, nil)
+	// fmt.Println(userCreated)
+
+	c.JSON(http.StatusCreated, successRes)
+
+}

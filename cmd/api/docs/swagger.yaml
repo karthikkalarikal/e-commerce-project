@@ -709,6 +709,36 @@ paths:
       summary: Address
       tags:
       - Address Management
+  /users/user/select:
+    patch:
+      description: Address selected for cash on delivery
+      parameters:
+      - description: Address Id
+        in: query
+        name: address_id
+        required: true
+        type: integer
+      - description: 'selection '
+        in: query
+        name: selection
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: changed addres
+          schema:
+            $ref: '#/definitions/models.UserDetails'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/models.UserSignInResponse'
+      security:
+      - BearerTokenAuth: []
+      summary: SelectAddress
+      tags:
+      - Address Management
   /users/verifyotp:
     post:
       consumes:
