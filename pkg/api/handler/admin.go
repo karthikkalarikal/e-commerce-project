@@ -171,3 +171,17 @@ func (u *AdminHandler) DeleteUser(c *gin.Context) {
 	succesRes := response.ClientResponse(http.StatusOK, "succesfully deleted the user", user, nil)
 	c.JSON(http.StatusOK, succesRes)
 }
+
+// --------------------------- change password ----------------------------- \\
+// ChangePassword godoc
+// @Summary Change Password
+// @Description Change Password
+// @Tags User Management
+// @Accept json
+// @Produce json
+// @Param user_id query int true "user id"
+// @Param password body string true "password"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "Array of user details "
+// @Failure 400 {object} response.Response "Bad request"
+// @Router /admin/users/deleteuser/{user_id} [delete]
