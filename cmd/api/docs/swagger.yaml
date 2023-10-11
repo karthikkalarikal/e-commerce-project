@@ -624,6 +624,43 @@ paths:
       summary: UserSignIN
       tags:
       - User Auth
+  /users/order/add:
+    post:
+      consumes:
+      - application/json
+      description: Add cart to the order using user id and cart id
+      parameters:
+      - description: user_id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: address_id
+        in: query
+        name: address_id
+        required: true
+        type: integer
+      - description: cart id
+        in: query
+        name: cart_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Add To Order
+      tags:
+      - Order Mangement
   /users/otplogin:
     post:
       consumes:
