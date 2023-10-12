@@ -804,13 +804,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "address_id",
-                        "name": "address_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "cart id",
                         "name": "cart_id",
                         "in": "query",

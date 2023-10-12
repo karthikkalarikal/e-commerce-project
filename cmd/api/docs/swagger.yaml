@@ -635,11 +635,6 @@ paths:
         name: user_id
         required: true
         type: integer
-      - description: address_id
-        in: query
-        name: address_id
-        required: true
-        type: integer
       - description: cart id
         in: query
         name: cart_id

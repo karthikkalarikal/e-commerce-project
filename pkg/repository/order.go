@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"gorm.io/gorm"
@@ -48,3 +50,22 @@ func (repo *orderRepositryImpl) GetOrder(userId int) (domain.Order, error) {
 	return body, nil
 }
 
+// ------------------------------------------ get selected address from user id ------------------------------------- \\
+
+func (repo *orderRepositryImpl) GetDeliveryAddress(userId int) (int, error) {
+	var address domain.Address
+
+	query := `
+		select address_id from addresses
+		where selection = true and user_id = $1
+	`
+	if err := repo.db.Raw(query, userId).Scan(&address).Error; err != nil {
+		return 0, err
+	}
+	fmt.Println("addresses", address.AddressId)
+	return address.AddressId, nil
+}
+
+// ------------------------------------- get carts of user from user id -------------------------------------------------- \\
+
+// func (repo *orderRepositryImpl) GetCartsOfUser (userId int) ([]int, error)

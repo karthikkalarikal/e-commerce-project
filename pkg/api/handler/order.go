@@ -27,7 +27,6 @@ func NewOrderHandler(usecase interfaces.OrderUseCase) *OrderHandler {
 // @Accept json
 // @Produce json
 // @Param user_id query int true "user_id"
-// @Param address_id query int true "address_id"
 // @Param cart_id query int true "cart id"
 // @Security BearerTokenAuth
 // @Success 200 {object} response.Response "success"
@@ -43,14 +42,6 @@ func (handler *OrderHandler) AddToOrder(ctx *gin.Context) {
 		return
 	}
 
-	addressId := ctx.Query("address_id")
-	addressIdInt, err := strconv.Atoi(addressId)
-	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in product id", nil, err.Error())
-		ctx.JSON(http.StatusBadRequest, errRes)
-		return
-	}
-
 	cartId := ctx.Query("cart_id")
 	cartIdInt, err := strconv.Atoi(cartId)
 	if err != nil {
@@ -59,7 +50,7 @@ func (handler *OrderHandler) AddToOrder(ctx *gin.Context) {
 		return
 	}
 
-	resOrder, err := handler.orderUseCase.AddToOrder(userIdInt, cartIdInt, addressIdInt)
+	resOrder, err := handler.orderUseCase.AddToOrder(userIdInt, cartIdInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in ordering", nil, err.Error())
 		ctx.JSON(http.StatusBadRequest, errRes)
