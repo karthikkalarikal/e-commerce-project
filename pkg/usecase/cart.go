@@ -43,8 +43,8 @@ func (usecase *cartUseCaseImpl) AddToCart(cartitems models.CartItems, userId, ca
 
 // -------------------------------------------- cart item listing ----------------------------------------------- \\
 
-func (usecase *cartUseCaseImpl) CartItemListing(userId int) ([]models.CartItems, error) {
-	body, err := usecase.repo.CartItemListing(userId)
+func (usecase *cartUseCaseImpl) CartItemListing(userId, cartId int) ([]models.CartItems, error) {
+	body, err := usecase.repo.CartItemListing(userId, cartId)
 	if err != nil {
 		return []models.CartItems{}, err
 	}
@@ -54,12 +54,12 @@ func (usecase *cartUseCaseImpl) CartItemListing(userId int) ([]models.CartItems,
 
 // ----------------------------------------------cart item quantity updation-----------------------------------------\\
 
-func (usecase *cartUseCaseImpl) CartItemQuantityUpdations(userId, productInt int, quantity string) ([]models.CartItems, error) {
-	if err := usecase.repo.CartItemQuantityUpdations(userId, productInt, quantity); err != nil {
+func (usecase *cartUseCaseImpl) CartItemQuantityUpdations(userId, cartInt int, quantity string) ([]models.CartItems, error) {
+	if err := usecase.repo.CartItemQuantityUpdations(userId, cartInt, quantity); err != nil {
 		return []models.CartItems{}, err
 	}
 
-	body, err := usecase.repo.CartItemListing(userId)
+	body, err := usecase.repo.CartItemListing(userId, cartInt)
 	if err != nil {
 		return []models.CartItems{}, err
 	}
@@ -74,7 +74,7 @@ func (usecase *cartUseCaseImpl) CartItemDeletion(userId, productInt int) ([]mode
 		return []models.CartItems{}, err
 	}
 
-	body, err := usecase.repo.CartItemListing(userId)
+	body, err := usecase.repo.CartItemListing(userId, productInt)
 	if err != nil {
 		return []models.CartItems{}, err
 	}

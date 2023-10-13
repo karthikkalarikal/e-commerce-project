@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -48,18 +49,17 @@ func (repo *cartRepositoryImpl) AddToCart(cart models.CartItems, cartId int) (mo
 
 // --------------------------------------- cart item listing ------------------------------------------------------\\
 
-func (repo *cartRepositoryImpl) CartItemListing(userId int) ([]models.CartItems, error) {
-	fmt.Println("******cart item listing*******")
+func (repo *cartRepositoryImpl) CartItemListing(userId, cartId int) ([]models.CartItems, error) {
+	log.Println("******cart item listing*******")
 	var carts []models.CartItems
 
-	query := `select ci.product_id,p.product_name,ci.quantity,p.price 
-				from carts ci 
-				join products p on ci.product_id = p.product_id
-				where ci.user_id =  $1
-	
+	query := `
+	select * from cart_items ct 
+	join carts c on c.cart_id = ct.cart_id
+	where c.user_id = $1 and c.cart_id = $2
 	`
 
-	if err := repo.DB.Raw(query, userId).Scan(&carts).Error; err != nil {
+	if err := repo.DB.Raw(query, userId, cartId).Scan(&carts).Error; err != nil {
 		return []models.CartItems{}, err
 	}
 	// fmt.Println("carts", carts)
@@ -67,7 +67,7 @@ func (repo *cartRepositoryImpl) CartItemListing(userId int) ([]models.CartItems,
 }
 
 // ---------------------------------------------- quantity updation -----------------------------------------------------\\
-
+																
 func (repo *cartRepositoryImpl) CartItemQuantityUpdations(userId, productId int, qunatity string) error {
 
 	query := `update carts

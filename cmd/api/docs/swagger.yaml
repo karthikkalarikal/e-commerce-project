@@ -466,7 +466,7 @@ paths:
       - application/json
       description: Add product to the cart using product id
       parameters:
-      - description: cart_id
+      - description: cart_id only this cart_id is needed
         in: query
         name: cart_id
         type: integer
@@ -577,6 +577,11 @@ paths:
       - description: user id
         in: query
         name: user_id
+        required: true
+        type: integer
+      - description: cart_id
+        in: query
+        name: cart_id
         required: true
         type: integer
       produces:

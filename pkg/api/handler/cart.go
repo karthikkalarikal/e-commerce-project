@@ -21,12 +21,14 @@ func NewCartHandler(usecase interfaces.CartUseCase) *CartHandler {
 	}
 }
 
+// ----------------------------------------- add cart ----------------------------------------------------\\
+
 // @Summary Add to Cart
 // @Description Add product to the cart using product id
 // @Tags Cart Mangement
 // @Accept json
 // @Produce json
-// @Param cart_id query int false "cart_id"
+// @Param cart_id query int false "cart_id only this cart_id is needed"
 // @Param user_id query int true "user_id"
 // @Param product body models.CartItems true "Cart details"
 // @Security BearerTokenAuth
@@ -70,12 +72,15 @@ func (handler *CartHandler) AddToCart(ctx *gin.Context) {
 
 }
 
+// ------------------------------------------ view cart -------------------------------------------- \\
+
 // CartItemListing godoc
 // @Summary List the products in cart
 // @Description Retrive and display product list in cart
 // @Tags Cart Mangement
 // @Produce json
 // @Param user_id query int true "user id"
+// @Param cart_id query int true "cart_id"
 // @Security BearerTokenAuth
 // @Success 200 {array} response.Response "Array of product details "
 // @Failure 400 {array} response.Response "Bad request"
@@ -85,12 +90,19 @@ func (handler *CartHandler) CartItemListing(c *gin.Context) {
 	user_id := c.Query("user_id")
 	userInt, err := strconv.Atoi(user_id)
 	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in id", nil, err.Error())
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	cartId := c.Query("cart_id")
+	cartIdInt, err := strconv.Atoi(cartId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in cart id", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 
-	cartItems, err := handler.cartUsecase.CartItemListing(userInt)
+	cartItems, err := handler.cartUsecase.CartItemListing(userInt, cartIdInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "could not display the  products", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
@@ -99,6 +111,8 @@ func (handler *CartHandler) CartItemListing(c *gin.Context) {
 	successRes := response.ClientResponse(http.StatusOK, "succesfully displayed the products in cart", cartItems, nil)
 	c.JSON(http.StatusOK, successRes)
 }
+
+// ------------------------------------------- cart item quntity ------------------------------------------- \\
 
 // CartItemQuatityModification godoc
 // @Summary Update the quantity of cart

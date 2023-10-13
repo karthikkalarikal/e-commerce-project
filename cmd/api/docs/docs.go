@@ -536,7 +536,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "cart_id",
+                        "description": "cart_id only this cart_id is needed",
                         "name": "cart_id",
                         "in": "query"
                     },
@@ -706,6 +706,13 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "user id",
                         "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "cart_id",
+                        "name": "cart_id",
                         "in": "query",
                         "required": true
                     }
