@@ -119,37 +119,37 @@ func (handler *CartHandler) CartItemListing(c *gin.Context) {
 // @Description Change the quantity of the cart items
 // @Tags Cart Mangement
 // @Produce json
-// @Param user_id query int true "user id"
-// @Param product_id query int true "product_id"
-// @Param quantity query string true "quantity"
+// @Param cart_items query int true "cart items id"
+// @Param quantity query int true "quantity"
 // @Security BearerTokenAuth
 // @Success 200 {array} response.Response "Array of product details "
 // @Failure 400 {array} response.Response "Bad request"
 // @Router /users/carts/quantity [patch]
 func (handler *CartHandler) CartItemQuatityModification(c *gin.Context) {
 	fmt.Println("*************cart item mod****************")
-	user_id := c.Query("user_id")
-	userInt, err := strconv.Atoi(user_id)
+	cartItems := c.Query("cart_items")
+	cartItemsInt, err := strconv.Atoi(cartItems)
 	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in cart items id", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	product_id := c.Query("product_id")
-	productInt, err := strconv.Atoi(product_id)
-	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in product id", nil, err.Error())
-		c.JSON(http.StatusBadRequest, errRes)
-		return
-	}
+
 	quantity := c.Query("quantity")
-	cartItems, err := handler.cartUsecase.CartItemQuantityUpdations(userInt, productInt, quantity)
+	quantityInt, err := strconv.Atoi(quantity)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in quantity", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	newCartItems, err := handler.cartUsecase.CartItemQuantityUpdations(cartItemsInt, quantityInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "could not display the  products", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	successRes := response.ClientResponse(http.StatusOK, "succesfully changed the quantity", cartItems, nil)
+	successRes := response.ClientResponse(http.StatusOK, "succesfully changed the quantity", newCartItems, nil)
 	c.JSON(http.StatusOK, successRes)
 }
 
@@ -158,34 +158,27 @@ func (handler *CartHandler) CartItemQuatityModification(c *gin.Context) {
 // @Description delet a product from cart
 // @Tags Cart Mangement
 // @Produce json
-// @Param user_id query int true "user id"
-// @Param product_id query int true "product_id"
+// @Param cart_items_id query int true "cart items id"
 // @Security BearerTokenAuth
-// @Success 200 {array} response.Response "Array of product details "
+// @Success 200 {array} response.Response "deleted cart items"
 // @Failure 400 {array} response.Response "Bad request"
 // @Router /users/carts/delete [delete]
 func (handler *CartHandler) CartItemDeletion(c *gin.Context) {
 	fmt.Println("*************cart item mod****************")
-	user_id := c.Query("user_id")
-	userInt, err := strconv.Atoi(user_id)
+	cart_id := c.Query("cart_items_id")
+	cartItemInt, err := strconv.Atoi(cart_id)
 	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in cartJ_item id", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	product_id := c.Query("product_id")
-	productInt, err := strconv.Atoi(product_id)
-	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in product id", nil, err.Error())
-		c.JSON(http.StatusBadRequest, errRes)
-		return
-	}
-	cartItems, err := handler.cartUsecase.CartItemDeletion(userInt, productInt)
+
+	cartItem, err := handler.cartUsecase.CartItemDeletion(cartItemInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "could not delete", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	successRes := response.ClientResponse(http.StatusOK, "succesfully deleted the product", cartItems, nil)
+	successRes := response.ClientResponse(http.StatusOK, "succesfully deleted the product", cartItem, nil)
 	c.JSON(http.StatusOK, successRes)
 }

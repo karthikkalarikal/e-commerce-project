@@ -591,22 +591,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "user id",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "product_id",
-                        "name": "product_id",
+                        "description": "cart items id",
+                        "name": "cart_items_id",
                         "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Array of product details ",
+                        "description": "deleted cart items",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -644,20 +637,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "user id",
-                        "name": "user_id",
+                        "description": "cart items id",
+                        "name": "cart_items",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "product_id",
-                        "name": "product_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "quantity",
                         "name": "quantity",
                         "in": "query",

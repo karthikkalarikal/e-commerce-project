@@ -501,21 +501,16 @@ paths:
     delete:
       description: delet a product from cart
       parameters:
-      - description: user id
+      - description: cart items id
         in: query
-        name: user_id
-        required: true
-        type: integer
-      - description: product_id
-        in: query
-        name: product_id
+        name: cart_items_id
         required: true
         type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: 'Array of product details '
+          description: deleted cart items
           schema:
             items:
               $ref: '#/definitions/response.Response'
@@ -535,21 +530,16 @@ paths:
     patch:
       description: Change the quantity of the cart items
       parameters:
-      - description: user id
+      - description: cart items id
         in: query
-        name: user_id
-        required: true
-        type: integer
-      - description: product_id
-        in: query
-        name: product_id
+        name: cart_items
         required: true
         type: integer
       - description: quantity
         in: query
         name: quantity
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:

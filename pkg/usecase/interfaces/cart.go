@@ -7,6 +7,6 @@ import (
 type CartUseCase interface {
 	AddToCart(cartitems models.CartItems, userId, cartId int) (models.CartItems, error)
 	CartItemListing(int, int) ([]models.CartItems, error)
-	CartItemQuantityUpdations(int, int, string) ([]models.CartItems, error)
-	CartItemDeletion(int, int) ([]models.CartItems, error)
+	CartItemQuantityUpdations(int, int) (models.CartItems, error)
+	CartItemDeletion(int) (models.CartItems, error)
 }

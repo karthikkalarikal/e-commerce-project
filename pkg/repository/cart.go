@@ -47,7 +47,7 @@ func (repo *cartRepositoryImpl) AddToCart(cart models.CartItems, cartId int) (mo
 	return body, nil
 }
 
-// --------------------------------------- cart item listing ------------------------------------------------------\\
+// -------------------------------------------- cart item listing ------------------------------------------------------ \\
 
 func (repo *cartRepositoryImpl) CartItemListing(userId, cartId int) ([]models.CartItems, error) {
 	log.Println("******cart item listing*******")
@@ -66,16 +66,15 @@ func (repo *cartRepositoryImpl) CartItemListing(userId, cartId int) ([]models.Ca
 	return carts, nil
 }
 
-// ---------------------------------------------- quantity updation -----------------------------------------------------\\
-																
-func (repo *cartRepositoryImpl) CartItemQuantityUpdations(userId, productId int, qunatity string) error {
+// ---------------------------------------------- quantity updation ----------------------------------------------------- \\
 
-	query := `update carts
+func (repo *cartRepositoryImpl) CartItemQuantityUpdations(cartItems, qunatity int) error {
+
+	query := `update cart_items
 				set quantity = $1 
-				where user_id = $2
-				and product_id = $3
+				where cart_items_id = $2
 	`
-	if err := repo.DB.Exec(query, qunatity, userId, productId).Error; err != nil {
+	if err := repo.DB.Exec(query, qunatity, cartItems).Error; err != nil {
 		return err
 	}
 	return nil
@@ -83,14 +82,27 @@ func (repo *cartRepositoryImpl) CartItemQuantityUpdations(userId, productId int,
 
 // ----------------------------------------------- cart item deletion ------------------------------------------------------\\
 
-func (repo *cartRepositoryImpl) CartItemDeletion(userId, productId int) error {
+func (repo *cartRepositoryImpl) CartItemDeletion(cartItemsId int) error {
 
-	query := `delete from carts
-				where user_id = $1
-				and product_id = $2
+	query := `delete from cart_items where cart_items_id = $1
 	`
-	if err := repo.DB.Exec(query, userId, productId).Error; err != nil {
+	if err := repo.DB.Exec(query, cartItemsId).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+// ---------------------------------------- get cart items throught cart items id --------------------------------------- \\
+
+func (repo *cartRepositoryImpl) CartItemsById(cartItemsId int) (models.CartItems, error) {
+
+	var body models.CartItems
+
+	query := `
+	select * from cart_items where cart_items_id = $1
+	`
+	if err := repo.DB.Raw(query, cartItemsId).Scan(&body).Error; err != nil {
+		return models.CartItems{}, err
+	}
+	return body, nil
 }

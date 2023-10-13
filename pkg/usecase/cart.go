@@ -54,14 +54,14 @@ func (usecase *cartUseCaseImpl) CartItemListing(userId, cartId int) ([]models.Ca
 
 // ----------------------------------------------cart item quantity updation-----------------------------------------\\
 
-func (usecase *cartUseCaseImpl) CartItemQuantityUpdations(userId, cartInt int, quantity string) ([]models.CartItems, error) {
-	if err := usecase.repo.CartItemQuantityUpdations(userId, cartInt, quantity); err != nil {
-		return []models.CartItems{}, err
+func (usecase *cartUseCaseImpl) CartItemQuantityUpdations(cartItems, quantity int) (models.CartItems, error) {
+	if err := usecase.repo.CartItemQuantityUpdations(cartItems, quantity); err != nil {
+		return models.CartItems{}, err
 	}
 
-	body, err := usecase.repo.CartItemListing(userId, cartInt)
+	body, err := usecase.repo.CartItemsById(cartItems)
 	if err != nil {
-		return []models.CartItems{}, err
+		return models.CartItems{}, err
 	}
 
 	return body, nil
@@ -69,14 +69,15 @@ func (usecase *cartUseCaseImpl) CartItemQuantityUpdations(userId, cartInt int, q
 }
 
 // ----------------------------------------------cart item deletion ----------------------------------------------------\\
-func (usecase *cartUseCaseImpl) CartItemDeletion(userId, productInt int) ([]models.CartItems, error) {
-	if err := usecase.repo.CartItemDeletion(userId, productInt); err != nil {
-		return []models.CartItems{}, err
+func (usecase *cartUseCaseImpl) CartItemDeletion(cartItemId int) (models.CartItems, error) {
+	body, err := usecase.repo.CartItemsById(cartItemId)
+	if err != nil {
+		return models.CartItems{}, err
 	}
 
-	body, err := usecase.repo.CartItemListing(userId, productInt)
+	err = usecase.repo.CartItemDeletion(cartItemId)
 	if err != nil {
-		return []models.CartItems{}, err
+		return models.CartItems{}, err
 	}
 
 	return body, nil
