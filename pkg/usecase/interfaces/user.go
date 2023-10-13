@@ -13,4 +13,5 @@ type UserUseCase interface {
 	FindUserById(int) (domain.Users, error)
 	FindAddressByUI(int) ([]models.Address, error)
 	EditUserDetails(int, models.UserDetailsResponse) (models.UserDetailsResponse, error)
+	ChangePassword(pass models.ChangePassword, userId int) (models.UserSignInResponse, error)
 }

@@ -12,4 +12,6 @@ type UserRepository interface {
 	FindAddress(int) ([]models.Address, error)
 	SelectAddress(addressId int, val bool) (models.Address, error)
 	EditUserDetails(int, models.UserDetailsResponse) (models.UserDetailsResponse, error)
+	GetUserDetailsThroughId(int) (models.UserSignInResponse, error)
+	ChangeUserPassword(userId int, password string) (models.UserSignInResponse, error)
 }

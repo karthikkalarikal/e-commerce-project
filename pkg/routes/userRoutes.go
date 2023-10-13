@@ -35,6 +35,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 			usermanagement.GET("/viewdetails", userHandler.ViewUser)
 			usermanagement.GET("/addresses", userHandler.GetAddress)
 			usermanagement.PUT("/edit", userHandler.EditUserDetails)
+			usermanagement.POST("/changepassword", userHandler.ChangePassword)
 		}
 		ordermanagement := engine.Group("/order")
 		{

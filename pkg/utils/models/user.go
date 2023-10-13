@@ -47,3 +47,9 @@ type UserSignInResponse struct {
 	Password string `json:"password"`
 	Role     bool   `json:"role" default:"false"`
 }
+
+type ChangePassword struct {
+	Id          int    `json:"password_id"`
+	OldPassword string `json:"oldpassword"`
+	NewPassword string `json:"newpassword"`
+}

@@ -48,9 +48,6 @@ func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers
 	}
 	user.Password = string(hashedPassword)
 
-	//add user details to the database
-	// fmt.Println("user:", user)
-
 	userData, err := u.userRepo.UserSignUp(user)
 	// fmt.Println("userdata", userData)
 	if err != nil {
@@ -201,7 +198,7 @@ func (u *userUseCaseImpl) FindAddressByUI(userId int) ([]models.Address, error) 
 	return body, nil
 }
 
-// --------------------------------- edit user details -----------------------------------------\\
+// --------------------------------- edit user details ----------------------------------------- \\
 
 func (u *userUseCaseImpl) EditUserDetails(userId int, user models.UserDetailsResponse) (models.UserDetailsResponse, error) {
 	body, err := u.userRepo.EditUserDetails(userId, user)
@@ -209,5 +206,31 @@ func (u *userUseCaseImpl) EditUserDetails(userId int, user models.UserDetailsRes
 		return models.UserDetailsResponse{}, err
 	}
 
+	return body, nil
+}
+
+// ----------------------------------- change password ----------------------------------------- \\
+
+func (u *userUseCaseImpl) ChangePassword(pass models.ChangePassword, userId int) (models.UserSignInResponse, error) {
+
+	var body models.UserSignInResponse
+
+	password, err := u.userRepo.GetUserDetailsThroughId(userId)
+	if err != nil {
+		return models.UserSignInResponse{}, err
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(password.Password), []byte(pass.OldPassword)); err != nil {
+		return models.UserSignInResponse{}, err
+	}
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(pass.NewPassword), 10)
+	if err != nil {
+		return models.UserSignInResponse{}, err
+	}
+
+	body, err = u.userRepo.ChangeUserPassword(userId, string(hashedPassword))
+
+	if err != nil {
+		return models.UserSignInResponse{}, err
+	}
 	return body, nil
 }

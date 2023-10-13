@@ -46,6 +46,15 @@ definitions:
       category_name:
         type: string
     type: object
+  models.ChangePassword:
+    properties:
+      newpassword:
+        type: string
+      oldpassword:
+        type: string
+      password_id:
+        type: integer
+    type: object
   models.OTPData:
     properties:
       phone:
@@ -775,6 +784,43 @@ paths:
       security:
       - BearerTokenAuth: []
       summary: ViewAddress
+      tags:
+      - User Profile
+  /users/user/changepassword:
+    post:
+      consumes:
+      - application/json
+      description: Change the users password
+      parameters:
+      - description: User Id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: User Password
+        in: body
+        name: password
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChangePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User details
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+      security:
+      - BearerTokenAuth: []
+      summary: ChangePassword
       tags:
       - User Profile
   /users/user/edit:

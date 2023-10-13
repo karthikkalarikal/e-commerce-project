@@ -166,3 +166,38 @@ func (c *userDatabase) EditUserDetails(userId int, user models.UserDetailsRespon
 
 	return body, nil
 }
+
+// ---------------------------------- get userDetails ---------------------------------\\
+
+func (c *userDatabase) GetUserDetailsThroughId(userId int) (models.UserSignInResponse, error) {
+	var body models.UserSignInResponse
+
+	query := `select * from users where user_id = $1`
+
+	if err := c.DB.Raw(query, userId).Scan(&body).Error; err != nil {
+		return models.UserSignInResponse{}, err
+	}
+	return body, nil
+}
+
+// ---------------------------------------- change password --------------------------------- \\
+
+func (c *userDatabase) ChangeUserPassword(userId int, password string) (models.UserSignInResponse, error) {
+	var body models.UserSignInResponse
+
+	query := `
+	update users set password = $1 where user_id = $2 
+	`
+	if err := c.DB.Exec(query, password, userId).Error; err != nil {
+		return models.UserSignInResponse{}, err
+	}
+
+	query1 := `
+	select * from users where user_id = $1
+	`
+	if err := c.DB.Raw(query1, userId).Scan(&body).Error; err != nil {
+		return models.UserSignInResponse{}, err
+	}
+	return body, nil
+
+}

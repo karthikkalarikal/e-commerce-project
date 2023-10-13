@@ -293,3 +293,43 @@ func (u *UserHandler) EditUserDetails(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, successRes)
 }
+
+// @Summary ChangePassword
+// @Description Change the users password
+// @Tags User Profile
+// @Accept json
+// @Produce json
+// @Security BearerTokenAuth
+// @Param user_id query int true "User Id"
+// @Param password body models.ChangePassword true "User Password"
+// @Success 200 {array} response.Response "User details"
+// @Failure 400 {array} response.Response "Bad request"
+// @Router /users/user/changepassword [post]
+func (u *UserHandler) ChangePassword(c *gin.Context) {
+
+	var passwords models.ChangePassword
+	userId := c.Query("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	if err := c.BindJSON(&passwords); err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	body, err := u.userUseCase.ChangePassword(passwords, userIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error changing password", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusCreated, "changed password", body, nil)
+
+	c.JSON(http.StatusCreated, successRes)
+}
