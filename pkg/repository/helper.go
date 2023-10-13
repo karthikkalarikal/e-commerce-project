@@ -41,3 +41,17 @@ func (db *helperRepositoryimpl) FindProductById(id int) (domain.Product, error) 
 	fmt.Println(product)
 	return product, nil
 }
+
+// -------------------------------------- to see if the user id exists  ---------------------------------\\
+
+func (repo *helperRepositoryimpl) FindIfUserExists(userId int, str string) (bool, error) {
+	var count int
+	query := "select count(*) from "
+
+	query += str // you could give the name of table you want to check
+	query += " where user_id = $1"
+	if err := repo.db.Raw(query, userId).Scan(&count).Error; err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}

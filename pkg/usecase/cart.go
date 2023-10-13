@@ -1,7 +1,8 @@
 package usecase
 
 import (
-	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
+	"fmt"
+
 	repository "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -19,13 +20,22 @@ func NewCartUseCase(usecase repository.CartRepository) interfaces.CartUseCase {
 
 // ------------------------------------------add to cart usecase ---------------------------------------------- \\
 
-func (usecase *cartUseCaseImpl) AddToCart(cart domain.Cart, userId int, productId int) (domain.Cart, error) {
+func (usecase *cartUseCaseImpl) AddToCart(cartitems models.CartItems, userId, cartId int) (models.CartItems, error) {
+
+	if cartId <= 0 { // incase the cart isnt specified
+		newCart, err := usecase.repo.MakeNewCart(userId)
+		if err != nil {
+			return models.CartItems{}, err
+		}
+		cartId = newCart.CartId
+		fmt.Println("cart id", cartId, newCart)
+	}
 
 	// to do check for stocks
 
-	body, err := usecase.repo.AddToCart(cart, userId, productId)
+	body, err := usecase.repo.AddToCart(cartitems, cartId) // adds the items into cart items database as specified
 	if err != nil {
-		return domain.Cart{}, err
+		return models.CartItems{}, err
 	}
 
 	return body, nil

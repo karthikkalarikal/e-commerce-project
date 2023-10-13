@@ -3,7 +3,6 @@ package repository
 import (
 	"fmt"
 
-	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 	"gorm.io/gorm"
@@ -19,15 +18,30 @@ func NewCartRepository(db *gorm.DB) interfaces.CartRepository {
 	}
 }
 
-// ----------------------------------------add to cart ----------------------------------------------\\
+// ------------------------------------------ make a newcart ---------------------------------------------------- \\
 
-func (repo *cartRepositoryImpl) AddToCart(cart domain.Cart, userId int, productId int) (domain.Cart, error) {
-	var body domain.Cart
+func (repo *cartRepositoryImpl) MakeNewCart(userId int) (models.Cart, error) {
+	var cart models.Cart
 
-	query := "insert into carts(user_id,product_id,quantity,total_price) values($1,$2,$3,$4) returning *"
+	query := "insert into carts(user_id) values($1) returning *" // create a new cart in case the cart id isnt given
 
-	if err := repo.DB.Raw(query, userId, productId, cart.Quantity, cart.TotalPrice).Scan(&body).Error; err != nil {
-		return domain.Cart{}, err
+	if err := repo.DB.Raw(query, userId).Scan(&cart).Error; err != nil {
+		return models.Cart{}, err
+	}
+	fmt.Println("cart:", cart)
+	return cart, nil
+
+}
+
+// ---------------------------------------- add to cart ----------------------------------------------------------\\
+
+func (repo *cartRepositoryImpl) AddToCart(cart models.CartItems, cartId int) (models.CartItems, error) {
+	var body models.CartItems
+
+	query := "insert into cart_items(cart_id,product_id,quantity,amount) values($1,$2,$3,$4) returning *" // insert values into cart_items database
+
+	if err := repo.DB.Raw(query, cartId, cart.ProductId, cart.Quantity, cart.Amount).Scan(&body).Error; err != nil {
+		return models.CartItems{}, err
 	}
 	return body, nil
 }
@@ -52,7 +66,7 @@ func (repo *cartRepositoryImpl) CartItemListing(userId int) ([]models.CartItems,
 	return carts, nil
 }
 
-// ----------------------------------------------quantity updation -----------------------------------------------------\\
+// ---------------------------------------------- quantity updation -----------------------------------------------------\\
 
 func (repo *cartRepositoryImpl) CartItemQuantityUpdations(userId, productId int, qunatity string) error {
 

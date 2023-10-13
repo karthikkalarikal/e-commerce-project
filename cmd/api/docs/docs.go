@@ -536,15 +536,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "user_id",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
+                        "description": "cart_id",
+                        "name": "cart_id",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "product_id",
-                        "name": "product_id",
+                        "description": "user_id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     },
@@ -554,7 +553,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Cart"
+                            "$ref": "#/definitions/models.CartItems"
                         }
                     }
                 ],
@@ -1352,14 +1351,20 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Cart": {
+        "models.CartItems": {
             "type": "object",
             "properties": {
-                "quantity": {
-                    "type": "number"
+                "amount": {
+                    "type": "string"
                 },
-                "total_price": {
-                    "type": "number"
+                "cart_id": {
+                    "type": "integer"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "string"
                 }
             }
         },

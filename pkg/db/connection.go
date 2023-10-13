@@ -18,6 +18,6 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 	db.AutoMigrate(&domain.Category{})
 	db.AutoMigrate(&domain.Cart{})
 	db.AutoMigrate(&domain.Address{})
-	db.AutoMigrate(&domain.Order{})
+	db.AutoMigrate(&domain.CartItems{})
 	return db, err
 }

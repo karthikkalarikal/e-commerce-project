@@ -30,12 +30,16 @@ definitions:
     - state
     - street
     type: object
-  models.Cart:
+  models.CartItems:
     properties:
+      amount:
+        type: string
+      cart_id:
+        type: integer
+      product_id:
+        type: integer
       quantity:
-        type: number
-      total_price:
-        type: number
+        type: string
     type: object
   models.Category:
     properties:
@@ -462,14 +466,13 @@ paths:
       - application/json
       description: Add product to the cart using product id
       parameters:
+      - description: cart_id
+        in: query
+        name: cart_id
+        type: integer
       - description: user_id
         in: query
         name: user_id
-        required: true
-        type: integer
-      - description: product_id
-        in: query
-        name: product_id
         required: true
         type: integer
       - description: Cart details
@@ -477,7 +480,7 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/models.Cart'
+          $ref: '#/definitions/models.CartItems'
       produces:
       - application/json
       responses:

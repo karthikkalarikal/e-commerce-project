@@ -5,6 +5,7 @@ import (
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 	"gorm.io/gorm"
 )
 
@@ -68,4 +69,28 @@ func (repo *orderRepositryImpl) GetDeliveryAddress(userId int) (int, error) {
 
 // ------------------------------------- get carts of user from user id -------------------------------------------------- \\
 
-// func (repo *orderRepositryImpl) GetCartsOfUser (userId int) ([]int, error)
+func (repo *orderRepositryImpl) GetUserOrders(userId int) ([]models.Cart, error) {
+	var body []models.Cart
+
+	query := `
+	select * from carts where user_id = $1 and status = 'confirmed'
+	
+	` // get all the carts that have the given id and the status of confirmed
+	if err := repo.db.Raw(query, userId).Scan(&body).Error; err != nil {
+		return []models.Cart{}, err
+	}
+
+	return body, nil
+}
+
+// --------------------------------------- change cart status into cancel ------------------------------------------------ \\
+
+func (repo *orderRepositryImpl) ChangeStatus(userId int) error {
+	query := `
+	update orders set status = 'cancel'
+`
+	if err := repo.db.Raw(query, userId).Error; err != nil {
+		return err
+	}
+	return nil
+}
