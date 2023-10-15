@@ -637,14 +637,14 @@ paths:
       - application/json
       description: Add cart to the order using user id and cart id
       parameters:
-      - description: user_id
-        in: query
-        name: user_id
-        required: true
-        type: integer
       - description: cart id
         in: query
         name: cart_id
+        required: true
+        type: integer
+      - description: user_id
+        in: query
+        name: user_id
         required: true
         type: integer
       produces:

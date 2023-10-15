@@ -26,8 +26,8 @@ func NewOrderHandler(usecase interfaces.OrderUseCase) *OrderHandler {
 // @Tags Order Mangement
 // @Accept json
 // @Produce json
-// @Param user_id query int true "user_id"
 // @Param cart_id query int true "cart id"
+// @Param user_id query int true "user_id"
 // @Security BearerTokenAuth
 // @Success 200 {object} response.Response "success"
 // @Failure 500 {object} response.Response{} "fail"
@@ -69,16 +69,16 @@ func (handler *OrderHandler) AddToOrder(ctx *gin.Context) {
 // @Tags Order Mangement
 // @Accept json
 // @Produce json
-// @Param user_id query int true "user_id"
+// @Param order_id query int true "order_id"
 // @Security BearerTokenAuth
 // @Success 200 {object} response.Response "success"
 // @Failure 500 {object} response.Response{} "fail"
 // @Router /users/order/cancel [delete]
 // func (handler *OrderHandler) CancelOrder(ctx *gin.Context) {
-// 	user_id := ctx.Query("user_id")
-// 	userID, err := strconv.Atoi(user_id)
+// 	order_id := ctx.Query("order_id")
+// 	ordrId, err := strconv.Atoi(order_id)
 // 	if err != nil {
-// 		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the user id", nil, err.Error())
+// 		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the order id", nil, err.Error())
 // 		ctx.JSON(http.StatusBadRequest, errRes)
 // 		return
 // 	}

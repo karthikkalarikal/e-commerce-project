@@ -789,15 +789,15 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "user_id",
-                        "name": "user_id",
+                        "description": "cart id",
+                        "name": "cart_id",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
-                        "description": "cart id",
-                        "name": "cart_id",
+                        "description": "user_id",
+                        "name": "user_id",
                         "in": "query",
                         "required": true
                     }

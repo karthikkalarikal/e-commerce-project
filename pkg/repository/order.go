@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -21,33 +22,49 @@ func NewOrderRepository(db *gorm.DB) interfaces.OrderRepositry {
 
 // ------------------------------------------- add to order table -------------------------------------\\
 
-func (repo *orderRepositryImpl) AddToOrder(addressId, cartId int) error {
+func (repo *orderRepositryImpl) AddToOrder(addressId, cartId int) (domain.Order, error) {
+
+	var body domain.Order
 	query := `
 		insert into orders(user_id,address_id,cart_id)
 		select c.user_id,c.id, a.address_id
 		from carts c
 		join addresses a on c.user_id = a.user_id
-		where a.address_id = $1 and c.id = $2
-
+		where a.address_id = $1 and c.id = $2 
+		returning *
 	`
-	if err := repo.db.Exec(query, addressId, cartId).Error; err != nil {
+	if err := repo.db.Raw(query, addressId, cartId).Scan(&body).Error; err != nil {
+		err = errors.New("failed to add order to the data base" + err.Error())
+		return domain.Order{}, err
+	}
+	return body, nil
+}
+
+// ------------------------------------------- add amount to order table ---------------------------------- \\
+
+func (repo *orderRepositryImpl) AddAmountToOrder(amount float64, orderId uint) error {
+	query := `
+		update orders set amount = $1 where id = $2
+	`
+
+	if err := repo.db.Exec(query, amount, orderId).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-// -------------------------------------------- get order table by user id ----------------------------------\\
+// -------------------------------------------- get order table by cart id ----------------------------------\\
 
-func (repo *orderRepositryImpl) GetOrder(userId int) (domain.Order, error) {
+func (repo *orderRepositryImpl) GetOrder(orderId int) (domain.Order, error) {
 	var body domain.Order
 	query := `
 		select * from orders
-		where user_id = $1
+		where id = $1
 	`
-	if err := repo.db.Raw(query, userId).Scan(&body).Error; err != nil {
+	if err := repo.db.Raw(query, orderId).Scan(&body).Error; err != nil {
 		return domain.Order{}, err
 	}
-
+	fmt.Println("amount", body.Amount)
 	return body, nil
 }
 
@@ -93,4 +110,26 @@ func (repo *orderRepositryImpl) ChangeStatus(userId int) error {
 		return err
 	}
 	return nil
+}
+
+// ----------------------------------------- get total amount of a cart --------------------------------------------------- \\
+
+func (repo *orderRepositryImpl) TotalAmountInCart(cartId int) (float64, error) {
+	var amounts []float64
+
+	query := `
+		select ci.amount from carts c 
+		join cart_items ci
+		on c.id = ci.cart_id 
+		where c.cart_id = $1
+	`
+	if err := repo.db.Raw(query, cartId).Pluck("amount", &amounts).Error; err != nil {
+		return 0, err
+	}
+	sum := 0.0
+	for _, v := range amounts {
+
+		sum += v
+	}
+	return sum, nil
 }

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	repo "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
@@ -29,16 +30,30 @@ func (repo *orderUseCaseImpl) AddToOrder(userId, cartId int) (domain.Order, erro
 	if err != nil {
 		return domain.Order{}, nil
 	}
+	fmt.Println("addressid", addressId)
 
-	if err := repo.orderRepo.AddToOrder(cartId, addressId); err != nil {
-		return domain.Order{}, err
+	totlaAmount, err := repo.orderRepo.TotalAmountInCart(cartId)
+	if err != nil {
+		return domain.Order{}, nil
 	}
-	body, err := repo.orderRepo.GetOrder(userId)
+	fmt.Println("total amount", totlaAmount)
+
+	body, err := repo.orderRepo.AddToOrder(cartId, addressId)
 	if err != nil {
 		return domain.Order{}, err
 	}
 
-	return body, nil
+	fmt.Println("body", body)
+	if err := repo.orderRepo.AddAmountToOrder(totlaAmount, body.ID); err != nil {
+		return domain.Order{}, err
+	}
+	body2, err := repo.orderRepo.GetOrder(int(body.ID))
+	if err != nil {
+		return domain.Order{}, err
+	}
+	fmt.Println("body2", body2)
+
+	return body2, nil
 
 }
 
