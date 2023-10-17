@@ -21,8 +21,8 @@ func NewPaymentHandler(useCase pay.PaymentUseCase) *PaymentHandler {
 	}
 }
 
-// @Summary Delete product
-// @Description Delete product by id
+// @Summary Make Payment
+// @Description pay for razor pay
 // @Tags Order Management
 // @Accept json
 // @Produce json
@@ -66,4 +66,30 @@ func (handler *PaymentHandler) MakePaymentRazorpay(c *gin.Context) {
 		"user_name":   body.Name,
 		"total":       int(body.Amount),
 	})
+}
+
+// @Summary verify payment
+// @Description verify payment
+// @Tags Order Management
+// @Produce json
+// @Param payment_id query string true "payment id"
+// @Param order_id query string true "order_id"
+// @Param razor_id query string true "razor_id"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "invoice with details of order and user "
+// @Failure 400 {object} response.Response  "Bad request"
+// @Router /users/order/verifypayment [post]
+func (handler *PaymentHandler) VerifyPayment(c *gin.Context) {
+	orderId := c.Query("order_id")
+	paymentId := c.Query("payment_id")
+	razorId := c.Query("razor_id")
+
+	if err := handler.payment.SavePaymentDetails(paymentId, razorId, orderId); err != nil {
+		errorRes := response.ClientResponse(http.StatusInternalServerError, "could not update payment details", nil, err.Error())
+		c.JSON(http.StatusOK, errorRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "Successfully updated payment details", nil, nil)
+	c.JSON(http.StatusOK, successRes)
 }

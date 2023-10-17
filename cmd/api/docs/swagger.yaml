@@ -662,12 +662,12 @@ paths:
       - BearerTokenAuth: []
       summary: Add To Order
       tags:
-      - Order Mangement
+      - Order Management
   /users/order/payment:
     post:
       consumes:
       - application/json
-      description: Delete product by id
+      description: pay for razor pay
       parameters:
       - description: user id
         in: query
@@ -692,7 +692,42 @@ paths:
             $ref: '#/definitions/response.Response'
       security:
       - BearerTokenAuth: []
-      summary: Delete product
+      summary: Make Payment
+      tags:
+      - Order Management
+  /users/order/verifypayment:
+    post:
+      description: verify payment
+      parameters:
+      - description: payment id
+        in: query
+        name: payment_id
+        required: true
+        type: string
+      - description: order_id
+        in: query
+        name: order_id
+        required: true
+        type: string
+      - description: razor_id
+        in: query
+        name: razor_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'invoice with details of order and user '
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: verify payment
       tags:
       - Order Management
   /users/otplogin:

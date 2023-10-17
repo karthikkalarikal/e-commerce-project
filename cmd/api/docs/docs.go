@@ -783,7 +783,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order Mangement"
+                    "Order Management"
                 ],
                 "summary": "Add To Order",
                 "parameters": [
@@ -825,7 +825,7 @@ const docTemplate = `{
                         "BearerTokenAuth": []
                     }
                 ],
-                "description": "Delete product by id",
+                "description": "pay for razor pay",
                 "consumes": [
                     "application/json"
                 ],
@@ -835,7 +835,7 @@ const docTemplate = `{
                 "tags": [
                     "Order Management"
                 ],
-                "summary": "Delete product",
+                "summary": "Make Payment",
                 "parameters": [
                     {
                         "type": "integer",
@@ -848,6 +848,60 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "order_id",
                         "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "invoice with details of order and user ",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/order/verifypayment": {
+            "post": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "verify payment",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order Management"
+                ],
+                "summary": "verify payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "payment id",
+                        "name": "payment_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order_id",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "razor_id",
+                        "name": "razor_id",
                         "in": "query",
                         "required": true
                     }

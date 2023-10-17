@@ -61,3 +61,28 @@ func (repo *paymentUsecaseImpl) MakePaymentRazorpay(orderId, userId int) (models
 
 	return body2, razorPayOrderId, nil
 }
+
+// ------------------------------------------------- verify payment razor pay ------------------------------------ \\
+
+func (repo *paymentUsecaseImpl) SavePaymentDetails(paymentId, razorId, orderId string) error {
+
+	status, err := repo.paymentRepo.GetPaymentStatus(orderId)
+	if err != nil {
+		return err
+	}
+	fmt.Println("status", status)
+	if !status {
+		err = repo.paymentRepo.UpdatePaymentDetails(razorId, paymentId)
+		if err != nil {
+			return err
+		}
+
+		err = repo.paymentRepo.UpdatePaymentStatus(true, orderId)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	return errors.New("already paid")
+
+}
