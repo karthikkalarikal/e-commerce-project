@@ -36,6 +36,9 @@ func InitializeAPI(cfg config.Config) (*http.ServerHTTP, error) {
 		usecase.NewOrderUseCase,
 		handler.NewOrderHandler,
 		repository.NewOrderRepository,
+		handler.NewPaymentHandler,
+		usecase.NewPaymentUseCase,
+		repository.NewPaymentRepository,
 	)
 	return &http.ServerHTTP{}, nil
 

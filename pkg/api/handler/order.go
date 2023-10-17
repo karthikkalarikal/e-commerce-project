@@ -23,7 +23,7 @@ func NewOrderHandler(usecase interfaces.OrderUseCase) *OrderHandler {
 
 // @Summary Add To Order
 // @Description Add cart to the order using user id and cart id
-// @Tags Order Mangement
+// @Tags Order Management
 // @Accept json
 // @Produce json
 // @Param cart_id query int true "cart id"

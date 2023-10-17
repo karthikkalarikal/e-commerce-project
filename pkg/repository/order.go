@@ -53,7 +53,7 @@ func (repo *orderRepositryImpl) AddAmountToOrder(amount float64, orderId uint) e
 	return nil
 }
 
-// -------------------------------------------- get order table by cart id ----------------------------------\\
+// -------------------------------------------- get order table by order id ----------------------------------\\
 
 func (repo *orderRepositryImpl) GetOrder(orderId int) (domain.Order, error) {
 	var body domain.Order
@@ -132,4 +132,36 @@ func (repo *orderRepositryImpl) TotalAmountInCart(cartId int) (float64, error) {
 		sum += v
 	}
 	return sum, nil
+}
+
+// ---------------------------------------- get full order details through order id --------------------------------------------- \\
+
+func (repo *orderRepositryImpl) GetDetailedOrderThroughId(orderId int) (models.CombinedOrderDetails, error) {
+	var body models.CombinedOrderDetails
+
+	query := `
+	select 
+		o.id as order_id,
+		o.amount as amount,
+		o.order_status as order_status,
+		o.payment_status as payment_status,
+		u.name as name,
+		u.email as email,
+		u.phone as phone,
+		a.house_name as house_name,
+		a.state as state,
+		a.pin as pin,
+		a.street as street,
+		a.city as city
+	from orders o
+	join users u on o.user_id = u.user_id
+	join addresses a on o.address_id = a.address_id 
+	where o.id = $1
+	`
+	if err := repo.db.Raw(query, orderId).Scan(&body).Error; err != nil {
+		err = errors.New("error in getting detailed order through id in repository" + err.Error())
+		return models.CombinedOrderDetails{}, err
+	}
+	fmt.Println("body in repo", body.Amount)
+	return body, nil
 }

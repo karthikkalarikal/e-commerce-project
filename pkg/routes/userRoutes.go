@@ -6,7 +6,7 @@ import (
 	"github.com/karthikkalarikal/ecommerce-project/pkg/api/middlewar"
 )
 
-func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHandler *handler.OtpHandler, productHandler *handler.ProductHandler, cartHandler *handler.CartHandler, orderHandler *handler.OrderHandler) {
+func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHandler *handler.OtpHandler, productHandler *handler.ProductHandler, cartHandler *handler.CartHandler, orderHandler *handler.OrderHandler, payment *handler.PaymentHandler) {
 	engine.POST("/signup", userHandler.UserSignUp)
 	engine.POST("/login", userHandler.LoginHandler)
 
@@ -40,6 +40,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 		ordermanagement := engine.Group("/order")
 		{
 			ordermanagement.POST("/add", orderHandler.AddToOrder)
+			ordermanagement.POST("/payment", payment.MakePaymentRazorpay)
 		}
 	}
 

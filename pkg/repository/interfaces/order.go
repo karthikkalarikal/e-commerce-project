@@ -13,4 +13,5 @@ type OrderRepositry interface {
 	ChangeStatus(userId int) error
 	TotalAmountInCart(userId int) (float64, error)
 	AddAmountToOrder(amount float64, orderId uint) error
+	GetDetailedOrderThroughId(orderId int) (models.CombinedOrderDetails, error)
 }

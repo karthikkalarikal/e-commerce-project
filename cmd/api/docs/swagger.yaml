@@ -663,6 +663,38 @@ paths:
       summary: Add To Order
       tags:
       - Order Mangement
+  /users/order/payment:
+    post:
+      consumes:
+      - application/json
+      description: Delete product by id
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: order_id
+        in: query
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'invoice with details of order and user '
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Delete product
+      tags:
+      - Order Management
   /users/otplogin:
     post:
       consumes:
