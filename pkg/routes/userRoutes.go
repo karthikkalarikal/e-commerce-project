@@ -45,6 +45,10 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 			ordermanagement.GET("/view", orderHandler.ViewOrder)
 			ordermanagement.DELETE("/cancel", orderHandler.CancelOrder)
 		}
+		walletmanagement := engine.Group("/wallet")
+		{
+			walletmanagement.GET("/view", orderHandler.ViewWallet)
+		}
 	}
 
 }

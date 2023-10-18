@@ -102,7 +102,7 @@ func (repo *orderUseCaseImpl) CancelOrder(orderId int) (domain.Order, domain.Wal
 	if err != nil {
 		return domain.Order{}, domain.Wallet{}, err
 	}
-	walletBody, err := repo.orderRepo.GetWalletByUserId(orderRetBody.UserId)
+	walletBody, err := repo.orderRepo.GetWalletByUserId(orderRetBody.UserId) // get wallet
 	if err != nil {
 		return domain.Order{}, domain.Wallet{}, err
 	}
@@ -119,4 +119,14 @@ func (repo *orderUseCaseImpl) ViewOrder(orderId int) (models.CombinedOrderDetail
 		return models.CombinedOrderDetails{}, err
 	}
 	return body, err
+}
+
+// ------------------------------------ display the wallet of user by demand ------------------------------ \\ 
+
+func (repo *orderUseCaseImpl) ViewWalletByUserId(userId int) (domain.Wallet, error) {
+	body, err := repo.orderRepo.GetWalletByUserId(userId)
+	if err != nil {
+		return domain.Wallet{}, err
+	}
+	return body, nil
 }

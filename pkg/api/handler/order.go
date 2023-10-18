@@ -95,6 +95,8 @@ func (handler *OrderHandler) ViewOrder(ctx *gin.Context) {
 
 }
 
+// --------------------------------------------------- cancel order ------------------------------------------- \\
+
 // @Summary Cancel Order
 // @Description Cancel Order By Order Id
 // @Tags Order Management
@@ -122,6 +124,37 @@ func (handler *OrderHandler) CancelOrder(ctx *gin.Context) {
 	}
 	var body []interface{}
 	body = append(body, body1, body2)
+	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
+	ctx.JSON(http.StatusOK, successRes)
+}
+
+// ----------------------------------------------------- get wallet by userid ---------------------------------------- \\
+
+// @Summary Wallet of User
+// @Description Get Wallet By User Id
+// @Tags Wallet Management
+// @Produce json
+// @Param user_id query int true "user_id"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "success"
+// @Failure 500 {object} response.Response{} "fail"
+// @Router /users/wallet/view [get]
+func (handler *OrderHandler) ViewWallet(ctx *gin.Context) {
+	userId := ctx.Query("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the user id", nil, err.Error())
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	body, err := handler.orderUseCase.ViewWalletByUserId(userIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error while getting wallet", nil, err.Error())
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
 	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
 	ctx.JSON(http.StatusOK, successRes)
 }

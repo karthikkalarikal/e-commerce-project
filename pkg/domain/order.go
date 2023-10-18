@@ -18,10 +18,3 @@ type Wallet struct {
 	Users    Users   `json:"-" gorm:"foreignkey:UserId"`
 	Amount   float64 `json:"amount" gorm:"default:0"`
 }
-
-type CancelledOrder struct {
-	Id      int    `json:"cancelled_id" gorm:"not null"`
-	Name    string `json:"name"`
-	Product string `json:"product"`
-	Wallet  string `json:"amount"`
-}
