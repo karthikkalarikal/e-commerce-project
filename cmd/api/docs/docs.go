@@ -934,6 +934,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/order/cancel": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Cancel Order By Order Id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order Management"
+                ],
+                "summary": "Cancel Order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "order_id",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "fail",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/users/order/payment": {
             "post": {
                 "security": [
@@ -1053,7 +1093,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order Mangement"
+                    "Order Management"
                 ],
                 "summary": "Add To Order",
                 "parameters": [

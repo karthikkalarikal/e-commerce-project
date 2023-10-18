@@ -10,8 +10,14 @@ type OrderRepositry interface {
 	GetOrder(int) (domain.Order, error)
 	GetDeliveryAddress(userId int) (int, error)
 	GetUserOrders(userId int) ([]models.Cart, error)
-	ChangeStatus(userId int) error
+	ChangeOrderStatus(orderId int) (domain.Order, error)
 	TotalAmountInCart(userId int) (float64, error)
 	AddAmountToOrder(amount float64, orderId uint) error
 	GetDetailedOrderThroughId(orderId int) (models.CombinedOrderDetails, error)
+	GetPaymentStatus(orderId int) (bool, error)
+	GetTotalAmount(orderId int) (domain.Order, error)
+	AddMoneyToWallet(userId int, amount float64) (domain.Wallet, error)
+	CheckForWallet(userId int) (bool, error)
+	AddMondyToExistingWallet(userId int, amount float64) (domain.Wallet, error)
+	GetWalletByUserId(userId int) (domain.Wallet, error)
 }

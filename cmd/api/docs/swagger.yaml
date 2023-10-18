@@ -746,6 +746,31 @@ paths:
       summary: Add To Order
       tags:
       - Order Management
+  /users/order/cancel:
+    delete:
+      description: Cancel Order By Order Id
+      parameters:
+      - description: order_id
+        in: query
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Cancel Order
+      tags:
+      - Order Management
   /users/order/payment:
     post:
       consumes:
@@ -839,7 +864,7 @@ paths:
       - BearerTokenAuth: []
       summary: Add To Order
       tags:
-      - Order Mangement
+      - Order Management
   /users/otplogin:
     post:
       consumes:

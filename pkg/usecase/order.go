@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -59,34 +58,61 @@ func (repo *orderUseCaseImpl) AddToOrder(userId, cartId int) (domain.Order, erro
 
 // --------------------------------------------- cancel orders -------------------------------------- \\
 
-func (repo *orderUseCaseImpl) CancelOrder(userId int) ([]models.Cart, error) {
-	ok, err := repo.helpRepo.FindIfUserExists(userId, "orders") // validating user id
+func (repo *orderUseCaseImpl) CancelOrder(orderId int) (domain.Order, domain.Wallet, error) { // change the domain order to model cancelled order after
+	payment, err := repo.orderRepo.GetPaymentStatus(orderId) // get payment status
 	if err != nil {
-		return []models.Cart{}, err
-	}
-	if !ok {
-		return []models.Cart{}, errors.New("no user with this id")
+		return domain.Order{}, domain.Wallet{}, nil
 	}
 
-	body, err := repo.orderRepo.GetUserOrders(userId) // getting all the orders of user
-	if err != nil {
-		return []models.Cart{}, err
-	}
-	for _, v := range body {
-		if err := repo.orderRepo.ChangeStatus(v.CartId); err != nil {
-			return []models.Cart{}, err
+	if payment { // if payed the amount should be debited to wallet
+		bodyOrder, err := repo.orderRepo.GetTotalAmount(orderId) // get body of order by order id
+		if err != nil {
+			return domain.Order{}, domain.Wallet{}, err
 		}
+		okWallet, err := repo.orderRepo.CheckForWallet(bodyOrder.UserId) // if the user has a wallet already
+		if err != nil {
+			return domain.Order{}, domain.Wallet{}, nil
+		}
+		if !okWallet {
+			bodyWallet, err := repo.orderRepo.AddMoneyToWallet(bodyOrder.UserId, bodyOrder.Amount) // in the case of no wallet
+			if err != nil {
+				return domain.Order{}, domain.Wallet{}, err
+			}
+			orderRetBody, err := repo.orderRepo.ChangeOrderStatus(orderId) // change the order and payment status
+			if err != nil {
+				return domain.Order{}, domain.Wallet{}, err
+			}
+
+			return orderRetBody, bodyWallet, nil
+		} else {
+			bodyWallet, err := repo.orderRepo.AddMondyToExistingWallet(bodyOrder.UserId, bodyOrder.Amount) // add money to existing wallet
+			if err != nil {
+				return domain.Order{}, domain.Wallet{}, err
+			}
+			orderRetBody, err := repo.orderRepo.ChangeOrderStatus(orderId) // change order status again
+			if err != nil {
+				return domain.Order{}, domain.Wallet{}, err
+			}
+
+			return orderRetBody, bodyWallet, nil
+		}
+
+	}
+	orderRetBody, err := repo.orderRepo.ChangeOrderStatus(orderId) // in the case that the order is not payed yet
+	if err != nil {
+		return domain.Order{}, domain.Wallet{}, err
+	}
+	walletBody, err := repo.orderRepo.GetWalletByUserId(orderRetBody.UserId)
+	if err != nil {
+		return domain.Order{}, domain.Wallet{}, err
 	}
 
-	return body, nil
-
+	return orderRetBody, walletBody, nil
 }
 
 // ------------------------------------------ get orders of user ----------------------------------- \\
 
 func (repo *orderUseCaseImpl) ViewOrder(orderId int) (models.CombinedOrderDetails, error) {
-	
-
 
 	body, err := repo.orderRepo.GetDetailedOrderThroughId(orderId)
 	if err != nil {

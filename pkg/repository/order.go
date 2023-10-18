@@ -102,14 +102,15 @@ func (repo *orderRepositryImpl) GetUserOrders(userId int) ([]models.Cart, error)
 
 // --------------------------------------- change order status into cancel ------------------------------------------------ \\
 
-func (repo *orderRepositryImpl) ChangeStatus(userId int) error {
+func (repo *orderRepositryImpl) ChangeOrderStatus(orderId int) (domain.Order, error) {
+	var body domain.Order
 	query := `
-	update orders set status = 'cancel'
+	update orders set order_status = 'cancel' , payment_status = false where id = $1 returning *
 `
-	if err := repo.db.Raw(query, userId).Error; err != nil {
-		return err
+	if err := repo.db.Raw(query, orderId).Scan(&body).Error; err != nil {
+		return domain.Order{}, err
 	}
-	return nil
+	return body, nil
 }
 
 // ----------------------------------------- get total amount of a cart --------------------------------------------------- \\
@@ -163,5 +164,97 @@ func (repo *orderRepositryImpl) GetDetailedOrderThroughId(orderId int) (models.C
 		return models.CombinedOrderDetails{}, err
 	}
 	fmt.Println("body in repo", body.Amount)
+	return body, nil
+}
+
+// --------------------------------- check payment status by order id --------------------------------- \\
+
+func (repo *orderRepositryImpl) GetPaymentStatus(orderId int) (bool, error) {
+	var body bool
+	query := `select payment_status from orders where id = $1`
+
+	if err := repo.db.Raw(query, orderId).Scan(&body).Error; err != nil {
+		return false, err
+	}
+	return body, nil
+}
+
+// ----------------------------------- get total amount ------------------------------------------ \\
+
+func (repo *orderRepositryImpl) GetTotalAmount(orderId int) (domain.Order, error) {
+	var amount domain.Order
+
+	query := `
+	select * from orders where id = $1
+	`
+	if err := repo.db.Raw(query, orderId).Scan(&amount).Error; err != nil {
+		err = errors.New("error in getting total amount")
+		return domain.Order{}, err
+	}
+	return amount, nil
+
+}
+
+// -------------------------------------- check if user has a wallet ------------------------------- \\
+
+func (repo *orderRepositryImpl) CheckForWallet(userId int) (bool, error) {
+	var body int
+	query := `select count(*) from wallets where user_id = $1`
+
+	if err := repo.db.Raw(query, userId).Scan(&body).Error; err != nil {
+		return false, err
+	}
+	return body > 0, nil
+}
+
+// -------------------------------------- add money to wallet ----------------------------------------- \\
+
+func (repo *orderRepositryImpl) AddMoneyToWallet(userId int, amount float64) (domain.Wallet, error) {
+	var body domain.Wallet
+
+	query := `
+	insert into wallets(user_id,amount) values($1,$2) returning *
+	`
+	if err := repo.db.Raw(query, userId, amount).Scan(&body).Error; err != nil {
+		err = errors.New("error in inserting into wallets table")
+		return domain.Wallet{}, err
+	}
+
+	return body, nil
+}
+
+// ----------------------------------------- add money to existing wallet ----------------------------------- \\
+
+func (repo *orderRepositryImpl) AddMondyToExistingWallet(userId int, amount float64) (domain.Wallet, error) {
+	var body domain.Wallet
+	var balance float64
+
+	query := `
+		select amount from wallets where user_id = $1
+	`
+	if err := repo.db.Raw(query, userId).Scan(&balance).Error; err != nil {
+		err = errors.New("error in getting balance from wallet by user id")
+		return domain.Wallet{}, err
+	}
+	balance = balance + amount
+	query2 := `
+	update wallets set amount = $1 where user_id = $2 returning *
+	`
+	if err := repo.db.Raw(query2, balance, userId).Scan(&body).Error; err != nil {
+		err = errors.New("error in updating wallet value")
+		return domain.Wallet{}, err
+	}
+	return body, nil
+}
+
+func (repo *orderRepositryImpl) GetWalletByUserId(userId int) (domain.Wallet, error) {
+	var body domain.Wallet
+	query := `
+		select * from wallets where user_id = $1
+	
+	`
+	if err := repo.db.Raw(query, userId).Scan(&body).Error; err != nil {
+		return domain.Wallet{}, err
+	}
 	return body, nil
 }

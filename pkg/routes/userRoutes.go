@@ -43,7 +43,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 		{
 			ordermanagement.POST("/add", orderHandler.AddToOrder)
 			ordermanagement.GET("/view", orderHandler.ViewOrder)
-			// ordermanagement.POST("/verifypayment", payment.VerifyPayment)
+			ordermanagement.DELETE("/cancel", orderHandler.CancelOrder)
 		}
 	}
 

@@ -58,7 +58,7 @@ func (repo *paymentRepositoryImpl) GetPaymentStatus(orderId string) (bool, error
 func (repo *paymentRepositoryImpl) UpdatePaymentStatus(status bool, orderId string) error {
 
 	query := `
-			update orders set payment_status = $1 where id = $2 
+			update orders set payment_status = $1, order_status = 'confimed' where id = $2 
 	`
 	if err := repo.DB.Exec(query, status, orderId).Error; err != nil {
 		err = errors.New("error in updating orders payment status " + err.Error())

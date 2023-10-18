@@ -13,9 +13,15 @@ type Order struct {
 }
 
 type Wallet struct {
-	WalletId int   `json:"wallet_id" gorm:"not null"`
-	UserId   int   `json:"user_id" gorm:"not null"`
-	Users    Users `json:"-" gorm:"foreignkey:UserId"`
-	CartId   int   `json:"cart_id" gorm:"not null"`
-	Cart     Cart  `json:"-" gorm:"foreignkey:CartId"`
+	WalletId int     `json:"wallet_id" gorm:"primarykey not null"`
+	UserId   int     `json:"user_id" gorm:"not null"`
+	Users    Users   `json:"-" gorm:"foreignkey:UserId"`
+	Amount   float64 `json:"amount" gorm:"default:0"`
+}
+
+type CancelledOrder struct {
+	Id      int    `json:"cancelled_id" gorm:"not null"`
+	Name    string `json:"name"`
+	Product string `json:"product"`
+	Wallet  string `json:"amount"`
 }

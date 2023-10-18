@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -92,4 +93,35 @@ func (handler *OrderHandler) ViewOrder(ctx *gin.Context) {
 	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
 	ctx.JSON(http.StatusOK, successRes)
 
+}
+
+// @Summary Cancel Order
+// @Description Cancel Order By Order Id
+// @Tags Order Management
+// @Produce json
+// @Param order_id query int true "order_id"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "success"
+// @Failure 500 {object} response.Response{} "fail"
+// @Router /users/order/cancel [delete]
+func (handler *OrderHandler) CancelOrder(ctx *gin.Context) {
+	orderId := ctx.Query("order_id")
+	orderIdInt, err := strconv.Atoi(orderId)
+	fmt.Println("order id", orderIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the order id", nil, err.Error())
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	body1, body2, err := handler.orderUseCase.CancelOrder(orderIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in canceling ", nil, err.Error())
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	var body []interface{}
+	body = append(body, body1, body2)
+	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
+	ctx.JSON(http.StatusOK, successRes)
 }
