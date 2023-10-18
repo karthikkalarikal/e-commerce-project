@@ -53,7 +53,7 @@ func (hander *CouponHandler) AddCoupon(c *gin.Context) {
 
 }
 
-// @Summary Vidw Coupons
+// @Summary View Coupons
 // @Description View Coupons by Admin
 // @Tags Coupon Mangement
 // @Produce json
@@ -71,6 +71,31 @@ func (hander *CouponHandler) ViewCoupon(c *gin.Context) {
 	}
 
 	successRes := response.ClientResponse(http.StatusOK, "succesfully accessed the coupon", body, nil)
+	c.JSON(http.StatusOK, successRes)
+
+}
+
+// @Summary Expire Coupons
+// @Description Expire Coupons by Admin
+// @Tags Coupon Mangement
+// @Produce json
+// @Security BearerTokenAuth
+// @Param coupon query string true "coupon"
+// @Success 200 {object} response.Response "success"
+// @Failure 500 {object} response.Response{} "fail"
+// @Router /admin/coupon/expire [patch]
+func (hander *CouponHandler) ExpireCoupon(c *gin.Context) {
+
+	coupon := c.Query("coupon")
+
+	body, err := hander.usecase.ExpireCoupon(coupon)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not expire coupon", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "succesfully expired coupon", body, nil)
 	c.JSON(http.StatusOK, successRes)
 
 }

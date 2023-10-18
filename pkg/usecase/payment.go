@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	payment "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	usecase "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -12,11 +11,11 @@ import (
 )
 
 type paymentUsecaseImpl struct {
-	paymentRepo     payment.PaymentRepository
+	paymentRepo     usecase.PaymentRepository
 	orderRepository usecase.OrderRepositry
 }
 
-func NewPaymentUseCase(repo usecase.OrderRepositry, payment payment.PaymentRepository) interfaces.PaymentUseCase {
+func NewPaymentUseCase(repo usecase.OrderRepositry, payment usecase.PaymentRepository) interfaces.PaymentUseCase {
 	return &paymentUsecaseImpl{
 		orderRepository: repo,
 		paymentRepo:     payment,

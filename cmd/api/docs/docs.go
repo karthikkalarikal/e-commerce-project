@@ -62,6 +62,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/coupon/expire": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Expire Coupons by Admin",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon Mangement"
+                ],
+                "summary": "Expire Coupons",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "coupon",
+                        "name": "coupon",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "fail",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/coupon/view": {
             "get": {
                 "security": [
@@ -76,7 +116,7 @@ const docTemplate = `{
                 "tags": [
                     "Coupon Mangement"
                 ],
-                "summary": "Vidw Coupons",
+                "summary": "View Coupons",
                 "responses": {
                     "200": {
                         "description": "success",

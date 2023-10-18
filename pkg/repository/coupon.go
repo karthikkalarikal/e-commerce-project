@@ -39,6 +39,7 @@ func (repo *couponRepositoryImpl) AddCoupon(coupon string, discount int, validit
 }
 
 // ------------------------------------ view coupon by admin ---------------------------------------- \\
+
 func (repo *couponRepositoryImpl) ViewCoupon() ([]models.CouponInput, error) {
 	var body []models.CouponInput
 
@@ -50,4 +51,46 @@ func (repo *couponRepositoryImpl) ViewCoupon() ([]models.CouponInput, error) {
 		return []models.CouponInput{}, err
 	}
 	return body, nil
+}
+
+// -------------------------------------- expire coupon ------------------------------------- \\
+
+func (repo *couponRepositoryImpl) ExpireCoupon(coupon string) (models.CouponInput, error) {
+	var body models.CouponInput
+
+	query := `
+	update coupons set validity = false where coupon = $1 returning *
+	`
+	if err := repo.DB.Raw(query, coupon).Scan(&body).Error; err != nil {
+		return models.CouponInput{}, err
+	}
+	return body, nil
+}
+
+// -------------------------------------- check coupon for expiry ------------------------------ \\
+
+func (repo *couponRepositoryImpl) CheckCouponValidity(coupon string) (bool, error) {
+	var body bool
+
+	query := `
+		select validity from coupons where coupon = $1 
+	`
+	if err := repo.DB.Raw(query, coupon).Scan(&body).Error; err != nil {
+		return false, err
+	}
+	return body, nil
+}
+
+// ---------------------------------------- check coupon by name ------------------------------------ \\
+
+func (repo *couponRepositoryImpl) CheckCoupon(coupon string) (bool, error) {
+	body := 0
+	query := `
+	select count(*) from coupons where coupon = $1
+	
+	`
+	if err := repo.DB.Raw(query, coupon).Scan(&body).Error; err != nil {
+		return false, err
+	}
+	return body > 0, nil
 }
