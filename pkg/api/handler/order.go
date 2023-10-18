@@ -66,21 +66,30 @@ func (handler *OrderHandler) AddToOrder(ctx *gin.Context) {
 
 // @Summary Add To Order
 // @Description Add cart to the order using user id and cart id
-// @Tags Order Mangement
+// @Tags Order Management
 // @Accept json
 // @Produce json
 // @Param order_id query int true "order_id"
 // @Security BearerTokenAuth
 // @Success 200 {object} response.Response "success"
 // @Failure 500 {object} response.Response{} "fail"
-// @Router /users/order/cancel [delete]
-// func (handler *OrderHandler) CancelOrder(ctx *gin.Context) {
-// 	order_id := ctx.Query("order_id")
-// 	ordrId, err := strconv.Atoi(order_id)
-// 	if err != nil {
-// 		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the order id", nil, err.Error())
-// 		ctx.JSON(http.StatusBadRequest, errRes)
-// 		return
-// 	}
+// @Router /users/order/view [get]
+func (handler *OrderHandler) ViewOrder(ctx *gin.Context) {
+	order_id := ctx.Query("order_id")
+	ordrId, err := strconv.Atoi(order_id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the order id", nil, err.Error())
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
 
-// }
+	body, err := handler.orderUseCase.ViewOrder(ordrId)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in getting order", nil, err.Error())
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
+	ctx.JSON(http.StatusOK, successRes)
+
+}

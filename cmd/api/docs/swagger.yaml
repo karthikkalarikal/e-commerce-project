@@ -813,6 +813,33 @@ paths:
       summary: verify payment
       tags:
       - Order Management
+  /users/order/view:
+    get:
+      consumes:
+      - application/json
+      description: Add cart to the order using user id and cart id
+      parameters:
+      - description: order_id
+        in: query
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Add To Order
+      tags:
+      - Order Mangement
   /users/otplogin:
     post:
       consumes:

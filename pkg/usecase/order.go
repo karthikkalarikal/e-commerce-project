@@ -81,3 +81,16 @@ func (repo *orderUseCaseImpl) CancelOrder(userId int) ([]models.Cart, error) {
 	return body, nil
 
 }
+
+// ------------------------------------------ get orders of user ----------------------------------- \\
+
+func (repo *orderUseCaseImpl) ViewOrder(orderId int) (models.CombinedOrderDetails, error) {
+	
+
+
+	body, err := repo.orderRepo.GetDetailedOrderThroughId(orderId)
+	if err != nil {
+		return models.CombinedOrderDetails{}, err
+	}
+	return body, err
+}

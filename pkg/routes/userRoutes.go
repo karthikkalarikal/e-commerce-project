@@ -42,6 +42,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 		ordermanagement := engine.Group("/order")
 		{
 			ordermanagement.POST("/add", orderHandler.AddToOrder)
+			ordermanagement.GET("/view", orderHandler.ViewOrder)
 			// ordermanagement.POST("/verifypayment", payment.VerifyPayment)
 		}
 	}

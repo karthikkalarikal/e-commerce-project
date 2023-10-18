@@ -100,7 +100,7 @@ func (repo *orderRepositryImpl) GetUserOrders(userId int) ([]models.Cart, error)
 	return body, nil
 }
 
-// --------------------------------------- change cart status into cancel ------------------------------------------------ \\
+// --------------------------------------- change order status into cancel ------------------------------------------------ \\
 
 func (repo *orderRepositryImpl) ChangeStatus(userId int) error {
 	query := `
