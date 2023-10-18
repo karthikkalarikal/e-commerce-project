@@ -4,6 +4,7 @@ import (
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	usecase "github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 )
 
 type couponUseCaseImpl struct {
@@ -15,6 +16,8 @@ func NewCouponUseCase(repo interfaces.CouponRepository) usecase.CouponUseCase {
 		repo: repo,
 	}
 }
+
+// -------------------------------------------------- add coupons ---------------------------------------------- \\
 
 func (repo *couponUseCaseImpl) AddCoupon(coupon string, discount int, validity bool, minprice float64) (domain.Coupons, error) {
 
@@ -28,4 +31,16 @@ func (repo *couponUseCaseImpl) AddCoupon(coupon string, discount int, validity b
 	}
 
 	return body, nil
+}
+
+// ------------------------------------------------------- view coupons --------------------------------------------- \\
+
+func (repo *couponUseCaseImpl) ViewCoupon() ([]models.CouponInput, error) {
+	body, err := repo.repo.ViewCoupon()
+
+	if err != nil {
+		return []models.CouponInput{}, err
+	}
+	return body, nil
+
 }

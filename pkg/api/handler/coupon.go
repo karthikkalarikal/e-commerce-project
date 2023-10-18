@@ -48,7 +48,29 @@ func (hander *CouponHandler) AddCoupon(c *gin.Context) {
 		return
 	}
 
-	successRes := response.ClientResponse(http.StatusOK, "succesfully added to cart", body2, nil)
+	successRes := response.ClientResponse(http.StatusOK, "succesfully added to coupon", body2, nil)
+	c.JSON(http.StatusOK, successRes)
+
+}
+
+// @Summary Vidw Coupons
+// @Description View Coupons by Admin
+// @Tags Coupon Mangement
+// @Produce json
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "success"
+// @Failure 500 {object} response.Response{} "fail"
+// @Router /admin/coupon/view [get]
+func (hander *CouponHandler) ViewCoupon(c *gin.Context) {
+
+	body, err := hander.usecase.ViewCoupon()
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not view coupon", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "succesfully accessed the coupon", body, nil)
 	c.JSON(http.StatusOK, successRes)
 
 }

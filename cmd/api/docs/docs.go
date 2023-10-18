@@ -62,6 +62,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/coupon/view": {
+            "get": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "View Coupons by Admin",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon Mangement"
+                ],
+                "summary": "Vidw Coupons",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "fail",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/product/addcategory": {
             "post": {
                 "security": [

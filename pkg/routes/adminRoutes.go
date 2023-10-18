@@ -29,6 +29,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 		couponmanagement := engine.Group("/coupon")
 		{
 			couponmanagement.POST("/addcoupon", couponHandler.AddCoupon)
+			couponmanagement.GET("view", couponHandler.ViewCoupon)
 		}
 	}
 

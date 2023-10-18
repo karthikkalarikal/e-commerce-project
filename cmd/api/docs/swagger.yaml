@@ -194,6 +194,25 @@ paths:
       summary: Add Coupon
       tags:
       - Coupon Mangement
+  /admin/coupon/view:
+    get:
+      description: View Coupons by Admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Vidw Coupons
+      tags:
+      - Coupon Mangement
   /admin/product/addcategory:
     post:
       consumes:

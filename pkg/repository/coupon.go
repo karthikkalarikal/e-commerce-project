@@ -5,6 +5,7 @@ import (
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 	"gorm.io/gorm"
 )
 
@@ -34,5 +35,19 @@ func (repo *couponRepositoryImpl) AddCoupon(coupon string, discount int, validit
 		return domain.Coupons{}, err
 	}
 
+	return body, nil
+}
+
+// ------------------------------------ view coupon by admin ---------------------------------------- \\
+func (repo *couponRepositoryImpl) ViewCoupon() ([]models.CouponInput, error) {
+	var body []models.CouponInput
+
+	query := `
+		select * from coupons
+	
+	`
+	if err := repo.DB.Raw(query).Scan(&body).Error; err != nil {
+		return []models.CouponInput{}, err
+	}
 	return body, nil
 }
