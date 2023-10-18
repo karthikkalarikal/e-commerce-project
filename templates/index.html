@@ -83,10 +83,13 @@
       };
 
       function verifyPayment(res, orderid) {
+
+        const url = 'http://localhost:8080/users/verifypayment' + 
+              `?order_id=${orderid}&payment_id=${res.razorpay_payment_id}&razor_id=${res.razorpay_order_id}&signature=${res.razorpay_signature}`;
+        
         $.ajax({
           //passes details as url params
-          url: `/payment-success?order_id=${orderid}&payment_id=${res.razorpay_payment_id}&order_id=${res.razorpay_order_id}
-      &signature=${res.razorpay_signature}`,
+          url: url,
           method: "GET",
 
           success: (response) => {

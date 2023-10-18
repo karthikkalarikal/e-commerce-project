@@ -6,7 +6,7 @@ import (
 	"github.com/karthikkalarikal/ecommerce-project/pkg/api/middlewar"
 )
 
-func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, productHandler *handler.ProductHandler) {
+func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, productHandler *handler.ProductHandler, couponHandler *handler.CouponHandler) {
 
 	engine.Use(middlewar.AdminMiddleware)
 	{
@@ -25,6 +25,10 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 			productmanagement.POST("/addcategory", productHandler.AddCategory)
 			productmanagement.PUT("/updatecategory/:id", productHandler.UpdateCategory)
 			productmanagement.DELETE("/deletecategory/:category_id", productHandler.DeleteCategory)
+		}
+		couponmanagement := engine.Group("/coupon")
+		{
+			couponmanagement.POST("/addcoupon", couponHandler.AddCoupon)
 		}
 	}
 

@@ -55,6 +55,17 @@ definitions:
       password_id:
         type: integer
     type: object
+  models.CouponInput:
+    properties:
+      coupon:
+        type: string
+      discount_percentage:
+        type: integer
+      minimum_price:
+        type: number
+      validity:
+        type: boolean
+    type: object
   models.OTPData:
     properties:
       phone:
@@ -155,6 +166,34 @@ info:
   title: Go + Gin E-Commerce API
   version: 1.0.0
 paths:
+  /admin/coupon/addcoupon:
+    post:
+      consumes:
+      - application/json
+      description: Add Coupon
+      parameters:
+      - description: coupon details
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.CouponInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Add Coupon
+      tags:
+      - Coupon Mangement
   /admin/product/addcategory:
     post:
       consumes:

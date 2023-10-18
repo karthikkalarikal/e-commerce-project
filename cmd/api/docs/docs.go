@@ -17,6 +17,51 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/coupon/addcoupon": {
+            "post": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Add Coupon",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon Mangement"
+                ],
+                "summary": "Add Coupon",
+                "parameters": [
+                    {
+                        "description": "coupon details",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CouponInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "fail",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/product/addcategory": {
             "post": {
                 "security": [
@@ -1542,6 +1587,23 @@ const docTemplate = `{
                 },
                 "password_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.CouponInput": {
+            "type": "object",
+            "properties": {
+                "coupon": {
+                    "type": "string"
+                },
+                "discount_percentage": {
+                    "type": "integer"
+                },
+                "minimum_price": {
+                    "type": "number"
+                },
+                "validity": {
+                    "type": "boolean"
                 }
             }
         },
