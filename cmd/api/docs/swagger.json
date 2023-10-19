@@ -1016,6 +1016,53 @@
                 }
             }
         },
+        "/users/order/redeem": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Redeem Coupons by User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Coupon Mangement"
+                ],
+                "summary": "Redeem Coupons",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "coupon",
+                        "name": "coupon",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "order_id",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "fail",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/users/order/verifypayment": {
             "post": {
                 "security": [

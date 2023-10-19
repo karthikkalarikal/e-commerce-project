@@ -11,4 +11,6 @@ type CouponRepository interface {
 	ExpireCoupon(coupon string) (models.CouponInput, error)
 	CheckCouponValidity(coupon string) (bool, error)
 	CheckCoupon(coupon string) (bool, error)
+	GetCoupon(coupon string) (domain.Coupons, error)
+	ChangeOrderAmount(orderId int, amount float64) error
 }

@@ -11,12 +11,14 @@ import (
 )
 
 type couponUseCaseImpl struct {
-	repo interfaces.CouponRepository
+	repo      interfaces.CouponRepository
+	orderRepo interfaces.OrderRepositry
 }
 
-func NewCouponUseCase(repo interfaces.CouponRepository) usecase.CouponUseCase {
+func NewCouponUseCase(repo interfaces.CouponRepository, order interfaces.OrderRepositry) usecase.CouponUseCase {
 	return &couponUseCaseImpl{
-		repo: repo,
+		repo:      repo,
+		orderRepo: order,
 	}
 }
 
@@ -88,4 +90,37 @@ func (repo *couponUseCaseImpl) ExpireCoupon(name string) (models.CouponInput, er
 	}
 
 	return models.CouponInput{}, errors.New("coupon is not available")
+}
+
+// -------------------------------------- redeem coupons --------------------------------------- \\
+
+func (repo *couponUseCaseImpl) RedeemCoupon(coupon string, orderId int) (models.CombinedOrderDetails, error) {
+
+	couponDetails, err := repo.repo.GetCoupon(coupon) // get coupon details
+	if err != nil {
+		return models.CombinedOrderDetails{}, err
+	}
+	orderDetails, err := repo.orderRepo.GetOrder(orderId) // get order details
+	if err != nil {
+		return models.CombinedOrderDetails{}, err
+	}
+	if couponDetails.Validity && couponDetails.MinimumPrice < orderDetails.Amount {
+
+		amount := orderDetails.Amount - (orderDetails.Amount * float64(couponDetails.DiscountPercentage) / 100)
+		fmt.Println("amount changed ", amount)
+		err := repo.repo.ChangeOrderAmount(orderId, amount)
+		if err != nil {
+			return models.CombinedOrderDetails{}, err
+		}
+		_, err = repo.repo.ExpireCoupon(coupon)
+		if err != nil {
+			return models.CombinedOrderDetails{}, err
+		}
+		body, err := repo.orderRepo.GetDetailedOrderThroughId(orderId)
+		if err != nil {
+			return models.CombinedOrderDetails{}, err
+		}
+		return body, nil
+	}
+	return models.CombinedOrderDetails{}, errors.New("the coupon is not valid")
 }

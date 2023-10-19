@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	usecase "github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
@@ -53,6 +54,8 @@ func (hander *CouponHandler) AddCoupon(c *gin.Context) {
 
 }
 
+// ------------------------------------------ view coupons -------------------------------------------- \\
+
 // @Summary View Coupons
 // @Description View Coupons by Admin
 // @Tags Coupon Mangement
@@ -74,6 +77,8 @@ func (hander *CouponHandler) ViewCoupon(c *gin.Context) {
 	c.JSON(http.StatusOK, successRes)
 
 }
+
+// ----------------------------------------------------- expire coupon ------------------------------------ \\
 
 // @Summary Expire Coupons
 // @Description Expire Coupons by Admin
@@ -98,4 +103,38 @@ func (hander *CouponHandler) ExpireCoupon(c *gin.Context) {
 	successRes := response.ClientResponse(http.StatusOK, "succesfully expired coupon", body, nil)
 	c.JSON(http.StatusOK, successRes)
 
+}
+
+// --------------------------------------------- redeem a coupon ------------------------------------------- \\
+
+// @Summary Redeem Coupons
+// @Description Redeem Coupons by User
+// @Tags Coupon Mangement
+// @Produce json
+// @Security BearerTokenAuth
+// @Param coupon query string true "coupon"
+// @Param order_id query int true "order_id"
+// @Success 200 {object} response.Response "success"
+// @Failure 500 {object} response.Response{} "fail"
+// @Router /users/order/redeem [patch]
+func (handler *CouponHandler) RedeemCoupon(c *gin.Context) {
+	coupon := c.Query("coupon")
+	order_id := c.Query("order_id")
+	orderId, err := strconv.Atoi(order_id) // converting string to int
+	if err != nil {
+		err = errors.New("error in converting orderid into int" + err.Error())
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not redeem coupon", nil, err)
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	body, err := handler.usecase.RedeemCoupon(coupon, orderId) // to coupon usecase
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not redeem coupon", nil, err)
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "succesfully expired coupon", body, nil)
+	c.JSON(http.StatusOK, successRes)
 }

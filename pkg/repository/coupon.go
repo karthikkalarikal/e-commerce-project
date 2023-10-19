@@ -94,3 +94,32 @@ func (repo *couponRepositoryImpl) CheckCoupon(coupon string) (bool, error) {
 	}
 	return body > 0, nil
 }
+
+//  ------------------------------------ get coupon --------------------------------------- \\
+
+func (repo *couponRepositoryImpl) GetCoupon(coupon string) (domain.Coupons, error) {
+	var body domain.Coupons
+
+	query := `
+	select * from coupons where coupon = $1
+	`
+	if err := repo.DB.Raw(query, coupon).Scan(&body).Error; err != nil {
+		err = errors.New("error in getting coupon by coupon name")
+		return domain.Coupons{}, err
+	}
+	return body, nil
+}
+
+// ---------------------------------------- change order amount -------------------------------- \\
+
+func (repo *couponRepositoryImpl) ChangeOrderAmount(orderId int, amount float64) error {
+
+	query := `
+		update orders set amount = $1 where id = $2
+	`
+	if err := repo.DB.Exec(query, amount, orderId).Error; err != nil {
+		err = errors.New("error in updating the amount in orders table" + err.Error())
+		return err
+	}
+	return nil
+}

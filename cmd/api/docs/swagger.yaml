@@ -803,6 +803,36 @@ paths:
       summary: Make Payment
       tags:
       - Order Management
+  /users/order/redeem:
+    patch:
+      description: Redeem Coupons by User
+      parameters:
+      - description: coupon
+        in: query
+        name: coupon
+        required: true
+        type: string
+      - description: order_id
+        in: query
+        name: order_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: fail
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Redeem Coupons
+      tags:
+      - Coupon Mangement
   /users/order/verifypayment:
     post:
       description: verify payment
