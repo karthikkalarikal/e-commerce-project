@@ -18,6 +18,7 @@ func NewOtpRepository(DB *gorm.DB) interfaces.OtpRepository {
 }
 
 // ----------------------------------find user using moblie number----------------------------\\
+
 func (otp *otpRepositoryImpl) FindUserByMobileNumber(phone string) (domain.Users, error) {
 	var count domain.Users
 	query := "SELECT * FROM users WHERE phone = ?"
@@ -28,6 +29,7 @@ func (otp *otpRepositoryImpl) FindUserByMobileNumber(phone string) (domain.Users
 }
 
 // -------------------------------------user details using phone-----------------------------------\\
+
 func (otp *otpRepositoryImpl) UserDetailsUsingPhone(phone string) (models.UserDetailsResponse, error) {
 	var userDetails models.UserDetailsResponse
 	query := "SELECT * FROM users WHERE phone = ?"

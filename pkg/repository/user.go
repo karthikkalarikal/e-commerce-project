@@ -20,6 +20,7 @@ func NewUserRepository(DB *gorm.DB) interfaces.UserRepository {
 }
 
 // --------------------User Sign Up----------------------------------------\\
+
 func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsResponse, error) {
 	var userDetails models.UserDetailsResponse
 
@@ -33,6 +34,7 @@ func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsRe
 }
 
 // ----------------Check User Availability-----------------------\\
+
 func (c *userDatabase) CheckUserAvailability(email string) bool {
 	var count int
 
@@ -45,6 +47,7 @@ func (c *userDatabase) CheckUserAvailability(email string) bool {
 }
 
 // -----------------------------------blocked status--------------------------------------\\
+
 func (c *userDatabase) UserBlockedStatus(email string) (bool, error) {
 	var isBlocked bool
 
@@ -98,6 +101,7 @@ func (c *userDatabase) AddAddress(address models.Address, userId int) error {
 }
 
 // ------------------------------------------- get all addresses of user---------------------------\\
+
 func (c *userDatabase) FindAddress(userId int) ([]models.Address, error) {
 	var addresses []models.Address
 

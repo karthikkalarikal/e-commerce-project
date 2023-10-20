@@ -15,7 +15,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 
 	engine.GET("/viewproducts", productHandler.ListProducts)
 	engine.GET("/viewbycategories", productHandler.ListByCategoreis)
-	engine.GET("/payment", payment.MakePaymentRazorpay)
+
 	engine.GET("/verifypayment", payment.VerifyPayment)
 
 	engine.Use(middlewar.UserMiddleware)
@@ -45,6 +45,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 			ordermanagement.GET("/view", orderHandler.ViewOrder)
 			ordermanagement.DELETE("/cancel", orderHandler.CancelOrder)
 			ordermanagement.PATCH("/redeem", couponHandler.RedeemCoupon)
+			ordermanagement.GET("/payment", payment.MakePaymentRazorpay)
 		}
 		walletmanagement := engine.Group("/wallet")
 		{

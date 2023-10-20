@@ -1,6 +1,6 @@
 package domain
 
-type RazerPay struct {
+type Payment struct {
 	ID      uint   `json:"id" gorm:"primarykey not null"`
 	OrderId int    `json:"order_id"`
 	Order   Order  `json:"-" gorm:"foreignkey:OrderId"`

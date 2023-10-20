@@ -21,6 +21,7 @@ func NewProductRepository(repo *gorm.DB, helprepo interfaces.HelperRepository) i
 }
 
 // ------------------------------------add product -------------------------------------\\
+
 func (db *productRepositoryImpl) AddProduct(product models.Product) (domain.Product, error) {
 	var products domain.Product
 
@@ -33,6 +34,7 @@ func (db *productRepositoryImpl) AddProduct(product models.Product) (domain.Prod
 }
 
 // -----------------------------------add category ---------------------------------------\\
+
 func (db *productRepositoryImpl) AddCategory(category domain.Category) (domain.Category, error) {
 
 	var adCat domain.Category
@@ -47,6 +49,7 @@ func (db *productRepositoryImpl) AddCategory(category domain.Category) (domain.C
 }
 
 // ----------------------------------delete product------------------------------------------\\
+
 func (db *productRepositoryImpl) DeleteProduct(id int) (bool, error) {
 
 	query := "DELETE FROM products WHERE product_id = ?"
@@ -58,6 +61,7 @@ func (db *productRepositoryImpl) DeleteProduct(id int) (bool, error) {
 }
 
 // --------------------------------------list products --------------------------------------------\\
+
 func (prod *productRepositoryImpl) ListProducts(pageList, offset int) ([]models.Product, error) {
 
 	var product_list []models.Product
@@ -74,6 +78,7 @@ func (prod *productRepositoryImpl) ListProducts(pageList, offset int) ([]models.
 }
 
 // --------------------------------------list products by category--------------------------------------\\
+
 func (prod *productRepositoryImpl) ListProductsByCategory(catId int) ([]models.Product, error) {
 	var productList []models.Product
 
@@ -129,6 +134,7 @@ func (prod *productRepositoryImpl) DeleteCategory(id int) (domain.Category, erro
 }
 
 // -------------------------------------------- edit product -----------------------------------------------------\\
+
 func (db *productRepositoryImpl) EditProduct(product domain.Product, id int) (domain.Product, error) {
 	var modProduct domain.Product
 

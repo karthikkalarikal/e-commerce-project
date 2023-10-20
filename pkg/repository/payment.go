@@ -22,7 +22,7 @@ func NewPaymentRepository(DB *gorm.DB) interfaces.PaymentRepository {
 
 func (repo *paymentRepositoryImpl) AddRazorPayDetails(orderId int, razorPayId string) error {
 	query := `
-	insert into razer_pays (order_id,razer_id) values($1,$2) 
+	insert into payments (order_id,razer_id) values($1,$2) 
 	`
 	if err := repo.DB.Exec(query, orderId, razorPayId).Error; err != nil {
 		err = errors.New("error in inserting values to razor pay data table" + err.Error())
@@ -35,7 +35,7 @@ func (repo *paymentRepositoryImpl) AddRazorPayDetails(orderId int, razorPayId st
 
 func (repo *paymentRepositoryImpl) UpdatePaymentDetails(orderId string, paymentId string) error {
 	fmt.Println("razerId,paymetnId", orderId, paymentId)
-	if err := repo.DB.Exec("update razer_pays set payment = $1 where razer_id = $2", paymentId, orderId).Error; err != nil {
+	if err := repo.DB.Exec("update payments set payment = $1 where razer_id = $2", paymentId, orderId).Error; err != nil {
 		err = errors.New("error in updating the razer pay table " + err.Error())
 		return err
 	}
