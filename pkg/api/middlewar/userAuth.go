@@ -9,6 +9,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+// generate token for user
+
 func UserMiddleware(c *gin.Context) {
 	fmt.Println("**********user Middleware**************")
 	tokenString := c.GetHeader("Authorization")
