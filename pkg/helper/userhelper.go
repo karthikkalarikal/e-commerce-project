@@ -14,6 +14,8 @@ type authCustomClaims struct {
 	jwt.RegisteredClaims
 }
 
+// generate token for user
+
 func GenerateTokenClients(user models.UserDetailsResponse) (string, error) {
 	expiresAt := jwt.NewNumericDate(time.Now().Add(time.Hour * 48))
 	issuedAt := jwt.NewNumericDate(time.Now())
