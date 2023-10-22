@@ -10,4 +10,5 @@ type OrderUseCase interface {
 	ViewOrder(orderId int) (models.CombinedOrderDetails, error)
 	CancelOrder(orderId int) (domain.Order, domain.Wallet, error)
 	ViewWalletByUserId(userId int) (domain.Wallet, error)
+	PrintInvoice(orderId int) (models.CombinedOrderDetails, error)
 }

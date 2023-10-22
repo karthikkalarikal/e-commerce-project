@@ -14,3 +14,9 @@ type CombinedOrderDetails struct {
 	Street        string  `json:"street"`
 	City          string  `json:"city"`
 }
+
+type ItemDetails struct {
+	Name     string `json:"product_name"`
+	Price    string `json:"price"`
+	Quantity string `json:"quantity"`
+}

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -156,5 +157,34 @@ func (handler *OrderHandler) ViewWallet(ctx *gin.Context) {
 	}
 
 	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
+	ctx.JSON(http.StatusOK, successRes)
+}
+
+// @Summary Print Invoice
+// @Description Print invoice by order Id
+// @Tags Order Management
+// @Produce json
+// @Param order_id query int true "order_id"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "success"
+// @Failure 500 {object} response.Response{} "fail"
+// @Router /users/order/print [get]
+func (handler *OrderHandler) PrintInvoice(ctx *gin.Context) {
+	orderId := ctx.Query("order_id")
+	orderIdInt, err := strconv.Atoi(orderId)
+	if err != nil {
+		err = errors.New("error in converting order id" + err.Error())
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in reading the order id", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	body, err := handler.orderUseCase.PrintInvoice(orderIdInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in printing invoice", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
+	ctx.File("invoice.pdf")
 	ctx.JSON(http.StatusOK, successRes)
 }

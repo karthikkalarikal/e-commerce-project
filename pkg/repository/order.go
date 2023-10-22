@@ -247,6 +247,8 @@ func (repo *orderRepositryImpl) AddMondyToExistingWallet(userId int, amount floa
 	return body, nil
 }
 
+// ------------------------------------------ get wallet by user id ------------------------------------ \\
+
 func (repo *orderRepositryImpl) GetWalletByUserId(userId int) (domain.Wallet, error) {
 	var body domain.Wallet
 	query := `
@@ -257,4 +259,22 @@ func (repo *orderRepositryImpl) GetWalletByUserId(userId int) (domain.Wallet, er
 		return domain.Wallet{}, err
 	}
 	return body, nil
+}
+
+// ------------------------------------------ get items in an order ------------------------------------- \\
+
+func (repo *orderRepositryImpl) GetItemsByOrderId(orderId int) ([]models.ItemDetails, error) {
+	var items []models.ItemDetails
+
+	query := `
+		select * from orders o
+		join carts c on o.cart_id = c.id
+		join cart_items ct on c.cart_id = ct.cart_id
+		join products p on p.product_id = ct.product_id
+		where o.id = $1   
+	`
+	if err := repo.db.Raw(query, orderId).Scan(&items).Error; err != nil {
+		return []models.ItemDetails{}, err
+	}
+	return items, nil
 }

@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/jung-kurt/gofpdf"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	repo "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
@@ -121,7 +123,7 @@ func (repo *orderUseCaseImpl) ViewOrder(orderId int) (models.CombinedOrderDetail
 	return body, err
 }
 
-// ------------------------------------ display the wallet of user by demand ------------------------------ \\ 
+// ------------------------------------ display the wallet of user by demand ------------------------------ \\
 
 func (repo *orderUseCaseImpl) ViewWalletByUserId(userId int) (domain.Wallet, error) {
 	body, err := repo.orderRepo.GetWalletByUserId(userId)
@@ -129,4 +131,50 @@ func (repo *orderUseCaseImpl) ViewWalletByUserId(userId int) (domain.Wallet, err
 		return domain.Wallet{}, err
 	}
 	return body, nil
+}
+
+// ------------------------------------- print invoice of an order ----------------------------------------- \\
+
+func (repo *orderUseCaseImpl) PrintInvoice(orderId int) (models.CombinedOrderDetails, error) {
+
+	body, err := repo.orderRepo.GetDetailedOrderThroughId(orderId)
+	if err != nil {
+		return models.CombinedOrderDetails{}, err
+	}
+
+	items, err := repo.orderRepo.GetItemsByOrderId(orderId)
+	if err != nil {
+		return models.CombinedOrderDetails{}, err
+	}
+
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 16)
+	pdf.Cell(40, 10, "Invoice")
+
+	// Add customer details, items and total to the PDF
+	pdf.Cell(0, 10, "Customer Name: "+body.Name)
+	pdf.Cell(0, 10, body.HouseName)
+	pdf.Cell(0, 10, body.Street)
+	pdf.Cell(0, 10, body.State)
+	pdf.Cell(0, 10, body.City)
+
+	pdf.Ln(10)
+
+	for _, item := range items {
+		pdf.Cell(0, 10, "Item: "+item.Name)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Price: $"+item.Price)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Quantity: "+item.Quantity)
+	}
+	pdf.Cell(0, 10, strconv.FormatFloat(body.Amount, 'f', 2, 64))
+
+	err = pdf.OutputFileAndClose("invoice.pdf")
+	if err != nil {
+		return models.CombinedOrderDetails{}, err
+	}
+
+	return body, nil
+
 }

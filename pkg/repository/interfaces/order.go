@@ -20,4 +20,5 @@ type OrderRepositry interface {
 	CheckForWallet(userId int) (bool, error)
 	AddMondyToExistingWallet(userId int, amount float64) (domain.Wallet, error)
 	GetWalletByUserId(userId int) (domain.Wallet, error)
+	GetItemsByOrderId(orderId int) ([]models.ItemDetails, error)
 }

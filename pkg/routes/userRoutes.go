@@ -46,6 +46,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 			ordermanagement.DELETE("/cancel", orderHandler.CancelOrder)
 			ordermanagement.PATCH("/redeem", couponHandler.RedeemCoupon)
 			ordermanagement.GET("/payment", payment.MakePaymentRazorpay)
+			ordermanagement.GET("/print", orderHandler.PrintInvoice)
 		}
 		walletmanagement := engine.Group("/wallet")
 		{
