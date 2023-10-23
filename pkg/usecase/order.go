@@ -135,16 +135,16 @@ func (repo *orderUseCaseImpl) ViewWalletByUserId(userId int) (domain.Wallet, err
 
 // ------------------------------------- print invoice of an order ----------------------------------------- \\
 
-func (repo *orderUseCaseImpl) PrintInvoice(orderId int) (models.CombinedOrderDetails, error) {
+func (repo *orderUseCaseImpl) PrintInvoice(orderId int) (*gofpdf.Fpdf, error) {
 
 	body, err := repo.orderRepo.GetDetailedOrderThroughId(orderId)
 	if err != nil {
-		return models.CombinedOrderDetails{}, err
+		return &gofpdf.Fpdf{}, err
 	}
 
 	items, err := repo.orderRepo.GetItemsByOrderId(orderId)
 	if err != nil {
-		return models.CombinedOrderDetails{}, err
+		return &gofpdf.Fpdf{}, err
 	}
 
 	pdf := gofpdf.New("P", "mm", "A4", "")
@@ -154,10 +154,14 @@ func (repo *orderUseCaseImpl) PrintInvoice(orderId int) (models.CombinedOrderDet
 
 	// Add customer details, items and total to the PDF
 	pdf.Cell(0, 10, "Customer Name: "+body.Name)
-	pdf.Cell(0, 10, body.HouseName)
-	pdf.Cell(0, 10, body.Street)
-	pdf.Cell(0, 10, body.State)
-	pdf.Cell(0, 10, body.City)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "House Name: "+body.HouseName)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "Street: "+body.Street)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "State: "+body.State)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "City: "+body.City)
 
 	pdf.Ln(10)
 
@@ -170,11 +174,11 @@ func (repo *orderUseCaseImpl) PrintInvoice(orderId int) (models.CombinedOrderDet
 	}
 	pdf.Cell(0, 10, strconv.FormatFloat(body.Amount, 'f', 2, 64))
 
-	err = pdf.OutputFileAndClose("invoice.pdf")
-	if err != nil {
-		return models.CombinedOrderDetails{}, err
-	}
+	// err = pdf.OutputFileAndClose("invoice.pdf")
+	// if err != nil {
+	// 	return &gofpdf.Fpdf{}, err
+	// }
 
-	return body, nil
+	return pdf, nil
 
 }

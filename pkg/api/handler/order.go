@@ -178,13 +178,42 @@ func (handler *OrderHandler) PrintInvoice(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	body, err := handler.orderUseCase.PrintInvoice(orderIdInt)
+	pdf, err := handler.orderUseCase.PrintInvoice(orderIdInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadGateway, "error in printing invoice", nil, err)
 		ctx.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", body, nil)
-	ctx.File("invoice.pdf")
+	ctx.Header("Content-Disposition", "attachment;filename=invoice.pdf")
+
+	pdfFilePath := "salesReport/invoice.pdf" //generate temp file path for pdf
+
+	err = pdf.OutputFileAndClose(pdfFilePath)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in printing invoice", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	// set header for the file download
+	ctx.Header("Content-Disposition", "attachment; filename=sales_report.pdf")
+	ctx.Header("Content-Type", "application/pdf")
+
+	//serve pdf file for download
+	ctx.File(pdfFilePath)
+
+	//set content type header to application/pdf
+	ctx.Header("Content-Type", "application/pdf")
+
+	//write pdf data to the response writer
+	err = pdf.Output(ctx.Writer)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "error in printing invoice", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "the request was succesful", pdf, nil)
+	// ctx.File("invoice.pdf")
 	ctx.JSON(http.StatusOK, successRes)
 }

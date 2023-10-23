@@ -13,8 +13,8 @@ type Order struct {
 }
 
 type Wallet struct {
-	WalletId int     `json:"wallet_id" gorm:"primarykey not null"`
-	UserId   int     `json:"user_id" gorm:"not null"`
-	Users    Users   `json:"-" gorm:"foreignkey:UserId"`
-	Amount   float64 `json:"amount" gorm:"default:0"`
+	WalletId int `json:"wallet_id" gorm:"primarykey not null"`
+	UserId   int `json:"user_id" gorm:"not null"`
+	// Users    Users   `json:"-" gorm:"foreignkey:UserId"`
+	Amount float64 `json:"amount" gorm:"default:0"`
 }

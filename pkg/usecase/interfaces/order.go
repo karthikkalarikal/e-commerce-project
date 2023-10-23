@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"github.com/jung-kurt/gofpdf"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 )
@@ -10,5 +11,5 @@ type OrderUseCase interface {
 	ViewOrder(orderId int) (models.CombinedOrderDetails, error)
 	CancelOrder(orderId int) (domain.Order, domain.Wallet, error)
 	ViewWalletByUserId(userId int) (domain.Wallet, error)
-	PrintInvoice(orderId int) (models.CombinedOrderDetails, error)
+	PrintInvoice(orderId int) (*gofpdf.Fpdf, error)
 }
