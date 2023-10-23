@@ -135,50 +135,51 @@ func (repo *orderUseCaseImpl) ViewWalletByUserId(userId int) (domain.Wallet, err
 
 // ------------------------------------- print invoice of an order ----------------------------------------- \\
 
-func (repo *orderUseCaseImpl) PrintInvoice(orderId int) (*gofpdf.Fpdf, error) {
-
-	body, err := repo.orderRepo.GetDetailedOrderThroughId(orderId)
+func (repo *orderUseCaseImpl) PrintInvoice(orderID int) (*gofpdf.Fpdf, error) {
+	// Fetch order details and items
+	order, err := repo.orderRepo.GetDetailedOrderThroughId(orderID)
 	if err != nil {
-		return &gofpdf.Fpdf{}, err
+		return nil, err
 	}
 
-	items, err := repo.orderRepo.GetItemsByOrderId(orderId)
+	items, err := repo.orderRepo.GetItemsByOrderId(orderID)
 	if err != nil {
-		return &gofpdf.Fpdf{}, err
+		return nil, err
 	}
 
+	// Create a new PDF document
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
+
+	// Set font and title
 	pdf.SetFont("Arial", "B", 16)
 	pdf.Cell(40, 10, "Invoice")
-
-	// Add customer details, items and total to the PDF
-	pdf.Cell(0, 10, "Customer Name: "+body.Name)
-	pdf.Ln(10)
-	pdf.Cell(0, 10, "House Name: "+body.HouseName)
-	pdf.Ln(10)
-	pdf.Cell(0, 10, "Street: "+body.Street)
-	pdf.Ln(10)
-	pdf.Cell(0, 10, "State: "+body.State)
-	pdf.Ln(10)
-	pdf.Cell(0, 10, "City: "+body.City)
-
 	pdf.Ln(10)
 
+	// Add customer details
+	pdf.Cell(0, 10, "Customer Name: "+order.Name)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "House Name: "+order.HouseName)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "Street: "+order.Street)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "State: "+order.State)
+	pdf.Ln(10)
+	pdf.Cell(0, 10, "City: "+order.City)
+	pdf.Ln(10)
+
+	// Add items to the PDF
 	for _, item := range items {
-		pdf.Cell(0, 10, "Item: "+item.Name)
+		pdf.Cell(0, 10, "Item: "+item.ProductName)
 		pdf.Ln(10)
 		pdf.Cell(0, 10, "Price: $"+item.Price)
 		pdf.Ln(10)
 		pdf.Cell(0, 10, "Quantity: "+item.Quantity)
 	}
-	pdf.Cell(0, 10, strconv.FormatFloat(body.Amount, 'f', 2, 64))
+	pdf.Ln(10)
 
-	// err = pdf.OutputFileAndClose("invoice.pdf")
-	// if err != nil {
-	// 	return &gofpdf.Fpdf{}, err
-	// }
+	// Add the total amount to the PDF
+	pdf.Cell(0, 10, "Total Amount: $"+strconv.FormatFloat(order.Amount, 'f', 2, 64))
 
 	return pdf, nil
-
 }

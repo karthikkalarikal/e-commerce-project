@@ -16,7 +16,7 @@ type CombinedOrderDetails struct {
 }
 
 type ItemDetails struct {
-	Name     string `json:"product_name"`
-	Price    string `json:"price"`
-	Quantity string `json:"quantity"`
+	ProductName string `json:"product_name"`
+	Price       string `json:"price"`
+	Quantity    string `json:"quantity"`
 }

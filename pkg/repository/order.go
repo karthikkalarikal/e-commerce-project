@@ -276,5 +276,6 @@ func (repo *orderRepositryImpl) GetItemsByOrderId(orderId int) ([]models.ItemDet
 	if err := repo.db.Raw(query, orderId).Scan(&items).Error; err != nil {
 		return []models.ItemDetails{}, err
 	}
+	fmt.Println("items", items)
 	return items, nil
 }
