@@ -13,4 +13,7 @@ type AdminRepository interface {
 
 	CountUsers() (int, error)
 	SumRevenueByMonth() (float64, error)
+	GetSalesDetailsByYear(year int) (models.OrderDetails, error)
+	GetSalesDetailsByMonth(month int) (models.OrderDetails, error)
+	GetSalesDetailsByDay(day int) (models.OrderDetails, error)
 }

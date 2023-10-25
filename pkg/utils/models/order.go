@@ -20,3 +20,10 @@ type ItemDetails struct {
 	Price       string `json:"price"`
 	Quantity    string `json:"quantity"`
 }
+
+// to watch our for if you dont give the name similar to the gorm/json name there might be some errors
+
+type OrderDetails struct {
+	TotalAmount float64 `gorm:"column:sum"`
+	ProductName string  `gorm:"column:product_name"`
+}

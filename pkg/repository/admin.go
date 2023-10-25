@@ -145,3 +145,71 @@ func (db *adminRepositoryImpl) SumRevenueByMonth() (float64, error) {
 	}
 	return totalAmount, nil
 }
+
+// ---------------------------- sales by year / sort by products -------------------------- \\
+
+func (db *adminRepositoryImpl) GetSalesDetailsByYear(year int) (models.OrderDetails, error) {
+
+	var body models.OrderDetails
+
+	query := `select product_name,sum(o.amount)from 
+	orders as o 
+	join cart_items as ct
+	on ct.cart_id = o.cart_id 
+	join products as p 
+	on p.product_id = ct.product_id  
+	where o.payment_status = true  
+	and extract(year from o.created_at) = $1 
+	group by product_name
+
+	`
+	if err := db.db.Raw(query, year).Scan(&body).Error; err != nil {
+		return models.OrderDetails{}, err
+	}
+	fmt.Println(body, year)
+	return body, nil
+}
+
+// ---------------------------- sales by month / sort by products -------------------------- \\
+
+func (db *adminRepositoryImpl) GetSalesDetailsByMonth(month int) (models.OrderDetails, error) {
+	var body models.OrderDetails
+
+	query := `select (product_name,sum(o.amount)) from 
+	orders as o 
+	join cart_items as ct
+	on ct.cart_id = o.cart_id 
+	join products as p 
+	on p.product_id = ct.product_id  
+	where o.payment_status = true  
+	and extract(month from o.created_at) = $1 
+	group by product_name
+
+	`
+	if err := db.db.Raw(query, month).Scan(&body).Error; err != nil {
+		return models.OrderDetails{}, err
+	}
+	return body, nil
+}
+
+// ---------------------------- sales by day / sort by products -------------------------- \\
+
+func (db *adminRepositoryImpl) GetSalesDetailsByDay(day int) (models.OrderDetails, error) {
+	var body models.OrderDetails
+
+	query := `select (product_name,sum(o.amount)) from 
+	orders as o 
+	join cart_items as ct
+	on ct.cart_id = o.cart_id 
+	join products as p 
+	on p.product_id = ct.product_id  
+	where o.payment_status = true  
+	and extract(day from o.created_at) = $1 
+	group by product_name
+
+	`
+	if err := db.db.Raw(query, day).Scan(&body).Error; err != nil {
+		return models.OrderDetails{}, err
+	}
+	return body, nil
+}

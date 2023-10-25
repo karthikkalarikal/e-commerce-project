@@ -133,6 +133,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/dashboard/salesbydate": {
+            "get": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "sales by date",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin Dashboard"
+                ],
+                "summary": "sales by date",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "year YYYY",
+                        "name": "year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "month MM",
+                        "name": "month",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "day DD",
+                        "name": "day",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "array of order details ",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/dashboard/totalsales": {
             "get": {
                 "security": [
@@ -150,7 +201,7 @@ const docTemplate = `{
                 "summary": "Total Sales User",
                 "responses": {
                     "200": {
-                        "description": "Array of user details ",
+                        "description": "array of sales  ",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }

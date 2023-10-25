@@ -51,7 +51,7 @@ func (handler *OrderHandler) AddToOrder(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errRes)
 		return
 	}
-
+	// fmt.Println("cart id", cartIdInt)
 	resOrder, err := handler.orderUseCase.AddToOrder(userIdInt, cartIdInt)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in ordering", nil, err.Error())

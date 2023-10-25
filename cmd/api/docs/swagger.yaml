@@ -238,6 +238,38 @@ paths:
       summary: View Coupons
       tags:
       - Coupon Mangement
+  /admin/dashboard/salesbydate:
+    get:
+      description: sales by date
+      parameters:
+      - description: year YYYY
+        in: query
+        name: year
+        type: integer
+      - description: month MM
+        in: query
+        name: month
+        type: integer
+      - description: day DD
+        in: query
+        name: day
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'array of order details '
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: sales by date
+      tags:
+      - Admin Dashboard
   /admin/dashboard/totalsales:
     get:
       description: Total Sales
@@ -245,7 +277,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'Array of user details '
+          description: 'array of sales  '
           schema:
             $ref: '#/definitions/response.Response'
         "400":

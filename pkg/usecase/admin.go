@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -94,4 +95,39 @@ func (usecase *adminUseCaseImpl) TotalSalesByMonth() (float64, error) {
 	}
 
 	return amount, nil
+}
+
+// ----------------------------------------- sales by products by date --------------------------------------- \\
+
+func (usecase *adminUseCaseImpl) GetSalesDetailsByDate(yearInt, monthInt, dayInt int) (models.OrderDetails, error) {
+
+	// by year
+	if yearInt > 0 {
+		body, err := usecase.adminrepo.GetSalesDetailsByYear(yearInt)
+		if err != nil {
+			return models.OrderDetails{}, err
+		}
+		return body, nil
+	}
+
+	// by month
+	if monthInt > 0 {
+		body, err := usecase.adminrepo.GetSalesDetailsByMonth(monthInt)
+		if err != nil {
+			return models.OrderDetails{}, err
+		}
+		return body, nil
+	}
+
+	// by day
+	if dayInt > 0 {
+		body, err := usecase.adminrepo.GetSalesDetailsByDay(dayInt)
+		if err != nil {
+			return models.OrderDetails{}, err
+		}
+
+		return body, nil
+	}
+
+	return models.OrderDetails{}, errors.New("no value detected")
 }

@@ -27,6 +27,7 @@ func NewOrderUseCase(repo repo.OrderRepositry, helprepo repo.HelperRepository) i
 
 func (repo *orderUseCaseImpl) AddToOrder(userId, cartId int) (domain.Order, error) {
 
+	fmt.Println("cart id,user id", cartId, userId)
 	addressId, err := repo.orderRepo.GetDeliveryAddress(userId)
 	if err != nil {
 		return domain.Order{}, nil

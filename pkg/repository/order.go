@@ -22,22 +22,35 @@ func NewOrderRepository(db *gorm.DB) interfaces.OrderRepositry {
 
 // ------------------------------------------- add to order table -------------------------------------\\
 
-func (repo *orderRepositryImpl) AddToOrder(addressId, cartId int) (domain.Order, error) {
+func (repo *orderRepositryImpl) AddToOrder(cartId, addressId int) (domain.Order, error) {
 
 	var body domain.Order
+
+	fmt.Println("cart id, address id ", cartId, addressId)
 	query := `
-		insert into orders o
+		insert into orders as o
 		(created_at,user_id,address_id,cart_id)
-		select NOW(),c.user_id,c.id, a.address_id
+		select NOW(),c.user_id, a.address_id,c.id
 		from carts c
 		join addresses a on c.user_id = a.user_id
 		where a.address_id = $1 and c.id = $2  
-		returning *
+		
 	`
-	if err := repo.db.Raw(query, addressId, cartId).Scan(&body).Error; err != nil {
+	if err := repo.db.Exec(query, addressId, cartId).Error; err != nil {
 		err = errors.New("failed to add order to the data base" + err.Error())
 		return domain.Order{}, err
 	}
+
+	query = `
+		select * from orders where address_id = $1 and cart_id = $2
+		order by created_at desc 
+		limit 1
+	`
+	if err := repo.db.Raw(query, addressId, cartId).Scan(&body).Error; err != nil {
+		return domain.Order{}, err
+	}
+	fmt.Println("body", body)
+
 	return body, nil
 }
 

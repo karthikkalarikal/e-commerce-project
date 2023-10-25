@@ -35,6 +35,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 		ordermanagement := engine.Group("/dashboard")
 		{
 			ordermanagement.GET("/totalsales", adminHandler.GetTotalAmount)
+			ordermanagement.GET("/salesbydate", adminHandler.GetSalesDetailsByDate)
 		}
 	}
 

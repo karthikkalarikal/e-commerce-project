@@ -11,4 +11,5 @@ type AdminUseCase interface {
 	FindUser(email string, name string, id string, pageNo int, pageList int) ([]domain.Users, error)
 	DeleteUser(id int) (domain.Users, error)
 	TotalSalesByMonth() (float64, error)
+	GetSalesDetailsByDate(yearInt, monthInt, dayInt int) (models.OrderDetails, error)
 }

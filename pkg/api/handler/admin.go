@@ -178,7 +178,7 @@ func (u *AdminHandler) DeleteUser(c *gin.Context) {
 // @Tags Admin Dashboard
 // @Produce json
 // @Security BearerTokenAuth
-// @Success 200 {object} response.Response "Array of user details "
+// @Success 200 {object} response.Response "array of sales  "
 // @Failure 400 {object} response.Response "Bad request"
 // @Router /admin/dashboard/totalsales [get]
 func (u *AdminHandler) GetTotalAmount(c *gin.Context) {
@@ -189,5 +189,61 @@ func (u *AdminHandler) GetTotalAmount(c *gin.Context) {
 		return
 	}
 	succesRes := response.ClientResponse(http.StatusOK, "success", amount, nil)
+	c.JSON(http.StatusOK, succesRes)
+}
+
+// sale details by year-month-day
+// @Summary sales by date
+// @Description sales by date
+// @Tags Admin Dashboard
+// @Produce json
+// @Param year query int false "year YYYY"
+// @Param month query int false "month MM"
+// @Param day query int false "day DD"
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "array of order details "
+// @Failure 400 {object} response.Response "Bad request"
+// @Router /admin/dashboard/salesbydate [get]
+func (u *AdminHandler) GetSalesDetailsByDate(c *gin.Context) {
+
+	// year
+	year := c.Query("year")
+	yearInt, err := strconv.Atoi(year)
+
+	// in case year is nil we dont need to check for error
+	if err != nil && year != "" {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in year", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	// month
+	month := c.Query("month")
+	monthInt, err := strconv.Atoi(month)
+
+	// in case month is nil we dont need to check for error
+	if err != nil && month != "" {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in month", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	day := c.Query("day")
+	dayInt, err := strconv.Atoi(day)
+
+	// in case day is nil we dont need to check for error
+	if err != nil && day != "" {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in day", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	body, err := u.adminUseCase.GetSalesDetailsByDate(yearInt, monthInt, dayInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not get sales details", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	succesRes := response.ClientResponse(http.StatusOK, "success", body, nil)
 	c.JSON(http.StatusOK, succesRes)
 }
