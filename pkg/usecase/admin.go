@@ -85,6 +85,13 @@ func (usecase *adminUseCaseImpl) DeleteUser(id int) (domain.Users, error) {
 
 }
 
+// ------------------------------------------ total sales by month ---------------------------------------- \\
 
+func (usecase *adminUseCaseImpl) TotalSalesByMonth() (float64, error) {
+	amount, err := usecase.adminrepo.SumRevenueByMonth()
+	if err != nil {
+		return 0, err
+	}
 
-
+	return amount, nil
+}

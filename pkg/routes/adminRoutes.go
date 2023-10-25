@@ -32,6 +32,10 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 			couponmanagement.GET("/view", couponHandler.ViewCoupon)
 			couponmanagement.PATCH("/expire", couponHandler.ExpireCoupon)
 		}
+		ordermanagement := engine.Group("/dashboard")
+		{
+			ordermanagement.GET("/totalsales", adminHandler.GetTotalAmount)
+		}
 	}
 
 }

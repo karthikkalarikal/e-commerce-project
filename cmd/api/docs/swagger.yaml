@@ -238,6 +238,25 @@ paths:
       summary: View Coupons
       tags:
       - Coupon Mangement
+  /admin/dashboard/totalsales:
+    get:
+      description: Total Sales
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Array of user details '
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerTokenAuth: []
+      summary: Total Sales User
+      tags:
+      - Admin Dashboard
   /admin/product/addcategory:
     post:
       consumes:

@@ -125,6 +125,37 @@
                 }
             }
         },
+        "/admin/dashboard/totalsales": {
+            "get": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Total Sales",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin Dashboard"
+                ],
+                "summary": "Total Sales User",
+                "responses": {
+                    "200": {
+                        "description": "Array of user details ",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/product/addcategory": {
             "post": {
                 "security": [

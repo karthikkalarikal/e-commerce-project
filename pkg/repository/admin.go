@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 
@@ -23,6 +24,7 @@ func NewAdminRepository(db *gorm.DB, repo interfaces.HelperRepository) interface
 }
 
 // ----------------------view all the users in the database------------------------------ \\
+
 func (db *adminRepositoryImpl) UserList(pageList int, offset int) ([]models.UserDetailsResponse, error) {
 
 	var userList []models.UserDetailsResponse
@@ -39,6 +41,7 @@ func (db *adminRepositoryImpl) UserList(pageList int, offset int) ([]models.User
 }
 
 // --------------------------------user block or unblock --------------------------------------------------\\
+
 func (db *adminRepositoryImpl) BlockUser(id int, block bool) (domain.Users, error) {
 	var user domain.Users
 
@@ -51,6 +54,7 @@ func (db *adminRepositoryImpl) BlockUser(id int, block bool) (domain.Users, erro
 }
 
 // -----------------------------------search user--------------------- ---------------------------------------\\
+
 func (db *adminRepositoryImpl) FindUser(email string, name string, id string, pageList int, offset int) ([]domain.Users, error) {
 	fmt.Println("***************search repository*******************")
 	var users []domain.Users
@@ -92,6 +96,7 @@ func (db *adminRepositoryImpl) FindUser(email string, name string, id string, pa
 }
 
 // ----------------------------------delete user -------------------------------------------------\\
+
 func (db *adminRepositoryImpl) DeleteUser(id int) (domain.Users, error) {
 	// fmt.Println("**delete repo")
 	user, err := db.repo.GetUserDetailsThroughId(id)
@@ -109,6 +114,7 @@ func (db *adminRepositoryImpl) DeleteUser(id int) (domain.Users, error) {
 }
 
 // ---------------------check the number of users--------------------- \\
+
 func (db *adminRepositoryImpl) CountUsers() (int, error) {
 	var count int
 
@@ -119,4 +125,23 @@ func (db *adminRepositoryImpl) CountUsers() (int, error) {
 
 	return count, nil
 
+}
+
+// --------------------- total sales month wise --------------------- \\
+
+func (db *adminRepositoryImpl) SumRevenueByMonth() (float64, error) {
+	var totalAmountStr string
+
+	query := `select sum(amount) from orders;
+	`
+	if err := db.db.Raw(query).Scan(&totalAmountStr).Error; err != nil {
+		err = errors.New("error in summning amount" + err.Error())
+		return 0, err
+	}
+	totalAmount, err := strconv.ParseFloat(totalAmountStr, 64)
+	if err != nil {
+		err = errors.New("error converting sting into float" + err.Error())
+		return 0, err
+	}
+	return totalAmount, nil
 }

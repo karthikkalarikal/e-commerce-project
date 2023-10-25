@@ -171,3 +171,23 @@ func (u *AdminHandler) DeleteUser(c *gin.Context) {
 	succesRes := response.ClientResponse(http.StatusOK, "succesfully deleted the user", user, nil)
 	c.JSON(http.StatusOK, succesRes)
 }
+
+// Total Sales godoc
+// @Summary Total Sales User
+// @Description Total Sales
+// @Tags Admin Dashboard
+// @Produce json
+// @Security BearerTokenAuth
+// @Success 200 {object} response.Response "Array of user details "
+// @Failure 400 {object} response.Response "Bad request"
+// @Router /admin/dashboard/totalsales [get]
+func (u *AdminHandler) GetTotalAmount(c *gin.Context) {
+	amount, err := u.adminUseCase.TotalSalesByMonth()
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "could not get total sales", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	succesRes := response.ClientResponse(http.StatusOK, "success", amount, nil)
+	c.JSON(http.StatusOK, succesRes)
+}

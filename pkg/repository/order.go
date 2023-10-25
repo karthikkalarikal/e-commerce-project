@@ -26,11 +26,12 @@ func (repo *orderRepositryImpl) AddToOrder(addressId, cartId int) (domain.Order,
 
 	var body domain.Order
 	query := `
-		insert into orders(user_id,address_id,cart_id)
-		select c.user_id,c.id, a.address_id
+		insert into orders o
+		(created_at,user_id,address_id,cart_id)
+		select NOW(),c.user_id,c.id, a.address_id
 		from carts c
 		join addresses a on c.user_id = a.user_id
-		where a.address_id = $1 and c.id = $2 
+		where a.address_id = $1 and c.id = $2  
 		returning *
 	`
 	if err := repo.db.Raw(query, addressId, cartId).Scan(&body).Error; err != nil {
