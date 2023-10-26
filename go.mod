@@ -8,11 +8,13 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/wire v0.5.0
 	github.com/jinzhu/copier v0.4.0
+	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/razorpay/razorpay-go v1.2.0
 	github.com/spf13/viper v1.16.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.2
+	github.com/tealeg/xlsx v1.0.5
 	github.com/twilio/twilio-go v1.14.0
 	golang.org/x/crypto v0.13.0
 	gorm.io/driver/postgres v1.5.2
@@ -43,7 +45,6 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/jung-kurt/gofpdf v1.16.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect

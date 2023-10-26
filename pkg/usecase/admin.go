@@ -3,7 +3,9 @@ package usecase
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
+	"github.com/jung-kurt/gofpdf"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	repo "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
@@ -99,13 +101,13 @@ func (usecase *adminUseCaseImpl) TotalSalesByMonth() (float64, error) {
 
 // ----------------------------------------- sales by products by date --------------------------------------- \\
 
-func (usecase *adminUseCaseImpl) GetSalesDetailsByDate(yearInt, monthInt, dayInt int) (models.OrderDetails, error) {
+func (usecase *adminUseCaseImpl) GetSalesDetailsByDate(yearInt, monthInt, dayInt int) ([]models.OrderDetails, error) {
 
 	// by year
 	if yearInt > 0 {
 		body, err := usecase.adminrepo.GetSalesDetailsByYear(yearInt)
 		if err != nil {
-			return models.OrderDetails{}, err
+			return []models.OrderDetails{}, err
 		}
 		return body, nil
 	}
@@ -114,7 +116,7 @@ func (usecase *adminUseCaseImpl) GetSalesDetailsByDate(yearInt, monthInt, dayInt
 	if monthInt > 0 {
 		body, err := usecase.adminrepo.GetSalesDetailsByMonth(monthInt)
 		if err != nil {
-			return models.OrderDetails{}, err
+			return []models.OrderDetails{}, err
 		}
 		return body, nil
 	}
@@ -123,11 +125,40 @@ func (usecase *adminUseCaseImpl) GetSalesDetailsByDate(yearInt, monthInt, dayInt
 	if dayInt > 0 {
 		body, err := usecase.adminrepo.GetSalesDetailsByDay(dayInt)
 		if err != nil {
-			return models.OrderDetails{}, err
+			return []models.OrderDetails{}, err
 		}
 
 		return body, nil
 	}
 
-	return models.OrderDetails{}, errors.New("no value detected")
+	return []models.OrderDetails{}, errors.New("no value detected")
+}
+
+// ----------------------- print sales report ---------------------------------- \\
+
+func (repo *adminUseCaseImpl) PrintSalesReport(sales []models.OrderDetails) (*gofpdf.Fpdf, error) {
+
+	// Create a new PDF document
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+
+	// Set font and title
+	pdf.SetFont("Arial", "B", 16)
+	pdf.Cell(40, 10, "Total Sales Report")
+	pdf.Ln(10)
+
+	// Add items to the PDF
+	for _, item := range sales {
+		pdf.Cell(0, 10, "Item: "+item.ProductName)
+		pdf.Ln(10)
+		amount := strconv.FormatFloat(item.TotalAmount, 'f', -1, 64)
+		pdf.Cell(0, 10, "Sold: $ "+amount)
+		pdf.Ln(10)
+
+	}
+	pdf.Ln(10)
+
+	// Add the total amount to the PDF
+
+	return pdf, nil
 }

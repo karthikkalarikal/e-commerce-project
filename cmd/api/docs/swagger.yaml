@@ -254,6 +254,11 @@ paths:
         in: query
         name: day
         type: integer
+      - description: pdf/excel
+        in: query
+        name: download
+        required: true
+        type: string
       produces:
       - application/json
       responses:

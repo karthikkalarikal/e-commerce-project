@@ -35,7 +35,7 @@ func (u *userUseCaseImpl) UserSignUp(user models.UserDetails) (models.TokenUsers
 	if userExist {
 		return models.TokenUsers{}, errors.New("user already exist, sign in")
 	}
-	fmt.Println(user)
+	// fmt.Println(user)
 	if user.Password != user.ConfirmPassword {
 		return models.TokenUsers{}, errors.New("password does not match")
 	}

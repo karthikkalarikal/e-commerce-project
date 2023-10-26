@@ -166,6 +166,13 @@ const docTemplate = `{
                         "description": "day DD",
                         "name": "day",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "pdf/excel",
+                        "name": "download",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {

@@ -148,9 +148,9 @@ func (db *adminRepositoryImpl) SumRevenueByMonth() (float64, error) {
 
 // ---------------------------- sales by year / sort by products -------------------------- \\
 
-func (db *adminRepositoryImpl) GetSalesDetailsByYear(year int) (models.OrderDetails, error) {
+func (db *adminRepositoryImpl) GetSalesDetailsByYear(year int) ([]models.OrderDetails, error) {
 
-	var body models.OrderDetails
+	var body []models.OrderDetails
 
 	query := `select product_name,sum(o.amount)from 
 	orders as o 
@@ -164,7 +164,7 @@ func (db *adminRepositoryImpl) GetSalesDetailsByYear(year int) (models.OrderDeta
 
 	`
 	if err := db.db.Raw(query, year).Scan(&body).Error; err != nil {
-		return models.OrderDetails{}, err
+		return []models.OrderDetails{}, err
 	}
 	fmt.Println(body, year)
 	return body, nil
@@ -172,8 +172,8 @@ func (db *adminRepositoryImpl) GetSalesDetailsByYear(year int) (models.OrderDeta
 
 // ---------------------------- sales by month / sort by products -------------------------- \\
 
-func (db *adminRepositoryImpl) GetSalesDetailsByMonth(month int) (models.OrderDetails, error) {
-	var body models.OrderDetails
+func (db *adminRepositoryImpl) GetSalesDetailsByMonth(month int) ([]models.OrderDetails, error) {
+	var body []models.OrderDetails
 
 	query := `select (product_name,sum(o.amount)) from 
 	orders as o 
@@ -187,15 +187,15 @@ func (db *adminRepositoryImpl) GetSalesDetailsByMonth(month int) (models.OrderDe
 
 	`
 	if err := db.db.Raw(query, month).Scan(&body).Error; err != nil {
-		return models.OrderDetails{}, err
+		return []models.OrderDetails{}, err
 	}
 	return body, nil
 }
 
 // ---------------------------- sales by day / sort by products -------------------------- \\
 
-func (db *adminRepositoryImpl) GetSalesDetailsByDay(day int) (models.OrderDetails, error) {
-	var body models.OrderDetails
+func (db *adminRepositoryImpl) GetSalesDetailsByDay(day int) ([]models.OrderDetails, error) {
+	var body []models.OrderDetails
 
 	query := `select (product_name,sum(o.amount)) from 
 	orders as o 
@@ -209,6 +209,28 @@ func (db *adminRepositoryImpl) GetSalesDetailsByDay(day int) (models.OrderDetail
 
 	`
 	if err := db.db.Raw(query, day).Scan(&body).Error; err != nil {
+		return []models.OrderDetails{}, err
+	}
+	return body, nil
+}
+
+// ------------------------------------ sales report by year -------------------------------- \\
+
+func (db *adminRepositoryImpl) GetSalesReport(year int) (models.OrderDetails, error) {
+	var body models.OrderDetails
+
+	query := `select (extract(year from o.created_at),sum(o.amount)) 
+	from orders as o 
+	join cart_items as ct
+	on ct.cart_id = o.cart_id 
+	join products as p 
+	on p.product_id = ct.product_id  
+	where o.payment_status = true  
+	and extract(year from o.created_at) = $1 
+	group by extract(year from o.created_at)
+
+	`
+	if err := db.db.Raw(query, year).Scan(&body).Error; err != nil {
 		return models.OrderDetails{}, err
 	}
 	return body, nil

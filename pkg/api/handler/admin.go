@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/karthikkalarikal/ecommerce-project/pkg/helper"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/response"
 )
@@ -200,6 +201,7 @@ func (u *AdminHandler) GetTotalAmount(c *gin.Context) {
 // @Param year query int false "year YYYY"
 // @Param month query int false "month MM"
 // @Param day query int false "day DD"
+// @Param download query string true "pdf/excel"
 // @Security BearerTokenAuth
 // @Success 200 {object} response.Response "array of order details "
 // @Failure 400 {object} response.Response "Bad request"
@@ -239,11 +241,77 @@ func (u *AdminHandler) GetSalesDetailsByDate(c *gin.Context) {
 	}
 
 	body, err := u.adminUseCase.GetSalesDetailsByDate(yearInt, monthInt, dayInt)
+	fmt.Println(body)
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "could not get sales details", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
+
+	// for printing sales report
+	download := c.Query("download")
+	if download == "pdf" {
+		pdf, err := u.adminUseCase.PrintSalesReport(body)
+		if err != nil {
+			errRes := response.ClientResponse(http.StatusBadGateway, "error in printing sales report", nil, err)
+			c.JSON(http.StatusBadRequest, errRes)
+			return
+		}
+		c.Header("Content-Disposition", "attachment;filename=totalsalesreport.pdf")
+
+		pdfFilePath := "salesReport/totalsalesreport.pdf" //generate temp file path for pdf
+
+		err = pdf.OutputFileAndClose(pdfFilePath)
+		if err != nil {
+			errRes := response.ClientResponse(http.StatusBadGateway, "error in printing sales report", nil, err)
+			c.JSON(http.StatusBadRequest, errRes)
+			return
+		}
+
+		// set header for the file download
+		c.Header("Content-Disposition", "attachment; filename=total_sales_report.pdf")
+		c.Header("Content-Type", "application/pdf")
+
+		//serve pdf file for download
+		c.File(pdfFilePath)
+
+		//set content type header to application/pdf
+		c.Header("Content-Type", "application/pdf")
+
+		//write pdf data to the response writer
+		err = pdf.Output(c.Writer)
+		if err != nil {
+			errRes := response.ClientResponse(http.StatusBadGateway, "error in printing sales report", nil, err)
+			c.JSON(http.StatusBadRequest, errRes)
+			return
+		}
+	} else {
+		// for converting the data into excel
+		fmt.Println("body ", body)
+		excel, err := helper.ConvertToExel(body)
+		if err != nil {
+			errRes := response.ClientResponse(http.StatusBadGateway, "error in printing sales report", nil, err)
+			c.JSON(http.StatusBadRequest, errRes)
+			return
+		}
+
+		// file path where excel file should be saved
+
+		// Specify the file name
+		fileName := "sales_report.xlsx"
+
+		// Set the Content-Disposition header to prompt the client to download the file
+		c.Header("Content-Disposition", "attachment; filename="+fileName)
+		c.Header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+		// Serve the Excel file to the client
+		if err := excel.Write(c.Writer); err != nil {
+			errRes := response.ClientResponse(http.StatusBadGateway, "Error in serving the sales report", nil, err)
+			c.JSON(http.StatusBadRequest, errRes)
+			return
+		}
+	}
+
 	succesRes := response.ClientResponse(http.StatusOK, "success", body, nil)
 	c.JSON(http.StatusOK, succesRes)
 }
