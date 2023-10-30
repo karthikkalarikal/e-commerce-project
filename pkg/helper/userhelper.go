@@ -1,14 +1,12 @@
 package helper
 
 import (
-	"bytes"
 	"fmt"
-	"log"
 	"time"
 
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
-	"github.com/tealeg/xlsx"
 )
 
 type authCustomClaims struct {
@@ -69,45 +67,31 @@ func GenerateTokenAdmin(user models.AdminDetailsResponse) (string, error) {
 
 // for exel conversion
 
-func ConvertToExel(sales []models.OrderDetails) (*xlsx.File, error) {
+func ConvertToExel(sales []models.OrderDetails) (*excelize.File, error) {
 	// Create a new Excel file
-	file := xlsx.NewFile()
+	filename := "salesReport/sales_report.xlsx"
+	file := excelize.NewFile()
 
-	// Create a new sheet
-	sheet, err := file.AddSheet("Sales Report")
-	if err != nil {
-		fmt.Println("Error creating sheet:", err)
-		return nil, err
-	}
-	// Add headers to the sheet
-	headerRow := sheet.AddRow()
-	headerRow.AddCell().SetString("Item")
-	// headerRow.AddCell().SetString("Quantity Sold")
-	headerRow.AddCell().SetString("Total Amount")
+	// create headers for excel
+	file.SetCellValue("Sheet1", "A1", "Item")
+	file.SetCellValue("Sheet1", "B1", "Total Amount Sold")
 
 	// Add data rows to the sheet
-	fmt.Println("sales :", sales)
-	for _, sale := range sales {
-		dataRow := sheet.AddRow()
-		dataRow.AddCell().SetString(sale.ProductName)
-		// dataRow.AddCell().SetInt(sale.QuantitySold)
-		dataRow.AddCell().SetFloatWithFormat(sale.TotalAmount, "#,##0.00")
-		fmt.Println("date", dataRow)
+	// fmt.Println("sales :", sales)
+	for i, sale := range sales {
+		col1 := fmt.Sprintf("A%d", i+1)
+		col2 := fmt.Sprintf("B%d", i+1)
+		// dataRow := sheet.AddRow()
+		file.SetCellValue("Sheet1", col1, sale.ProductName)
+		file.SetCellValue("Sheet1", col2, sale.TotalAmount)
+
 	}
 
-	buffer := new(bytes.Buffer)
-	if err := file.Write(buffer); err != nil {
-		fmt.Println("Error writing Excel data to buffer:", err)
+	// save excel
+	if err := file.SaveAs(filename); err != nil {
 		return nil, err
 	}
-	fmt.Println("buffer", buffer)
+	// fmt.Println(file)
 
-	// Save the Excel file
-	err = file.Save("salesReport/sales_report.xlsx")
-	if err != nil {
-		fmt.Println("Error saving Excel file:", err)
-		return nil, err
-	}
-	log.Print("file", file)
 	return file, nil
 }
