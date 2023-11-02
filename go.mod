@@ -4,19 +4,21 @@ go 1.21.0
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize v1.4.1
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-playground/validator/v10 v10.15.5
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/wire v0.5.0
 	github.com/jinzhu/copier v0.4.0
+	github.com/jmoiron/sqlx v1.3.5
 	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/razorpay/razorpay-go v1.2.0
 	github.com/spf13/viper v1.16.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.2
-	github.com/tealeg/xlsx v1.0.5
 	github.com/twilio/twilio-go v1.14.0
+	go.uber.org/mock v0.3.0
 	golang.org/x/crypto v0.13.0
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/gorm v1.25.4

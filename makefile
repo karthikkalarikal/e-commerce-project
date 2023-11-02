@@ -48,3 +48,9 @@ Install-swagger:
 
 swagger:
 	GO111MODULE=off swagger generate spec -o ./swagger.yaml --scan-models	
+
+mock: ##make mock files using mockgen
+	mockgen -source=pkg/repository/interface/user.go -destination=pkg/mock/mockrepo/user_mock.go -package=mockrepo
+	mockgen -source=pkg/usecase/interfaces/user.go -destination=pkg/mock/mockusecase/user_mock.go -package=mockusecase
+	mockgen -source=pkg/repository/interface/inventory.go -destination=pkg/mock/mockrepo/inventory_mock.go -package=mockrepo
+	mockgen -source=pkg/repository/interface/order.go -destination=pkg/mock/mockrepo/order_mock.go -package=mockrepo

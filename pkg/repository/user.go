@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -24,9 +25,11 @@ func NewUserRepository(DB *gorm.DB) interfaces.UserRepository {
 func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsResponse, error) {
 	var userDetails models.UserDetailsResponse
 
-	err := u.DB.Raw("insert into users(name, email, password, phone) values (?,?,?,?) returning *", user.Name, user.Email, user.Password, user.Phone).Scan(&userDetails).Error
+	err := u.DB.Raw("insert into users(name, email, password, phone) values ($1,$2,$3,$4) returning *", user.Name, user.Email, user.Password, user.Phone).Scan(&userDetails).Error
 
 	if err != nil {
+		log.Print(err)
+		err = errors.New("insert into users table violates not null constraints")
 		return models.UserDetailsResponse{}, err
 	}
 	// fmt.Println(userDetails)

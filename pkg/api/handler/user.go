@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -36,6 +37,34 @@ func (u *UserHandler) UserSignUp(c *gin.Context) {
 	//bind user details to struct
 	if err := c.BindJSON(&user); err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	if user.Name == "" {
+		err := errors.New("no empty values")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong or nil", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	if user.Email == "" {
+		err := errors.New("no empty values")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong or nil", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	if user.Password == "" {
+		err := errors.New("no empty values")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong or nil", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	if user.Phone == "" {
+		err := errors.New("no empty values")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong or nil", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}

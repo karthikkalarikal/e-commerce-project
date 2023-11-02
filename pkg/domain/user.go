@@ -2,10 +2,10 @@ package domain
 
 type Users struct {
 	UserID   int    `json:"id" gorm:"primarykey;autoIncrement"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password" validate:"min=8,max=20"`
-	Phone    string `json:"phone"`
+	Name     string `json:"name" gorm:"not null"`
+	Email    string `json:"email" gorm:"not null"`
+	Password string `json:"password" validate:"min=8,max=20" gorm:"not null"`
+	Phone    string `json:"phone" gorm:"not null"`
 	Blocked  bool   `json:"blocked" gorm:"default:false"`
 	Role     bool   `json:"role" gorm:"default:false"`
 }
