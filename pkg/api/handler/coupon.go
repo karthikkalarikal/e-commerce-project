@@ -109,7 +109,7 @@ func (hander *CouponHandler) ExpireCoupon(c *gin.Context) {
 
 // @Summary Redeem Coupons
 // @Description Redeem Coupons by User
-// @Tags Coupon Mangement
+// @Tags Order Management
 // @Produce json
 // @Security BearerTokenAuth
 // @Param coupon query string true "coupon"

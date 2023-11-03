@@ -3,6 +3,7 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	repository "github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
@@ -80,5 +81,29 @@ func (usecase *cartUseCaseImpl) CartItemDeletion(cartItemId int) (models.CartIte
 		return models.CartItems{}, err
 	}
 
+	return body, nil
+}
+
+// ---------------------------------------------- check if user has carts ---------------------------------------- \\
+
+func (usecase *cartUseCaseImpl) CheckUserCartById(userInt int) error {
+
+	err := usecase.repo.CheckUserCartById(userInt)
+	if err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
+// -------------------------------------------- carts of users ------------------------------------------- \\
+
+func (usecase *cartUseCaseImpl) GetCartsByUserId(userInt int) ([]domain.Cart, error) {
+
+	body, err := usecase.repo.GetCartsByUserId(userInt)
+	if err != nil {
+		return []domain.Cart{}, err
+	}
 	return body, nil
 }

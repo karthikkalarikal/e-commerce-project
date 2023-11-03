@@ -824,6 +824,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/carts/listcarts": {
+            "get": {
+                "security": [
+                    {
+                        "BearerTokenAuth": []
+                    }
+                ],
+                "description": "Get All The Carts User Has",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart Mangement"
+                ],
+                "summary": "Carts By User Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of product details ",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Response"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/carts/quantity": {
             "patch": {
                 "security": [
@@ -1165,7 +1211,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Coupon Mangement"
+                    "Order Management"
                 ],
                 "summary": "Redeem Coupons",
                 "parameters": [

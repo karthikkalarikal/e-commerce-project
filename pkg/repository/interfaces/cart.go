@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 )
 
@@ -11,4 +12,6 @@ type CartRepository interface {
 	CartItemDeletion(cartItemsId int) error
 	MakeNewCart(int) (models.Cart, error)
 	CartItemsById(cartItemsId int) (models.CartItems, error)
+	CheckUserCartById(userId int) error
+	GetCartsByUserId(userInt int) ([]domain.Cart, error)
 }

@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 )
 
@@ -9,4 +10,6 @@ type CartUseCase interface {
 	CartItemListing(int, int) ([]models.CartItems, error)
 	CartItemQuantityUpdations(int, int) (models.CartItems, error)
 	CartItemDeletion(int) (models.CartItems, error)
+	CheckUserCartById(userInt int) error
+	GetCartsByUserId(userInt int) ([]domain.Cart, error)
 }

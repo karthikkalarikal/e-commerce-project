@@ -1,7 +1,10 @@
 package domain
 
+import "gorm.io/gorm"
+
 type Cart struct {
-	CartId int   `json:"cart_id" gorm:"primarykey;not null"`
+	gorm.Model
+	// CartId int   `json:"cart_id" gorm:"primarykey;not null"`
 	UserId int   `json:"user_id" gorm:"not null"`
 	Users  Users `json:"-" gorm:"foreignkey:UserId"`
 }

@@ -674,6 +674,35 @@ paths:
       summary: delete products from cart
       tags:
       - Cart Mangement
+  /users/carts/listcarts:
+    get:
+      description: Get All The Carts User Has
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'Array of product details '
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            items:
+              $ref: '#/definitions/response.Response'
+            type: array
+      security:
+      - BearerTokenAuth: []
+      summary: Carts By User Id
+      tags:
+      - Cart Mangement
   /users/carts/quantity:
     patch:
       description: Change the quantity of the cart items
@@ -913,7 +942,7 @@ paths:
       - BearerTokenAuth: []
       summary: Redeem Coupons
       tags:
-      - Coupon Mangement
+      - Order Management
   /users/order/verifypayment:
     post:
       description: verify payment

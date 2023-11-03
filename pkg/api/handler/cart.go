@@ -72,7 +72,7 @@ func (handler *CartHandler) AddToCart(ctx *gin.Context) {
 
 }
 
-// ------------------------------------------ view cart -------------------------------------------- \\
+// ------------------------------------------ view cart items -------------------------------------------- \\
 
 // CartItemListing godoc
 // @Summary List the products in cart
@@ -109,6 +109,47 @@ func (handler *CartHandler) CartItemListing(c *gin.Context) {
 		return
 	}
 	successRes := response.ClientResponse(http.StatusOK, "succesfully displayed the products in cart", cartItems, nil)
+	c.JSON(http.StatusOK, successRes)
+}
+
+// ------------------------------------------- view carts of the user --------------------------------------- \\
+
+// CartsByUser godoc
+// @Summary Carts By User Id
+// @Description Get All The Carts User Has
+// @Tags Cart Mangement
+// @Produce json
+// @Param user_id query int true "user id"
+// @Security BearerTokenAuth
+// @Success 200 {array} response.Response "Array of product details "
+// @Failure 400 {array} response.Response "Bad request"
+// @Router /users/carts/listcarts [get]
+func (handler *CartHandler) CartListing(c *gin.Context) {
+	fmt.Println("*************cart listing****************")
+	user_id := c.Query("user_id")
+
+	userInt, err := strconv.Atoi(user_id)
+	if err != nil {
+		fmt.Println("err", err)
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	err = handler.cartUsecase.CheckUserCartById(userInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "the user id is not valid", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	carts, err := handler.cartUsecase.GetCartsByUserId(userInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadGateway, "the carts could not be fetched", nil, err.Error())
+		c.JSON(http.StatusBadGateway, errRes)
+		return
+	}
+
+	successRes := response.ClientResponse(http.StatusOK, "succesfully displayed the products in cart", carts, nil)
 	c.JSON(http.StatusOK, successRes)
 }
 

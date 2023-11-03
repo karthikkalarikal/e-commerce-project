@@ -26,6 +26,7 @@ func UserRoutes(engine *gin.RouterGroup, userHandler *handler.UserHandler, otpHa
 			cartmanagement.GET("/viewcart", cartHandler.CartItemListing)
 			cartmanagement.PATCH("/quantity", cartHandler.CartItemQuatityModification)
 			cartmanagement.DELETE("/delete", cartHandler.CartItemDeletion)
+			cartmanagement.GET("/listcarts/", cartHandler.CartListing)
 		}
 		addressmanagement := engine.Group("/user")
 		{

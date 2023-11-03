@@ -13,3 +13,12 @@ type CartItems struct {
 	Quantity  string `json:"quantity"`
 	Amount    string `json:"amount"`
 }
+
+// type UserCart struct {
+// 	CartId      int    `json:"cart_id"`
+// 	UserId      int    `json:"user_id"`
+// 	CartItemsId int    `json:"cartitems_id"`
+// 	Name        string `json:"name"`
+// 	Email       string `json:"email"`
+// 	Amount      string `json:"amount"`
+// }

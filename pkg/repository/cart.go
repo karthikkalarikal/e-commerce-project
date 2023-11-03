@@ -1,9 +1,11 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
+	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 	"gorm.io/gorm"
@@ -104,5 +106,42 @@ func (repo *cartRepositoryImpl) CartItemsById(cartItemsId int) (models.CartItems
 	if err := repo.DB.Raw(query, cartItemsId).Scan(&body).Error; err != nil {
 		return models.CartItems{}, err
 	}
+	return body, nil
+}
+
+// ---------------------------------------- check if user has carts -------------------------------- \\
+
+func (repo *cartRepositoryImpl) CheckUserCartById(userId int) error {
+	var body int
+
+	query := `select count(*) from carts where user_id = $1`
+
+	if err := repo.DB.Raw(query, userId).Scan(&body).Error; err != nil {
+		err = errors.New("error in db query to check for carts" + err.Error())
+		return err
+	}
+
+	if body > 0 {
+		return nil
+	} else {
+		return errors.New("there are no carts for this user")
+	}
+}
+
+// ------------------------------------------ get carts of user ------------------------------------ \\
+
+func (repo *cartRepositoryImpl) GetCartsByUserId(userInt int) ([]domain.Cart, error) {
+	var body []domain.Cart
+
+	query := `
+		select * from carts
+		where user_id = $1
+	`
+
+	if err := repo.DB.Raw(query, userInt).Scan(&body).Error; err != nil {
+		err = errors.New("error in db query to get carts" + err.Error())
+		return []domain.Cart{}, err
+	}
+	fmt.Println("body", body)
 	return body, nil
 }
