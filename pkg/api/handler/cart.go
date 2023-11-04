@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -29,7 +30,6 @@ func NewCartHandler(usecase interfaces.CartUseCase) *CartHandler {
 // @Accept json
 // @Produce json
 // @Param cart_id query int false "cart_id only this cart_id is needed"
-// @Param user_id query int true "user_id"
 // @Param product body models.CartItems true "Cart details"
 // @Security BearerTokenAuth
 // @Success 200 {object} response.Response "success"
@@ -37,21 +37,36 @@ func NewCartHandler(usecase interfaces.CartUseCase) *CartHandler {
 // @Router /users/carts/addtocart [post]
 func (handler *CartHandler) AddToCart(ctx *gin.Context) {
 	var cart models.CartItems
-	userId := ctx.Query("user_id")
-	userIdInt, err := strconv.Atoi(userId)
-	if err != nil {
-		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+	userId, ok := ctx.Get("id")
+	if !ok {
+		err := errors.New("error in gettign user id")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	userIdInt, ok := userId.(int)
+	if !ok {
+		err := errors.New("error in getting user id")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err)
 		ctx.JSON(http.StatusBadRequest, errRes)
 		return
 	}
 
 	cartId := ctx.Query("cart_id")
-	cartIdInt := 0
-	if cartId != "" {
-		cartIdInt, err = strconv.Atoi(cartId)
-		if err != nil {
-			cartIdInt = 0
-		}
+	if cartId == "" {
+		err := errors.New("error in gettign cart id")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	cartIdInt, err := strconv.Atoi(cartId)
+	if err != nil {
+		err = errors.New("error in gettign cart id")
+		errRes := response.ClientResponse(http.StatusBadRequest, "fields are in wrong format", nil, err)
+		ctx.JSON(http.StatusBadRequest, errRes)
+		return
+
 	}
 
 	if err := ctx.BindJSON(&cart); err != nil {
@@ -79,7 +94,6 @@ func (handler *CartHandler) AddToCart(ctx *gin.Context) {
 // @Description Retrive and display product list in cart
 // @Tags Cart Mangement
 // @Produce json
-// @Param user_id query int true "user id"
 // @Param cart_id query int true "cart_id"
 // @Security BearerTokenAuth
 // @Success 200 {array} response.Response "Array of product details "
@@ -87,13 +101,21 @@ func (handler *CartHandler) AddToCart(ctx *gin.Context) {
 // @Router /users/carts/viewcart [get]
 func (handler *CartHandler) CartItemListing(c *gin.Context) {
 	fmt.Println("*************cart item listing****************")
-	user_id := c.Query("user_id")
-	userInt, err := strconv.Atoi(user_id)
-	if err != nil {
+	user_id, ok := c.Get("id")
+	if !ok {
+		err := errors.New("error in getting user id")
 		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)
 		return
 	}
+	userInt, ok := user_id.(int)
+	if !ok {
+		err := errors.New("error in getting user id")
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in user id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
 	cartId := c.Query("cart_id")
 	cartIdInt, err := strconv.Atoi(cartId)
 	if err != nil {

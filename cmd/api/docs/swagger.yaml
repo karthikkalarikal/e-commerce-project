@@ -1106,12 +1106,6 @@ paths:
   /users/user/addresses:
     get:
       description: get Address by user id
-      parameters:
-      - description: User Id
-        in: query
-        name: user_id
-        required: true
-        type: integer
       produces:
       - application/json
       responses:

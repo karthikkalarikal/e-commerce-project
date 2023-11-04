@@ -1508,15 +1508,6 @@ const docTemplate = `{
                     "User Profile"
                 ],
                 "summary": "ViewAddress",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "User Id",
-                        "name": "user_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "201": {
                         "description": "changed addres",

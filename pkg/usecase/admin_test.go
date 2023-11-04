@@ -1,5 +1,12 @@
 package usecase_test
 
-import "testing"
+import (
+	"testing"
 
-func TestUserList(t *testing.T)
+	"github.com/karthikkalarikal/ecommerce-project/pkg/usecase"
+)
+
+func TestUserList(t *testing.T) {
+	admin := usecase.NewAdminUseCase()
+	admin.
+}
