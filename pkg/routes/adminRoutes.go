@@ -25,6 +25,7 @@ func AdminRoutes(engine *gin.RouterGroup, adminHandler *handler.AdminHandler, pr
 			productmanagement.POST("/addcategory", productHandler.AddCategory)
 			productmanagement.PUT("/updatecategory/:id", productHandler.UpdateCategory)
 			productmanagement.DELETE("/deletecategory/:category_id", productHandler.DeleteCategory)
+			productmanagement.POST("/addimage", productHandler.AddProductImage)
 		}
 		couponmanagement := engine.Group("/coupon")
 		{

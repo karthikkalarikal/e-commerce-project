@@ -70,6 +70,7 @@ func (otp *otpUseCaseImpl) VerifyOTP(code models.VerifyData) (models.TokenUsers,
 }
 
 // -------------------------------------------send otp ------------------------------------------\\
+
 func (otp *otpUseCaseImpl) SendOTP(phone string) error {
 	fmt.Println("i am here")
 	user, err := otp.otpRepo.FindUserByMobileNumber(phone)

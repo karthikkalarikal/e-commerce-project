@@ -13,6 +13,7 @@ type authCustomClaims struct {
 	Id    int    `json:"id"`
 	Email string `json:"email"`
 	Role  string `json:"role"`
+	
 	jwt.RegisteredClaims
 }
 

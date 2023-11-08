@@ -140,7 +140,7 @@ func (db *productRepositoryImpl) EditProduct(product domain.Product, id int) (do
 
 	query := "UPDATE products SET category_id = ? , product_name = ?, product_image = ?, colour = ?, stock = ?, price = ? WHERE product_id = ?"
 
-	if err := db.repo.Exec(query, product.CategoryId, product.ProductName, product.Product_image, product.Colour, product.Stock, product.Price, id).Error; err != nil {
+	if err := db.repo.Exec(query, product.CategoryId, product.ProductName, product.Colour, product.Stock, product.Price, id).Error; err != nil {
 		return domain.Product{}, err
 	}
 
@@ -150,3 +150,39 @@ func (db *productRepositoryImpl) EditProduct(product domain.Product, id int) (do
 
 	return modProduct, nil
 }
+
+// ---------------------------------------------- add image ------------------------------------------- \\
+
+func (db *productRepositoryImpl) AddImage(url string, productId int) (domain.Image, error) {
+	var body domain.Image
+
+	query := `
+	insert into images 
+	(product_id,url) 
+	values($1,$2)
+	returning *
+	
+	`
+
+	if err := db.repo.Raw(query, productId, url).Scan(&body).Error; err != nil {
+		err = errors.New("error in inserting url to image database")
+		return domain.Image{}, err
+	}
+
+	return body, nil
+
+}
+
+// ----------------------------------------------- display image ----------------------------------- \\
+
+// func (db *productRepositoryImpl) DisplayImage(productId int) (domain.Product, []domain.Image, error) {
+// 	var product domain.Product
+// 	var images []domain.Image
+
+// 	query1 := `select product_name,product_amount from products
+// 	where id  = $1
+// 	`
+// 	query2 := `select * from images where product_id = $1`
+
+// 	return product, images, nil
+// }
