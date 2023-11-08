@@ -1,6 +1,9 @@
 package interfaces
 
 import (
+	"mime/multipart"
+
+	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/utils/models"
 )
@@ -14,4 +17,5 @@ type ProductUseCase interface {
 	DeleteProduct(id int) (domain.Product, error)
 	AddCategory(domain.Category) (domain.Category, error)
 	EditProduct(domain.Product, int) (domain.Product, error)
+	AddImage(*gin.Context, *multipart.FileHeader, int) (domain.Image, error)
 }

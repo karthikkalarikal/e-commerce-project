@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -302,5 +303,64 @@ func (u *ProductHandler) EditProduct(c *gin.Context) {
 	}
 
 	succesRes := response.ClientResponse(http.StatusOK, "sucessfully edited product", modProduct, nil)
+	c.JSON(http.StatusOK, succesRes)
+}
+
+// Add Product Image by admin
+// @Summary Add Image
+// @Description add image by admin
+// @Tags Product Management
+// @Accept mpfd
+// @Produce json
+// @Param product_id query int true "product_id"
+// @Param file formData file true "Image file to upload" collectionFormat "multi"
+// @Security BearerTokenAuth
+// @Success 200 {string}  response.Response "Edit product details"
+// @Failure 400 {string}  response.Response "Bad request"
+// @Router /admin/product/addimage [post]
+func (u *ProductHandler) AddProductImage(c *gin.Context) {
+
+	id := c.Query("product_id")
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "problems in the product id", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+	fmt.Println(idInt)
+	file, err := c.FormFile("file")
+	// fmt.Println(file)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "problem uploading", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	allowedExtensions := []string{".jpg", ".jpeg", ".png", ".gif"}
+	ext := filepath.Ext(file.Filename)
+	isValid := false
+	for _, allowedExt := range allowedExtensions {
+		if ext == allowedExt {
+			isValid = true
+			break
+		}
+	}
+
+	if !isValid {
+		if err != nil {
+			errRes := response.ClientResponse(http.StatusBadRequest, "unsupported file format", nil, err.Error())
+			c.JSON(http.StatusBadRequest, errRes)
+			return
+		}
+	}
+
+	body, err := u.productUsecase.AddImage(c, file, idInt)
+	if err != nil {
+		errRes := response.ClientResponse(http.StatusBadRequest, "error in saving file", nil, err.Error())
+		c.JSON(http.StatusBadRequest, errRes)
+		return
+	}
+
+	succesRes := response.ClientResponse(http.StatusOK, "sucessfully added image", body, nil)
 	c.JSON(http.StatusOK, succesRes)
 }

@@ -23,6 +23,7 @@ func NewServerHTTP(userHandler *handler.UserHandler, otpHandler *handler.OtpHand
 	engine.LoadHTMLGlob("templates/*")
 	routes.UserRoutes(engine.Group("/users"), userHandler, otpHandler, productHandler, cartHandler, orderHandler, paymentHandler, couponHandler)
 	routes.AdminRoutes(engine.Group("/admin"), adminHandler, productHandler, couponHandler)
+	engine.Static("/uploads", "./uploads")
 	return &ServerHTTP{engine: engine}
 }
 

@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"fmt"
+	"mime/multipart"
 
+	"github.com/gin-gonic/gin"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/repository/interfaces"
 	usecase "github.com/karthikkalarikal/ecommerce-project/pkg/usecase/interfaces"
@@ -113,4 +115,22 @@ func (usecase *productUseCaseImpl) EditProduct(product domain.Product, id int) (
 		return domain.Product{}, err
 	}
 	return modProduct, nil
+}
+
+// ---------------------------------------------------- add image --------------------------------------- \\
+
+func (usecase *productUseCaseImpl) AddImage(c *gin.Context, file *multipart.FileHeader, productId int) (domain.Image, error) {
+	if err := c.SaveUploadedFile(file, "uploads/"+file.Filename); err != nil {
+		return domain.Image{}, err
+	}
+
+	baseUrl := "http://localhost:8080"
+	uploadedURL := baseUrl + "/uploads/" + file.Filename
+
+	body, err := usecase.usecase.AddImage(uploadedURL, productId)
+	if err != nil {
+		return domain.Image{}, nil
+	}
+
+	return body, nil
 }

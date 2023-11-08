@@ -14,7 +14,6 @@ type Address struct {
 	AddressId int    `json:"address_id" gorm:";primarykey;autoIncrement"`
 	Selection bool   `json:"selection" gorm:"default:false"`
 	UserID    int    `json:"user_id"`
-	Users     Users  `json:"-" gorm:"foreignkey:UserID"`
 	Name      string `json:"name" validate:"required"`
 	HouseName string `json:"house_name" validate:"required"`
 	Street    string `json:"street" validate:"required"`

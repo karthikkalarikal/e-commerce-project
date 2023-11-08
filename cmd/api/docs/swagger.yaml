@@ -322,6 +322,38 @@ paths:
       summary: Add category
       tags:
       - Product Management
+  /admin/product/addimage:
+    post:
+      consumes:
+      - multipart/form-data
+      description: add image by admin
+      parameters:
+      - description: product_id
+        in: query
+        name: product_id
+        required: true
+        type: integer
+      - description: Image file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Edit product details
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+      security:
+      - BearerTokenAuth: []
+      summary: Add Image
+      tags:
+      - Product Management
   /admin/product/addproduct:
     post:
       consumes:
