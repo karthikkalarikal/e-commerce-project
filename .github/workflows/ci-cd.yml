@@ -30,8 +30,11 @@ jobs:
 
       - name: Set up SSH key (for server deployment)
         run: |
-          echo "$AWS_SSH_PRIVATE_KEY" > ssh_key
+          echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > ssh_key
           chmod 600 ssh_key
           eval "$(ssh-agent -s)"
           ssh-add ssh_key
 
+      - name: Deploy to EC2
+        run: |
+          ssh -i ssh_key ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd /e-commerce-project && ./deploy.sh"
