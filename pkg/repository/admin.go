@@ -235,3 +235,17 @@ func (db *adminRepositoryImpl) GetSalesReport(year int) (models.OrderDetails, er
 	}
 	return body, nil
 }
+
+// ---------------------------------- query images ----------------------------------------- \\
+
+func (db *adminRepositoryImpl) GetImgagesById(productId int) ([]string, error) {
+	var str []string
+
+	query := `select url from images where product_id = $1`
+
+	if err := db.db.Raw(query, productId).Scan(&str).Error; err != nil {
+		return []string{}, err
+	}
+	return str, nil
+
+}

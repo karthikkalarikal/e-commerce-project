@@ -52,6 +52,7 @@ func (u *AdminHandler) UserList(c *gin.Context) {
 	pageListInt, _ := strconv.Atoi(pageList)
 
 	user_list, err := u.adminUseCase.UserList(pageNoInt, pageListInt)
+	
 	if err != nil {
 		errRes := response.ClientResponse(http.StatusBadRequest, "Users cannot be displayed", nil, err.Error())
 		c.JSON(http.StatusBadRequest, errRes)

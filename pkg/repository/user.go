@@ -25,7 +25,11 @@ func NewUserRepository(DB *gorm.DB) interfaces.UserRepository {
 func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsResponse, error) {
 	var userDetails models.UserDetailsResponse
 
-	err := u.DB.Raw("insert into users(name, email, password, phone) values ($1,$2,$3,$4) returning *", user.Name, user.Email, user.Password, user.Phone).Scan(&userDetails).Error
+	err := u.
+		DB.
+		Raw("insert into users(name, email, password, phone) values ($1,$2,$3,$4) returning *", user.Name, user.Email, user.Password, user.Phone).
+		Scan(&userDetails).
+		Error
 
 	if err != nil {
 		log.Print(err)
@@ -41,7 +45,7 @@ func (u *userDatabase) UserSignUp(user models.UserDetails) (models.UserDetailsRe
 func (c *userDatabase) CheckUserAvailability(email string) bool {
 	var count int
 
-	query := "SELECT COUNT(*) from users where email= ?"
+	query := "SELECT COUNT(*) from users where email= $1"
 
 	if err := c.DB.Raw(query, email).Scan(&count).Error; err != nil {
 		return false

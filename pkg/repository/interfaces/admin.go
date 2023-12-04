@@ -17,4 +17,6 @@ type AdminRepository interface {
 	GetSalesDetailsByMonth(month int) ([]models.OrderDetails, error)
 	GetSalesDetailsByDay(day int) ([]models.OrderDetails, error)
 	GetSalesReport(year int) (models.OrderDetails, error)
+
+	GetImgagesById(productId int) ([]string, error)
 }
