@@ -30,12 +30,12 @@ jobs:
 
       - name: Set up SSH key (for server deployment)
         run: |
-          echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > ssh_key
-          cat ssh_key
+          echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > techdeck
           chmod 600 ssh_key
+          openssl rsa -in techdeck -outform PEM -out techdeck.pem
           eval "$(ssh-agent -s)"
-          ssh-add ssh_key
+          ssh-add techdeck.pem
 
       - name: Deploy to EC2
         run: |
-          ssh -i ssh_key ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd /e-commerce-project && ./deploy.sh"
+          ssh -i techdeck.pem ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd /e-commerce-project && ./deploy.sh"
