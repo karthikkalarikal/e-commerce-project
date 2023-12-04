@@ -1,0 +1,13 @@
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# pull_request:
+# types: [opened, synchronize]
+# branches:
+# include:
+# - 'main'
+
