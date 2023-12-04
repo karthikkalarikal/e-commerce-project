@@ -31,6 +31,7 @@ jobs:
       - name: Set up SSH key (for server deployment)
         run: |
           echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > ssh_key
+          cat ssh_key
           chmod 600 ssh_key
           eval "$(ssh-agent -s)"
           ssh-add ssh_key
