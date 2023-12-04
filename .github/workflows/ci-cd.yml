@@ -29,6 +29,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SSH key (for server deployment)
+        env: 
+          AWS_SSH_PRIVATE_KEY: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
         run: |
           echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > techdeck
           chmod 600 techdeck
