@@ -34,10 +34,9 @@ jobs:
         run: |
           echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > techdeck
           chmod 600 techdeck
-          openssl rsa -in techdeck -outform PEM -out techdeck.pem
-          eval "$(ssh-agent -s)"
-          ssh-add techdeck.pem
-
+          mkdir -p ~/.ssh
+          cp known_hosts ~/.ssh/known_hosts
+         
       - name: Deploy to EC2
         run: |
-          ssh -T -i techdeck.pem ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd /e-commerce-project && ./deploy.sh"
+          ssh -t -i techdeck ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd /e-commerce-project && ./deploy.sh"
