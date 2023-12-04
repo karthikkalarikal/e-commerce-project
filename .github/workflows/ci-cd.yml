@@ -31,7 +31,7 @@ jobs:
       - name: Set up SSH key (for server deployment)
         run: |
           echo "$AWS_SSH_PRIVATE_KEY" | tr -d '\r' > techdeck
-          chmod 600 ssh_key
+          chmod 600 techdeck
           openssl rsa -in techdeck -outform PEM -out techdeck.pem
           eval "$(ssh-agent -s)"
           ssh-add techdeck.pem
