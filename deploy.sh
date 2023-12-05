@@ -3,4 +3,4 @@ export PATH=$PATH:/home/karthik/go
 export PATH=$PATH:/home/karthik/go/bin
 
 git pull origin main
-make run
+make build
