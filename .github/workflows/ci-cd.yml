@@ -41,4 +41,4 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           cp known_hosts ~/.ssh/known_hosts
-          ssh -t -i techdeck ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd e-commerce-project && sudo ./deploy.sh"
+          ssh -t -i techdeck ubuntu@ec2-13-235-9-49.ap-south-1.compute.amazonaws.com "cd e-commerce-project && bash ./deploy.sh"
