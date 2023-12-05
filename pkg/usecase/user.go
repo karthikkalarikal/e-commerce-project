@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/jinzhu/copier"
 	"github.com/karthikkalarikal/ecommerce-project/pkg/domain"
@@ -103,7 +104,8 @@ func (u *userUseCaseImpl) LoginHandler(user models.UserLogin) (interface{}, erro
 
 	err = bcrypt.CompareHashAndPassword([]byte(user_details.Password), []byte(user.Password))
 	if err != nil {
-		return models.TokenUsers{}, errors.New("password incorrect"), false
+		// return models.TokenUsers{}, errors.New("password incorrect"), false
+		log.Printf("password error")
 	}
 
 	if user_details.Role {

@@ -54,3 +54,4 @@ mock: ##make mock files using mockgen
 	mockgen -source=pkg/usecase/interfaces/user.go -destination=pkg/mock/mockusecase/user_mock.go -package=mockusecase
 	mockgen -source=pkg/repository/interfaces/helper.go -destination=pkg/mock/mockrepo/helper_mock.go -package=mockrepo
 	mockgen -source=pkg/repository/interfaces/order.go -destination=pkg/mock/mockrepo/order_mock.go -package=mockrepo
+	mockgen -source=pkg/helper/userhelper.go -destination=pkg/mock/mockhelper/helper_pkg_mock.go -package=mockrepo
