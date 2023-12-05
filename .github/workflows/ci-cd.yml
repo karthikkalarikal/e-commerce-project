@@ -20,7 +20,7 @@ jobs:
       
     
       - name: Build Go app
-        run: make run
+        run: make build
 
   deploy:
     runs-on: ubuntu-latest
