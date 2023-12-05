@@ -16,7 +16,7 @@ build: ${BINARY_DIR} ## Compile the code, build Executable File
 	$(GOCMD) build -o $(BINARY_DIR) -v ./cmd/api
 
 run: ## Start application
-	$(GOCMD) run ./cmd/*.go
+	$(GOCMD) run ./cmd/api
 
 test: ## Run tests
 	$(GOCMD) test ./... -cover
